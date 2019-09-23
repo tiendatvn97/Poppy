@@ -8,6 +8,9 @@ import * as Font from 'expo-font'
 import { AppLoading } from 'expo';
 
 import LoginView from "./src/views/Login/LoginView"
+import SingInView from "./src/views/Login/SignInView"
+import RegisterView from "./src/views/Login/RegisterView"
+import NewsFeedView from "./src/views/Feed/NewsFeedView"
 
 // export default function App() {
 //   const stores = config();
@@ -38,7 +41,7 @@ export default class App extends React.Component {
       return <AppLoading/>
     }
     return(
-      <LoginView/>
+      <NewsFeedView/>
     )
   }
 }

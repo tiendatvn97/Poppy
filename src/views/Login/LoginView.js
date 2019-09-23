@@ -8,7 +8,7 @@ import {
   View,
   Text
 } from "react-native";
-export default class FormLogin extends Component {
+export default class LoginView extends Component {
   render() {
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
@@ -29,14 +29,15 @@ export default class FormLogin extends Component {
             <Text uppercase={false}>Sign In</Text>
           </Button>
           <View style={{ flex: 1 }} />
-          <TouchableOpacity
+          <Button
+            transparent
             style={{ alignSelf: "center" }}
             onPress={() => {
               Alert.alert("ok");
             }}
           >
             <Text style={styles.textNewAcount}>Create New Account</Text>
-          </TouchableOpacity>
+          </Button>
           <View style={{ flex: 1 }} />
           <Text style={{ textAlign: "center", fontSize: 10 }}>
             © 2019 PoppyApp Inc
