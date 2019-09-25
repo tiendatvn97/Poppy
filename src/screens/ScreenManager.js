@@ -3,6 +3,7 @@ import { ScrollView, SafeAreaView, Image } from "react-native";
 import MainScreen from "./MainScreen";
 import SecondScreen from "./SecondScreen";
 import { StyleSheet, StatusBar } from "react-native";
+import NewsFeedCardComponent from "../views/Feed/NewsFeedView/NewsFeedCardComponent"
 import {
   createDrawerNavigator,
   DrawerNavigatorItems
@@ -37,11 +38,12 @@ const CustomDrawerContentComponent = props => (
 );
 
 let routeConfigs = {
-  Main: { screen: MainScreen },
-  Second: { screen: SecondScreen }
+  // Main: { screen: MainScreen },
+  // Second: { screen: SecondScreen }
+  NewsFeedCard: NewsFeedCardComponent
 };
 let drawerNavigationConfig = {
-  initialRouteName: "Main",
+  initialRouteName: "NewsFeedCard",
   contentComponent: CustomDrawerContentComponent,
   contentOptions: {
     // activeTintColor: "orange".
