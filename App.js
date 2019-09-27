@@ -5,7 +5,7 @@ import { Provider } from "mobx-react/native";
 import config from "./src/mobx";
 import NewsFeedCardComponent from "./src/views/Feed/NewsFeedView/NewsFeedCardComponent"
 import NewsFeedView from "./src/views/Feed/NewsFeedView/NewsFeedView"
-import PostDetail from "./src/views/Feed/PostDetail/index"
+import PostDetailView from "./src/views/Feed/PostDetailView"
 
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
@@ -47,7 +47,7 @@ export default class App extends React.Component {
     return (
       // <NewsFeedView/>
       // <Provider {...stores}>
-        <PostDetail />
+        <PostDetailView />
       // </Provider>
     );
   }
