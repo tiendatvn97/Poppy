@@ -11,6 +11,8 @@ import * as Font from "expo-font";
 import { AppLoading } from "expo";
 
 import LoginView from "./src/views/Login/LoginView";
+import MyProfileView  from "./src/views/profile/MyProfileView";
+import CreatePostView  from "./src/views/Feed/CreatePostView";
 // import SingInView from "./src/views/Login/SignInView";
 // import RegisterView from "./src/views/Login/RegisterView";
 // import NewsFeedView from "./src/views/Feed/NewsFeedView";
@@ -47,7 +49,7 @@ export default class App extends React.Component {
     return (
       // <NewsFeedView/>
       // <Provider {...stores}>
-        <PostDetailView />
+        <CreatePostView />
       // </Provider>
     );
   }
