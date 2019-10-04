@@ -13,6 +13,7 @@ import { AppLoading } from "expo";
 import LoginView from "./src/views/Login/LoginView";
 import MyProfileView  from "./src/views/profile/MyProfileView";
 import CreatePostView  from "./src/views/Feed/CreatePostView";
+import RecentChatsView  from "./src/views/Chat/RecentChatsView";
 // import SingInView from "./src/views/Login/SignInView";
 // import RegisterView from "./src/views/Login/RegisterView";
 // import NewsFeedView from "./src/views/Feed/NewsFeedView";
@@ -49,7 +50,7 @@ export default class App extends React.Component {
     return (
       // <NewsFeedView/>
       // <Provider {...stores}>
-        <CreatePostView />
+        <RecentChatsView />
       // </Provider>
     );
   }
