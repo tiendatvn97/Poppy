@@ -17,27 +17,17 @@ import {
   Form,
   Item
 } from "native-base";
+import BackHeader from "../header/BackHeader";
 import { StyleSheet, Alert } from "react-native";
 export default class SignInView extends Component {
+  static navigationOptions = {
+    drawerLabel: () => null
+  };
   render() {
     return (
       <Container>
-        <Header transparent>
-          <Left style={{ flex: 1 }}>
-            <Button transparent>
-              <Icon name="arrow-back" style={{ color: "black" }} />
-            </Button>
-          </Left>
-          <Body>
-            <Title
-              style={{ color: "black", alignSelf: "center", fontSize: 18 }}
-            >
-              Sign in
-            </Title>
-          </Body>
-          <Right style={{ flex: 1 }} />
-        </Header>
-        <View style={{ flex: 1}}>
+        <BackHeader title="Sign In" parent={this} />
+        <View style={{ flex: 1 }}>
           <View style={styles.viewDescription}>
             <Text style={styles.textDescription}>
               Type in your Email ID and Password you chose for Momento and click
@@ -52,11 +42,15 @@ export default class SignInView extends Component {
                   marginTop: 20
                 }}
               >
-                <Item regular style={{ borderRadius: 8 }}>
-                  <Input
-                    placeholder="Email Id"
-                    placeholderTextColor="#cccccc"
-                  />
+                <Item
+                  regular
+                  style={{
+                    borderRadius: 8,
+                    borderWidth: 0.5,
+                    borderColor: "gray"
+                  }}
+                >
+                  <Input placeholder="Email" placeholderTextColor="#cccccc" />
                 </Item>
                 <View style={{ height: 30 }}></View>
                 <Item regular style={{ borderRadius: 8 }}>
@@ -71,9 +65,14 @@ export default class SignInView extends Component {
           <View style={{ flex: 1.4 }}>
             <View style={{ flex: 1 }}>
               <View style={{ flex: 1 }} />
-              <Button style={styles.button}>
+              <Button
+                style={styles.button}
+                onPress={() => {
+                  this.props.navigation.navigate("NewsFeed");
+                }}
+              >
                 <Text uppercase={false} style={{ fontSize: 16 }}>
-                  Sign In
+                  Go to Feed
                 </Text>
               </Button>
               <View style={{ flex: 1 }} />
@@ -108,7 +107,8 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     marginHorizontal: 45,
-    fontSize: 13
+    fontSize: 13,
+    color: "#4A4A4A"
   },
   viewDescription: {
     flex: 1,

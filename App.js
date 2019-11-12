@@ -3,17 +3,17 @@ import { StyleSheet, Text, View } from "react-native";
 import ScreenManager from "./src/screens/ScreenManager";
 import { Provider } from "mobx-react/native";
 import config from "./src/mobx";
-import NewsFeedCardComponent from "./src/views/Feed/NewsFeedView/NewsFeedCardComponent"
-import NewsFeedView from "./src/views/Feed/NewsFeedView/NewsFeedView"
-import PostDetailView from "./src/views/Feed/PostDetailView"
+// import NewsFeedCardComponent from "./src/views/feed/NewsFeedView/NewsFeedCardComponent"
+// import NewsFeedView from "./src/views/feed/NewsFeedView/NewsFeedView"
+// import PostDetailView from "./src/views/feed/PostDetailView"
 
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
 
-import LoginView from "./src/views/Login/LoginView";
-import MyProfileView  from "./src/views/profile/MyProfileView";
-import CreatePostView  from "./src/views/Feed/CreatePostView";
-import RecentChatsView  from "./src/views/Chat/RecentChatsView";
+// import LoginView from "./src/views/login/LoginView";
+// import MyProfileView  from "./src/views/profile/MyProfileView";
+// import CreatePostView  from "./src/views/feed/CreatePostView";
+// import RecentChatsView  from "./src/views/chat/RecentChatsView";
 // import SingInView from "./src/views/Login/SignInView";
 // import RegisterView from "./src/views/Login/RegisterView";
 // import NewsFeedView from "./src/views/Feed/NewsFeedView";
@@ -26,10 +26,10 @@ import RecentChatsView  from "./src/views/Chat/RecentChatsView";
 // </Provider>
 //   );
 // }
+const stores = config();
 
 export default class App extends React.Component {
   constructor(props) {
-    const stores= config();
     console.disableYellowBox = true;
     super(props);
     this.state = { loading: true };
@@ -45,13 +45,12 @@ export default class App extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <AppLoading/>;
+      return <AppLoading />;
     }
     return (
-      // <NewsFeedView/>
-      // <Provider {...stores}>
-        <RecentChatsView />
-      // </Provider>
+      <Provider {...stores}>
+        <ScreenManager />
+      </Provider>
     );
   }
 }

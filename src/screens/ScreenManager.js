@@ -1,75 +1,51 @@
-import React from "react";
-import { ScrollView, SafeAreaView, Image } from "react-native";
-import MainScreen from "./MainScreen";
-import SecondScreen from "./SecondScreen";
-import { StyleSheet, StatusBar } from "react-native";
-import NewsFeedCardComponent from "../views/Feed/NewsFeedView/NewsFeedCardComponent"
+import LoginView from "../views/login/LoginView"
+import RegisterView from "../views/login/RegisterView"
+import SignInView from "../views/login/SignInView"
+import CreatePostView from "../views/feed/CreatePostView"
+import NewsFeedView from "../views/feed/NewsFeedView"
+import PostDetailView from "../views/feed/PostDetailView"
+import MyProfileView from "../views/profile/MyProfileView"
+import RecentChatsView from "../views/chat/RecentChatsView"
+
+import CustomDrawerContentComponent from "./CustomDrawerContentComponent"
+
 import {
-  createDrawerNavigator,
-  DrawerNavigatorItems
+  createDrawerNavigator
 } from "react-navigation-drawer";
 import { createAppContainer } from "react-navigation";
 
-import {
-  View,
-  Container,
-  Text,
-  Header,
-  Content,
-  // Icon,
-  Body,
-  Left
-} from "native-base";
-
-const CustomDrawerContentComponent = props => (
-  <Container>
-    <Header style={styles.headerContainer}>
-      <Body style={{ alignItems: "center" }}>
-        <Image
-          style={styles.headerImage}
-          source={require("../icons/avatar.jpg")}
-        ></Image>
-      </Body>
-    </Header>
-    <Content>
-      <DrawerNavigatorItems {...props} />
-    </Content>
-  </Container>
-);
-
 let routeConfigs = {
-  // Main: { screen: MainScreen },
-  // Second: { screen: SecondScreen }
-  NewsFeedCard: NewsFeedCardComponent
+  Login: LoginView,
+  Register: RegisterView,
+  SignIn: SignInView,
+  CreatePost: CreatePostView,
+  NewsFeed: NewsFeedView,
+  PostDetail: PostDetailView,
+  MyProfile: MyProfileView,
+  RecentChats: RecentChatsView
 };
 let drawerNavigationConfig = {
-  initialRouteName: "NewsFeedCard",
+  initialRouteName: "Login",
   contentComponent: CustomDrawerContentComponent,
   contentOptions: {
-    // activeTintColor: "orange".
-    // drawerWidth: 150,
-    // drawerPosition: "left",
+    activeTintColor: "orange",
+    drawerWidth: 150,
+    drawerPosition: "left",
+    labelStyle: {
+      color: "gray"
+    }
   },
-  // order:[Home, Setting]
-  drawerPosition: "left"
-  // order: ["Setting", "Home"]
+  order:["NewsFeed","MyProfile","RecentChats","Login","SignIn","Register"],
+  drawerPosition: "left",
+  // order: [Login, Register]
 };
+
+
 const drawerNavigator = createDrawerNavigator(
   routeConfigs,
   drawerNavigationConfig
 );
+
+
 export default createAppContainer(drawerNavigator);
-const styles = StyleSheet.create({
-  headerContainer: {
-    height: 200,
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: StatusBar.currentHeight
-  },
-  headerImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75
-  }
-});
+

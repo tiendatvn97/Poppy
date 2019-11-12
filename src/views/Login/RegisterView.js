@@ -16,21 +16,20 @@ import {
   Item
 } from "native-base";
 import { StyleSheet, Alert } from "react-native";
+import { observer, inject } from "mobx-react";
+
+import BackHeader from "../header/BackHeader";
+
+@inject("registerStore")
+@observer
 export default class RegisterView extends Component {
+  static navigationOptions = {
+    drawerLabel: () => null
+  };
   render() {
     return (
       <Container>
-        <Header transparent>
-          <Left style={{ flex: 1 }}>
-            <Button transparent>
-              <Icon name="arrow-back" style={{ color: "black" }} />
-            </Button>
-          </Left>
-          <Body>
-            <Title style={styles.headerTitle}>Create Account</Title>
-          </Body>
-          <Right style={{ flex: 1 }} />
-        </Header>
+        <BackHeader title="Create Account" parent={this} />
         <View style={{ flex: 1 }}>
           <View style={styles.viewDescription}>
             <Text style={styles.textDescription}>
@@ -83,7 +82,12 @@ export default class RegisterView extends Component {
               justifyContent: "center"
             }}
           >
-            <Button style={styles.button}>
+            <Button
+              style={styles.button}
+              onPress={() => {
+                this.props.navigation.navigate("NewsFeed");
+              }}
+            >
               <Text uppercase={false} style={{ fontSize: 16 }}>
                 Proceed
               </Text>
@@ -107,7 +111,8 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     marginHorizontal: 45,
-    fontSize: 13
+    fontSize: 13,
+    color: "#4A4A4A" /*  */
   },
   viewDescription: {
     flex: 1,

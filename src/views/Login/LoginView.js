@@ -1,14 +1,20 @@
 import React, { Component } from "react";
-import { Button } from "native-base";
+import { Button, Icon } from "native-base";
 import {
   Image,
   StyleSheet,
   TouchableOpacity,
   Alert,
   View,
-  Text
+  Text,
 } from "react-native";
 export default class LoginView extends Component {
+  static navigationOptions = {
+    drawerLabel: "Sign Out",
+    drawerIcon: ({ tintColor }) => (
+      <Icon name="logout" type="SimpleLineIcons" style={{ fontSize: 20 }} />
+    )
+  };
   render() {
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
@@ -25,7 +31,10 @@ export default class LoginView extends Component {
 
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }} />
-          <Button style={styles.button}>
+          <Button 
+            style={styles.button}
+            onPress={() => this.props.navigation.navigate("SignIn")}
+          >
             <Text uppercase={false}>Sign In</Text>
           </Button>
           <View style={{ flex: 1 }} />
@@ -33,7 +42,7 @@ export default class LoginView extends Component {
             transparent
             style={{ alignSelf: "center" }}
             onPress={() => {
-              Alert.alert("ok");
+              this.props.navigation.navigate("Register")
             }}
           >
             <Text style={styles.textNewAcount}>Create New Account</Text>

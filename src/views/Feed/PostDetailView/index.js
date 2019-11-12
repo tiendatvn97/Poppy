@@ -27,13 +27,14 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import Image from "react-native-scalable-image";
+import DrawerHeader from "../../header/DrawerHeader";
 const widthScreen = Dimensions.get("window").width;
 export default class PostDetailView extends Component {
   render() {
     return (
       <Container>
+        <DrawerHeader parent ={this} />
         <Content>
-          <Header />
           <Card transparent>
             <CardItem
               style={{

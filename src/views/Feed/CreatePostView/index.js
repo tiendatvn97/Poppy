@@ -29,6 +29,8 @@ import {
 } from "react-native";
 const widthScreen = Dimensions.get("window").width;
 
+import DrawerHeader from "../../header/DrawerHeader";
+
 export default class CreatePostView extends Component {
   constructor(props) {
     super(props);
@@ -68,7 +70,7 @@ export default class CreatePostView extends Component {
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <Container>
-          <Header></Header>
+          <DrawerHeader parent ={this} />
           <Content
             ref={ref => {
               this.scrollView = ref;

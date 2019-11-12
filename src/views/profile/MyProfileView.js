@@ -29,12 +29,24 @@ import {
 } from "react-native";
 
 const widthScreen = Dimensions.get("window").width;
+import DrawerHeader from "../header/DrawerHeader";
 
 export default class MyProfileView extends Component {
+  static navigationOptions = {
+    drawerLabel: "My Profile",
+    drawerIcon: ({ tintColor }) => (
+      <Icon name="profile" type="AntDesign" style={{ fontSize: 20 }} />
+    )
+  };
   render() {
     return (
       <Container>
-        <Header />
+        <DrawerHeader
+          parent={this}
+          title="My Profile"
+          nameIcon="edit"
+          typeIcon="Feather"
+        />
         <Content>
           <Card style={{ elevation: 0 }}>
             <CardItem>

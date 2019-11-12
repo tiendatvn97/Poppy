@@ -10,8 +10,11 @@ import {
   Left,
   Body,
   Right,
-  Button
+  Button,
+  Icon
 } from "native-base";
+
+import DrawerHeader from "../../header/DrawerHeader"
 import { StyleSheet, Alert } from "react-native";
 const data = [
   {
@@ -44,10 +47,16 @@ const data = [
   }
 ];
 export default class RecentChatsView extends Component {
+  static navigationOptions = {
+    drawerLabel: "Chats",
+    drawerIcon: ({ tintColor }) => (
+      <Icon name="rocketchat" type="FontAwesome5" style={{ fontSize: 20 }} />
+    )
+  };
   render() {
     return (
       <Container>
-        <Header />
+        <DrawerHeader parent={this} title="Recent Chats" nameIcon="user-friends" typeIcon="FontAwesome5"/>
         <Content>
           <List>
             {data.map(item => (
