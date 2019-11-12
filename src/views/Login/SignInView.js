@@ -19,11 +19,18 @@ import {
 } from "native-base";
 import BackHeader from "../header/BackHeader";
 import { StyleSheet, Alert } from "react-native";
+
+import Firebase from "../../firebase/Firebase";
+import { observer, inject } from "mobx-react";
+
+@inject("signInStore")
+@observer
 export default class SignInView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
   };
   render() {
+    const { signInStore } = this.props;
     return (
       <Container>
         <BackHeader title="Sign In" parent={this} />
@@ -50,13 +57,20 @@ export default class SignInView extends Component {
                     borderColor: "gray"
                   }}
                 >
-                  <Input placeholder="Email" placeholderTextColor="#cccccc" />
+                  <Input
+                    placeholder="Email"
+                    placeholderTextColor="#cccccc"
+                    value={signInStore.email}
+                    onChangeText={value => signInStore.emailOnChange(value)}
+                  />
                 </Item>
                 <View style={{ height: 30 }}></View>
                 <Item regular style={{ borderRadius: 8 }}>
                   <Input
                     placeholder="Password"
                     placeholderTextColor="#cccccc"
+                    value={signInStore.password}
+                    onChangeText={value => signInStore.passwordOnChange(value)}
                   />
                 </Item>
               </Form>
@@ -68,7 +82,8 @@ export default class SignInView extends Component {
               <Button
                 style={styles.button}
                 onPress={() => {
-                  this.props.navigation.navigate("NewsFeed");
+                  // this.props.navigation.navigate("NewsFeed");
+                  signInStore.SignIn();
                 }}
               >
                 <Text uppercase={false} style={{ fontSize: 16 }}>

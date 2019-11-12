@@ -15,6 +15,8 @@ import {
   Form,
   Item
 } from "native-base";
+
+import Firebase from "../../firebase/Firebase"
 import { StyleSheet, Alert } from "react-native";
 import { observer, inject } from "mobx-react";
 
@@ -26,7 +28,9 @@ export default class RegisterView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
   };
+
   render() {
+    const { registerStore } = this.props;
     return (
       <Container>
         <BackHeader title="Create Account" parent={this} />
@@ -44,8 +48,10 @@ export default class RegisterView extends Component {
                 <Form style={styles.formInput}>
                   <Item regular style={{ borderRadius: 8 }}>
                     <Input
-                      placeholder="Email Id"
+                      placeholder="Email "
                       placeholderTextColor="#cccccc"
+                      value={registerStore.email}
+                      onChangeText={value => registerStore.emailOnChange(value)}
                     />
                   </Item>
                   <View style={{ height: 20 }}></View>
@@ -53,6 +59,10 @@ export default class RegisterView extends Component {
                     <Input
                       placeholder="Password"
                       placeholderTextColor="#cccccc"
+                      value={registerStore.password}
+                      onChangeText={value =>
+                        registerStore.passwordOnChange(value)
+                      }
                     />
                   </Item>
                   <View style={{ height: 20 }}></View>
@@ -60,6 +70,10 @@ export default class RegisterView extends Component {
                     <Input
                       placeholder="Confirm Password"
                       placeholderTextColor="#cccccc"
+                      value={registerStore.confirmPassword}
+                      onChangeText={value =>
+                        registerStore.confirmPasswordOnChange(value)
+                      }
                     />
                   </Item>
                 </Form>
@@ -84,8 +98,15 @@ export default class RegisterView extends Component {
           >
             <Button
               style={styles.button}
-              onPress={() => {
-                this.props.navigation.navigate("NewsFeed");
+              onPress={async () => {
+                // this.props.navigation.navigate("NewsFeed");
+                let mess = registerStore.validate();
+                if (!mess) {
+                  mess = await registerStore.register();
+                }
+                if (mess) {
+                  Alert.alert(mess);
+                } else this.props.navigation.navigate("NewsFeed");
               }}
             >
               <Text uppercase={false} style={{ fontSize: 16 }}>
