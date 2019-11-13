@@ -5,6 +5,7 @@ export default class RegisterStore {
   @observable email: ?String = "dat@gmail.com";
   @observable password: ?String = "123456";
   @observable confirmPassword: ?String = "123456";
+  @observable isLoading: boolean = false;
 
   @action emailOnChange(email: ?string) {
     this.email = email;
@@ -25,6 +26,7 @@ export default class RegisterStore {
   }
 
   @action validate(): ?string {
+    this.isLoading = true;
     let mess = "";
     if (!this.validEmail()) mess = "Email is invalid \n";
     else if (!this.password || this.password.length < 6)
@@ -38,7 +40,10 @@ export default class RegisterStore {
     let mess = "";
     Firebase.init();
     try {
-      await Firebase.auth.createUserWithEmailAndPassword(this.email, this.password);
+      await Firebase.auth.createUserWithEmailAndPassword(
+        this.email,
+        this.password
+      );
     } catch (error) {
       mess = error.message;
     }

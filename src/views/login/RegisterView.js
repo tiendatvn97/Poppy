@@ -13,10 +13,11 @@ import {
   Input,
   View,
   Form,
-  Item
+  Item,
+  Spinner
 } from "native-base";
 
-import Firebase from "../../firebase/Firebase"
+import Firebase from "../../firebase/Firebase";
 import { StyleSheet, Alert } from "react-native";
 import { observer, inject } from "mobx-react";
 
@@ -100,10 +101,12 @@ export default class RegisterView extends Component {
               style={styles.button}
               onPress={async () => {
                 // this.props.navigation.navigate("NewsFeed");
+
                 let mess = registerStore.validate();
                 if (!mess) {
                   mess = await registerStore.register();
                 }
+                registerStore.isLoading = false;
                 if (mess) {
                   Alert.alert(mess);
                 } else this.props.navigation.navigate("NewsFeed");
@@ -114,7 +117,11 @@ export default class RegisterView extends Component {
               </Text>
             </Button>
           </View>
-          <View style={{ flex: 1.5 }}></View>
+          <View style={{ flex: 1.5 }}>
+            {registerStore.isLoading && (
+              <Spinner size="large" color="#0000ff" />
+            )}
+          </View>
         </View>
       </Container>
     );
