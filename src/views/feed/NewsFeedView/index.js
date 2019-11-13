@@ -42,15 +42,38 @@ export default class NewsFeedView extends Component {
     ];
     return (
       <Container style={{ paddingBottom: 15 }}>
-        <DrawerHeader parent ={this} title="My Feed" nameIcon="search1" typeIcon="AntDesign"/>
+        <DrawerHeader
+          parent={this}
+          title="My Feed"
+          nameIcon="search1"
+          typeIcon="AntDesign"
+        />
         <Content contentContainerStyle={{ paddingHorizontal: 15 }}>
           {data.map(item => (
             <NewsFeedCardComponent
+              parent={this}
               key={item.key}
               profileImage={item.profileImage}
             />
           ))}
         </Content>
+        <Button
+          style={{
+            width: 55,
+            height: 55,
+            alignSelf: "center",
+            borderRadius: 27.5,
+            position: "absolute",
+            right: 10,
+            bottom: 10,
+            backgroundColor: "#ff6265"
+          }}
+          onPress={() => {
+            this.props.navigation.navigate("CreatePost")
+          }}
+        >
+          <Icon name="video-camera" type="Entypo"></Icon>
+        </Button>
       </Container>
     );
   }

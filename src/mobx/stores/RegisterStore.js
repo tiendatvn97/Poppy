@@ -38,12 +38,12 @@ export default class RegisterStore {
 
   @action async register(): ?string {
     let mess = "";
-    Firebase.init();
     try {
       await Firebase.auth.createUserWithEmailAndPassword(
         this.email,
         this.password
       );
+      Firebase.userInfo.name = this.email;
     } catch (error) {
       mess = error.message;
     }

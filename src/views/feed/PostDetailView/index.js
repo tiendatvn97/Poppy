@@ -28,12 +28,16 @@ import {
 } from "react-native";
 import Image from "react-native-scalable-image";
 import DrawerHeader from "../../header/DrawerHeader";
+import BackHeader from "../../header/BackHeader";
 const widthScreen = Dimensions.get("window").width;
 export default class PostDetailView extends Component {
+  static navigationOptions = {
+    drawerLabel: () => null
+  };
   render() {
     return (
       <Container>
-        <DrawerHeader parent ={this} />
+        <BackHeader parent ={this} title="Ngoc Trinh's Moment" />
         <Content>
           <Card transparent>
             <CardItem

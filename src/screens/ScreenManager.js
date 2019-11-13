@@ -1,17 +1,16 @@
-import LoginView from "../views/login/LoginView"
-import RegisterView from "../views/login/RegisterView"
-import SignInView from "../views/login/SignInView"
-import CreatePostView from "../views/feed/CreatePostView"
-import NewsFeedView from "../views/feed/NewsFeedView"
-import PostDetailView from "../views/feed/PostDetailView"
-import MyProfileView from "../views/profile/MyProfileView"
-import RecentChatsView from "../views/chat/RecentChatsView"
+import LoginView from "../views/login/LoginView";
+import RegisterView from "../views/login/RegisterView";
+import SignInView from "../views/login/SignInView";
+import CreatePostView from "../views/feed/CreatePostView";
+import NewsFeedView from "../views/feed/NewsFeedView";
+import PostDetailView from "../views/feed/PostDetailView";
+import MyProfileView from "../views/profile/MyProfileView";
+import SetUpProfileView from "../views/profile/SetUpProfileView";
+import RecentChatsView from "../views/chat/RecentChatsView";
 
-import CustomDrawerContentComponent from "./CustomDrawerContentComponent"
+import CustomDrawerContentComponent from "./CustomDrawerContentComponent";
 
-import {
-  createDrawerNavigator
-} from "react-navigation-drawer";
+import { createDrawerNavigator } from "react-navigation-drawer";
 import { createAppContainer } from "react-navigation";
 
 let routeConfigs = {
@@ -22,10 +21,11 @@ let routeConfigs = {
   NewsFeed: NewsFeedView,
   PostDetail: PostDetailView,
   MyProfile: MyProfileView,
-  RecentChats: RecentChatsView
+  RecentChats: RecentChatsView,
+  SetUpProfile: SetUpProfileView
 };
 let drawerNavigationConfig = {
-  initialRouteName: "Login",
+  initialRouteName: "SetUpProfile",
   contentComponent: CustomDrawerContentComponent,
   contentOptions: {
     activeTintColor: "orange",
@@ -35,17 +35,24 @@ let drawerNavigationConfig = {
       color: "gray"
     }
   },
-  order:["NewsFeed","MyProfile","RecentChats","Login","SignIn","Register"],
-  drawerPosition: "left",
+  order: [
+    "NewsFeed",
+    "MyProfile",
+    "RecentChats",
+    "Login",
+    "SignIn",
+    "Register",
+    "PostDetail",
+    "CreatePost",
+    "SetUpProfile"
+  ],
+  drawerPosition: "left"
   // order: [Login, Register]
 };
-
 
 const drawerNavigator = createDrawerNavigator(
   routeConfigs,
   drawerNavigationConfig
 );
 
-
 export default createAppContainer(drawerNavigator);
-

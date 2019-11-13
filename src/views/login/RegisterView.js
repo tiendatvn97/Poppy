@@ -42,7 +42,7 @@ export default class RegisterView extends Component {
               are mandatory
             </Text>
           </View>
-          <View style={{ height: 35 }} />
+          <View style={{ height: 15 }} />
           <View style={{ flex: 4 }}>
             <Content>
               <Content>
@@ -109,7 +109,10 @@ export default class RegisterView extends Component {
                 registerStore.isLoading = false;
                 if (mess) {
                   Alert.alert(mess);
-                } else this.props.navigation.navigate("NewsFeed");
+                } else {
+                  console.log("okki")
+                  this.props.navigation.navigate("NewsFeed");
+                }
               }}
             >
               <Text uppercase={false} style={{ fontSize: 16 }}>
@@ -133,7 +136,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     borderRadius: 8,
     backgroundColor: "#ff6265",
-    marginHorizontal: 18,
+    marginHorizontal: 30,
     justifyContent: "center",
     color: "white"
   },
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   formInput: {
-    marginHorizontal: 15,
+    marginHorizontal: 27,
     marginTop: 20
   }
 });

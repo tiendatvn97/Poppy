@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   View,
   Container,
@@ -12,27 +12,45 @@ import {
 } from "native-base";
 import { StyleSheet, StatusBar, Image } from "react-native";
 import { DrawerNavigatorItems } from "react-navigation-drawer";
+import { observer, inject } from "mobx-react";
+import Firebase from "../firebase/Firebase";
 
-const CustomDrawerContentComponent = props => (
-  <Container>
-    <Header style={styles.headerContainer}>
-      <Left>
-        <Image
-          style={styles.headerImage}
-          source={require("../icons/avatar.jpg")}
-        ></Image>
-      </Left>
-      <Body>
-        <Text>William Franklin</Text>
-        <Text style={styles.textNote}>M, 27, Atlanta, GA</Text>
-      </Body>
-    </Header>
-    <Content>
-      <DrawerNavigatorItems {...props} />
-    </Content>
-  </Container>
-);
-
+@inject("signInStore")
+@observer
+class CustomDrawerContentComponent extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <Container>
+        <Header style={styles.headerContainer}>
+          <Left>
+            <Image
+              style={styles.headerImage}
+              source={require("../icons/avatar.jpg")}
+            ></Image>
+          </Left>
+          <Body>
+            <Text>{Firebase.userInfo.name}</Text>
+            <Text style={styles.textNote}>M, 27, Atlanta, GA</Text>
+          </Body>
+        </Header>
+        <Content>
+          <DrawerNavigatorItems
+            {...this.props}
+            onItemPress={async ({ route, focused }) => {
+              if (route.key === "Login") {
+                await this.props.signInStore.SignOut();
+              }
+              this.props.onItemPress({ route, focused });
+            }}
+          />
+        </Content>
+      </Container>
+    );
+  }
+}
 const styles = StyleSheet.create({
   headerContainer: {
     height: 120,

@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     borderRadius: 8,
     backgroundColor: "#ff6265",
-    marginHorizontal: 18,
+    marginHorizontal: 30,
     justifyContent: "center",
     color: "white"
   },

@@ -14,6 +14,9 @@ var firebaseConfig = {
 
 export default class Firebase {
     static auth;
+    static userInfo= {
+        name:""
+    };
     static init() {
         firebase.initializeApp(firebaseConfig);
         Firebase.auth = firebase.auth();

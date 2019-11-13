@@ -29,9 +29,12 @@ import {
 } from "react-native";
 const widthScreen = Dimensions.get("window").width;
 
-import DrawerHeader from "../../header/DrawerHeader";
+import FullBackHeader from "../../header/FullBackHeader";
 
 export default class CreatePostView extends Component {
+  static navigationOptions = {
+    drawerLabel: () => null
+  }
   constructor(props) {
     super(props);
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -70,7 +73,7 @@ export default class CreatePostView extends Component {
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <Container>
-          <DrawerHeader parent ={this} />
+          <FullBackHeader parent ={this} title="Create Moment" nameIcon="closecircleo" typeIcon="AntDesign" />
           <Content
             ref={ref => {
               this.scrollView = ref;

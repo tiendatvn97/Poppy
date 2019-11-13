@@ -15,7 +15,8 @@ import {
   Row,
   Grid,
   Form,
-  Item
+  Item,
+  Spinner
 } from "native-base";
 import BackHeader from "../header/BackHeader";
 import { StyleSheet, Alert } from "react-native";
@@ -28,6 +29,20 @@ import { observer, inject } from "mobx-react";
 export default class SignInView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
+  };
+
+  constructor(props) {
+    super(props);
+    this.signIn = this.signIn.bind(this);
+  }
+
+  signIn = async () => {
+    let mess = await this.props.signInStore.SignIn();
+    if (mess) {
+      Alert.alert(mess);
+    } else {
+      this.props.navigation.navigate("NewsFeed");
+    }
   };
   render() {
     const { signInStore } = this.props;
@@ -45,7 +60,7 @@ export default class SignInView extends Component {
             <Content>
               <Form
                 style={{
-                  marginHorizontal: 15,
+                  marginHorizontal: 27,
                   marginTop: 20
                 }}
               >
@@ -78,14 +93,12 @@ export default class SignInView extends Component {
           </View>
           <View style={{ flex: 1.4 }}>
             <View style={{ flex: 1 }}>
-              <View style={{ flex: 1 }} />
-              <Button
-                style={styles.button}
-                onPress={() => {
-                  // this.props.navigation.navigate("NewsFeed");
-                  signInStore.SignIn();
-                }}
-              >
+              <View style={{ flex: 1, alignItems:"center", justifyContent: "center" }}>
+                {
+                  signInStore.isLoading && <Spinner/>
+                }
+              </View>
+              <Button style={styles.button} onPress={this.signIn}>
                 <Text uppercase={false} style={{ fontSize: 16 }}>
                   Go to Feed
                 </Text>
@@ -116,7 +129,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     borderRadius: 8,
     backgroundColor: "#ff6265",
-    marginHorizontal: 18,
+    marginHorizontal: 30,
     justifyContent: "center",
     color: "white"
   },
