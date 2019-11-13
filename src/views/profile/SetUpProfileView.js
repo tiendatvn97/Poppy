@@ -20,8 +20,9 @@ import {
 import Firebase from "../../firebase/Firebase";
 import { StyleSheet, Alert } from "react-native";
 import { observer, inject } from "mobx-react";
-import DatePicker from "react-native-datepicker";
 import BackHeader from "../header/BackHeader";
+import DateTimePicker from "react-native-modal-datetime-picker";
+import SwitchSelector from "react-native-switch-selector";
 
 @inject("setUpProfileStore")
 @observer
@@ -29,7 +30,6 @@ export default class SetUpProfileView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
   };
-
   render() {
     const { setUpProfileStore } = this.props;
     return (
@@ -51,8 +51,10 @@ export default class SetUpProfileView extends Component {
                     <Input
                       placeholder="Full Name "
                       placeholderTextColor="#cccccc"
-                      //   value={registerStore.email}
-                      //   onChangeText={value => registerStore.emailOnChange(value)}
+                      value={setUpProfileStore.fullName}
+                      onChangeText={value =>
+                        setUpProfileStore.fullNameOnChange(value)
+                      }
                     />
                   </Item>
                   <View style={{ height: 20 }}></View>
@@ -62,54 +64,63 @@ export default class SetUpProfileView extends Component {
                       borderRadius: 8
                     }}
                   >
-                    {/* <Input
+                    <Input
                       placeholder="Date Of Birth"
                       placeholderTextColor="#cccccc"
-                      //   value={registerStore.password}
-                      //   onChangeText={value =>
-                      //     registerStore.passwordOnChange(value)
-                      //   }
-                    ></Input> */}
-                    <DatePicker
-                      style={{ backgroundColor: "#ffffff" }}
-                      mode="date"
-                      //   date={attendCustomerStore.visitDateFrom}
-                      //   onDateChange={date =>
-                      //     attendCustomerStore.visitDateFromOnChange(date)
-                      //   }
-                      format="YYYY-MM-DD"
-                      placeholder=" "
-                      confirmBtnText="Confirm"
-                      cancelBtnText="Cancel"
-                      showIcon={false}
-                      hideText = {true}
-                      disabled={true}
-                      ref={picker => {
-                        this.datePickerFrom = picker;
-                      }}
-                      placeholder="test"
-                    />
+                      value={setUpProfileStore.dateOfBirth}
+                      onChangeText={value =>
+                        setUpProfileStore.dateOfBirthOnChange(value)
+                      }
+                    ></Input>
+
                     <Icon
                       name="md-calendar"
                       style={{
-                        // paddingLeft: 5,
-                        // paddingTop: 5,
                         color: "#C4CAD6",
                         fontSize: 25
                       }}
-                      onPress={() => this.datePickerFrom.onPressDate()}
+                      onPress={() => setUpProfileStore.showDateTimePicker()}
                     />
-                    
+                    <DateTimePicker
+                      mode="date"
+                      date={new Date()}
+                      isVisible={setUpProfileStore.isDateTimePickerVisible}
+                      onConfirm={date =>
+                        setUpProfileStore.handleDatePicked(date)
+                      }
+                      onCancel={() => setUpProfileStore.hideDateTimePicker()}
+                    />
                   </Item>
                   <View style={{ height: 20 }}></View>
                   <Item regular style={{ borderRadius: 8 }}>
                     <Input
                       placeholder="Gender"
                       placeholderTextColor="#cccccc"
-                      //   value={registerStore.confirmPassword}
-                      //   onChangeText={value =>
-                      //     registerStore.confirmPasswordOnChange(value)
-                      //   }
+                      value={setUpProfileStore.gender}
+                      onChangeText={value =>
+                        setUpProfileStore.genderOnChange(value)
+                      }
+                    />
+                    <SwitchSelector
+                      initial={0}
+                      style={{ width: 150 }}
+                      onPress={value => setUpProfileStore.genderOnChange(value)}
+                      textColor="#7a44cf"
+                      selectedColor={(setUpProfileStore.gender != "Male" && setUpProfileStore.gender != "Female") ? "#7a44cf": "white"}
+                      buttonColor={(setUpProfileStore.gender != "Male" && setUpProfileStore.gender != "Female") ? "white": "#7a44cf"}
+                      borderColor="#d9d9d9"
+                      hasPadding
+                      borderRadius={5}
+                      options={[
+                        {
+                          label: "Female",
+                          value: "Female"
+                        },
+                        {
+                          label: "Male",
+                          value: "Male"
+                        }
+                      ]}
                     />
                   </Item>
                   <View style={{ height: 20 }}></View>
@@ -117,10 +128,10 @@ export default class SetUpProfileView extends Component {
                     <Input
                       placeholder="Location"
                       placeholderTextColor="#cccccc"
-                      //   value={registerStore.confirmPassword}
-                      //   onChangeText={value =>
-                      //     registerStore.confirmPasswordOnChange(value)
-                      //   }
+                      value={setUpProfileStore.location}
+                      onChangeText={value =>
+                        setUpProfileStore.locationOnChange(value)
+                      }
                     />
                   </Item>
                   <View style={{ height: 20 }}></View>
@@ -128,10 +139,10 @@ export default class SetUpProfileView extends Component {
                     <Input
                       placeholder="About Me"
                       placeholderTextColor="#cccccc"
-                      //   value={registerStore.confirmPassword}
-                      //   onChangeText={value =>
-                      //     registerStore.confirmPasswordOnChange(value)
-                      //   }
+                      value={setUpProfileStore.aboutMe}
+                      onChangeText={value =>
+                        setUpProfileStore.aboutMeOnChange(value)
+                      }
                     />
                   </Item>
                 </Form>
@@ -151,11 +162,11 @@ export default class SetUpProfileView extends Component {
               //   onPress={async () => {
               //     // this.props.navigation.navigate("NewsFeed");
 
-              //     let mess = registerStore.validate();
+              //     let mess = setUpProfileStore.validate();
               //     if (!mess) {
-              //       mess = await registerStore.register();
+              //       mess = await setUpProfileStore.register();
               //     }
-              //     registerStore.isLoading = false;
+              //     setUpProfileStore.isLoading = false;
               //     if (mess) {
               //       Alert.alert(mess);
               //     } else {
@@ -170,7 +181,7 @@ export default class SetUpProfileView extends Component {
             </Button>
           </View>
           <View style={{ flex: 1 }}>
-            {/* {registerStore.isLoading && (
+            {/* {setUpProfileStore.isLoading && (
               <Spinner size="large" color="#0000ff" />
             )} */}
           </View>
