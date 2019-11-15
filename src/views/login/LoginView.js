@@ -42,7 +42,7 @@ export default class LoginView extends Component {
             transparent
             style={{ alignSelf: "center" }}
             onPress={() => {
-              this.props.navigation.navigate("Register")
+              this.props.navigation.navigate("SetUpProfile")
             }}
           >
             <Text style={styles.textNewAcount}>Create New Account</Text>

@@ -35,6 +35,7 @@ import * as Permissions from "expo-permissions";
 const PUSH_ENDPOINT = "https://your-server.com/users/push-token";
 
 const stores = config();
+let currentUser="";
 
 export default class App extends React.Component {
   registerForPushNotificationsAsync = async () => {
@@ -78,7 +79,8 @@ export default class App extends React.Component {
     // });
 
     try {
-      Firebase.database.ref('users/'+this.currentUser.uid+'/push_token').set(token);
+      console.log(`test current ${JSON.stringify(currentUser)}`)
+      Firebase.database.ref('users/'+currentUser.uid+'/push_token').set(token);
     } catch (error) {
       console.log(error)
     }
@@ -95,11 +97,15 @@ export default class App extends React.Component {
     super(props);
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     Firebase.init();
     this.loadStaticResources();
     Firebase.auth.onAuthStateChanged(user => {
       // console.log(`ok${JSON.stringify(user)}`)
+      if (user) {
+        currentUser = Firebase.auth.currentUser
+        this.registerForPushNotificationsAsync();
+      }
       this.setState({
         authStatusReported: true,
         isUserAuthenticated: !!user
@@ -107,8 +113,9 @@ export default class App extends React.Component {
     });
   }
   async componentDidMount() {
-    this.currentUser = await Firebase.auth.currentUser
-    await this.registerForPushNotificationsAsync();
+   
+    
+    // await this.registerForPushNotificationsAsync();
   }
 
   async loadStaticResources() {

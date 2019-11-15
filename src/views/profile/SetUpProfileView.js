@@ -76,138 +76,134 @@ export default class SetUpProfileView extends Component {
         <Container>
           <BackHeader title="Set up Profile" parent={this} />
           <View style={{ flex: 1 }}>
-            <View style={styles.viewDescription}>
-              <Text style={styles.textDescription}>
-                Hey! We need few details from you before you start sharing on
-                Momento
-              </Text>
-            </View>
-            <View style={{ height: 15 }} />
-            <View style={{ flex: 5.5 }}>
+            <View style={{ flex: 6.5 }}>
               <Content>
-                <Content>
-                  <Form style={styles.formInput}>
-                    <Item regular style={{ borderRadius: 8 }}>
-                      <Input
-                        placeholder="Full Name "
-                        placeholderTextColor="#cccccc"
-                        value={setUpProfileStore.fullName}
-                        onChangeText={value =>
-                          setUpProfileStore.fullNameOnChange(value)
-                        }
-                      />
-                    </Item>
-                    <View style={{ height: 20 }}></View>
-                    <Item
-                      regular
-                      style={{
-                        borderRadius: 8
-                      }}
-                    >
-                      <Input
-                        placeholder="Date Of Birth"
-                        placeholderTextColor="#cccccc"
-                        value={setUpProfileStore.dateOfBirth}
-                        onChangeText={value =>
-                          setUpProfileStore.dateOfBirthOnChange(value)
-                        }
-                      ></Input>
+                <View style={styles.viewDescription}>
+                  <View style={{ height: 20 }} />
+                  <Text style={styles.textDescription}>
+                    Hey! We need few details from you before you start sharing
+                    on Momento
+                  </Text>
+                </View>
+                <Form style={styles.formInput}>
+                  <Item regular style={{ borderRadius: 8 }}>
+                    <Input
+                      placeholder="Full Name "
+                      placeholderTextColor="#cccccc"
+                      value={setUpProfileStore.fullName}
+                      onChangeText={value =>
+                        setUpProfileStore.fullNameOnChange(value)
+                      }
+                    />
+                  </Item>
+                  <View style={{ height: 20 }}></View>
+                  <Item
+                    regular
+                    style={{
+                      borderRadius: 8
+                    }}
+                  >
+                    <Input
+                      placeholder="Date Of Birth"
+                      placeholderTextColor="#cccccc"
+                      value={setUpProfileStore.dateOfBirth}
+                      onChangeText={value =>
+                        setUpProfileStore.dateOfBirthOnChange(value)
+                      }
+                    ></Input>
 
-                      <Icon
-                        name="md-calendar"
-                        style={styles.iconForm}
-                        onPress={() => setUpProfileStore.showDateTimePicker()}
-                      />
-                      <DateTimePicker
-                        mode="date"
-                        date={new Date()}
-                        isVisible={setUpProfileStore.isDateTimePickerVisible}
-                        onConfirm={date =>
-                          setUpProfileStore.handleDatePicked(date)
+                    <Icon
+                      name="md-calendar"
+                      style={styles.iconForm}
+                      onPress={() => setUpProfileStore.showDateTimePicker()}
+                    />
+                    <DateTimePicker
+                      mode="date"
+                      date={new Date()}
+                      isVisible={setUpProfileStore.isDateTimePickerVisible}
+                      onConfirm={date =>
+                        setUpProfileStore.handleDatePicked(date)
+                      }
+                      onCancel={() => setUpProfileStore.hideDateTimePicker()}
+                    />
+                  </Item>
+                  <View style={{ height: 20 }}></View>
+                  <Item regular style={{ borderRadius: 8 }}>
+                    <Input
+                      placeholder="Gender"
+                      placeholderTextColor="#cccccc"
+                      value={setUpProfileStore.gender}
+                      onChangeText={value =>
+                        setUpProfileStore.genderOnChange(value)
+                      }
+                    />
+                    <SwitchSelector
+                      initial={0}
+                      style={{ width: 150 }}
+                      onPress={value => setUpProfileStore.genderOnChange(value)}
+                      textColor="#7a44cf"
+                      selectedColor={
+                        setUpProfileStore.gender != "Male" &&
+                        setUpProfileStore.gender != "Female"
+                          ? "#7a44cf"
+                          : "white"
+                      }
+                      buttonColor={
+                        setUpProfileStore.gender != "Male" &&
+                        setUpProfileStore.gender != "Female"
+                          ? "white"
+                          : "#7a44cf"
+                      }
+                      borderColor="#d9d9d9"
+                      hasPadding
+                      borderRadius={5}
+                      options={[
+                        {
+                          label: "Female",
+                          value: "Female"
+                        },
+                        {
+                          label: "Male",
+                          value: "Male"
                         }
-                        onCancel={() => setUpProfileStore.hideDateTimePicker()}
-                      />
-                    </Item>
-                    <View style={{ height: 20 }}></View>
-                    <Item regular style={{ borderRadius: 8 }}>
-                      <Input
-                        placeholder="Gender"
-                        placeholderTextColor="#cccccc"
-                        value={setUpProfileStore.gender}
-                        onChangeText={value =>
-                          setUpProfileStore.genderOnChange(value)
-                        }
-                      />
-                      <SwitchSelector
-                        initial={0}
-                        style={{ width: 150 }}
-                        onPress={value =>
-                          setUpProfileStore.genderOnChange(value)
-                        }
-                        textColor="#7a44cf"
-                        selectedColor={
-                          setUpProfileStore.gender != "Male" &&
-                          setUpProfileStore.gender != "Female"
-                            ? "#7a44cf"
-                            : "white"
-                        }
-                        buttonColor={
-                          setUpProfileStore.gender != "Male" &&
-                          setUpProfileStore.gender != "Female"
-                            ? "white"
-                            : "#7a44cf"
-                        }
-                        borderColor="#d9d9d9"
-                        hasPadding
-                        borderRadius={5}
-                        options={[
-                          {
-                            label: "Female",
-                            value: "Female"
-                          },
-                          {
-                            label: "Male",
-                            value: "Male"
-                          }
-                        ]}
-                      />
-                    </Item>
-                    <View style={{ height: 20 }}></View>
-                    <Item regular style={{ borderRadius: 8 }}>
-                      <Input
-                        placeholder="Location"
-                        placeholderTextColor="#cccccc"
-                        value={setUpProfileStore.location}
-                        onChangeText={value =>
-                          setUpProfileStore.locationOnChange(value)
-                        }
-                      />
-                      <Icon
-                        name="map-pin"
-                        type="Feather"
-                        style={styles.iconForm}
-                      />
-                    </Item>
-                    <View style={{ height: 20 }}></View>
-                    <Item regular style={{ borderRadius: 8 }}>
-                      <Input
-                        returnKeyType="Done"
-                        blurOnSubmit
-                        returnKeyType="Done"
-                        placeholder="About Me"
-                        placeholderTextColor="#cccccc"
-                        value={setUpProfileStore.aboutMe}
-                        onChangeText={value =>
-                          setUpProfileStore.aboutMeOnChange(value)
-                        }
-                        multiline={true}
-                        style={{
-                          height: 100
-                        }}
-                      />
-                    </Item>
-                  </Form>
-                </Content>
+                      ]}
+                    />
+                  </Item>
+                  <View style={{ height: 20 }}></View>
+                  <Item regular style={{ borderRadius: 8 }}>
+                    <Input
+                      placeholder="Location"
+                      placeholderTextColor="#cccccc"
+                      value={setUpProfileStore.location}
+                      onChangeText={value =>
+                        setUpProfileStore.locationOnChange(value)
+                      }
+                    />
+                    <Icon
+                      name="map-pin"
+                      type="Feather"
+                      style={styles.iconForm}
+                    />
+                  </Item>
+                  <View style={{ height: 20 }}></View>
+                  <Item regular style={{ borderRadius: 8 }}>
+                    <Input
+                      returnKeyType="Done"
+                      blurOnSubmit
+                      returnKeyType="Done"
+                      placeholder="About Me"
+                      placeholderTextColor="#cccccc"
+                      value={setUpProfileStore.aboutMe}
+                      onChangeText={value =>
+                        setUpProfileStore.aboutMeOnChange(value)
+                      }
+                      multiline={true}
+                      style={{
+                        height: 100
+                      }}
+                    />
+                  </Item>
+                </Form>
               </Content>
             </View>
             {!this.state.keyBoardDidShow && (
@@ -225,11 +221,12 @@ export default class SetUpProfileView extends Component {
                     if (mess) Alert.alert(mess);
                     else {
                       //   this.props.navigation.navigate("Register");
-                      mess = await setUpProfileStore.setProfileUser(
-                        "123456789"
-                      );
-                      if (mess) Alert.alert(mess);
-                      else Alert.alert("successfully");
+                      //   mess = await setUpProfileStore.setProfileUser(
+                      //     "123456789"
+                      //   );
+                      //   if (mess) Alert.alert(mess);
+                      //   else Alert.alert("successfully");
+                      this.props.navigation.navigate("Register");
                     }
                   }}
                 >
@@ -267,7 +264,6 @@ const styles = StyleSheet.create({
     color: "#4A4A4A" /*  */
   },
   viewDescription: {
-    flex: 1,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"

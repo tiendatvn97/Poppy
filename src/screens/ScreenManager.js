@@ -25,7 +25,7 @@ let routeConfigs = {
   SetUpProfile: SetUpProfileView
 };
 let drawerNavigationConfig = {
-  initialRouteName: "SetUpProfile",
+  initialRouteName: "Login",
   contentComponent: CustomDrawerContentComponent,
   contentOptions: {
     activeTintColor: "orange",
