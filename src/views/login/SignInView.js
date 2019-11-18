@@ -24,7 +24,7 @@ import { StyleSheet, Alert, KeyboardAvoidingView } from "react-native";
 import Firebase from "../../firebase/Firebase";
 import { observer, inject } from "mobx-react";
 
-@inject("signInStore")
+@inject("signInStore","userStore")
 @observer
 export default class SignInView extends Component {
   static navigationOptions = {

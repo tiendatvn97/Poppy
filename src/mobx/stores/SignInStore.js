@@ -1,7 +1,11 @@
 import { observable, action, computed } from "mobx";
-
 import Firebase from "../../firebase/Firebase";
 export default class SignInStore {
+
+  constructor(store) {
+    this.rootStore = store;
+  }
+
   @observable email: ?String = "dat@gmail.com";
   @observable password: ?String = "123456";
   @observable isLoading: boolean = false;
@@ -19,7 +23,8 @@ export default class SignInStore {
     this.isLoading = true;
     try {
       await Firebase.auth.signInWithEmailAndPassword(this.email, this.password);
-      Firebase.userInfo.name=this.email;
+      // Firebase.userInfo.name=this.email;
+      this.rootStore.userStore.setUser();
     } catch (error) {
       mess = error.message;
     }

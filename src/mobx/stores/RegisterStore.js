@@ -2,6 +2,9 @@ import { observable, action, computed } from "mobx";
 
 import Firebase from "../../firebase/Firebase";
 export default class RegisterStore {
+  constructor(rootStore) {
+    this.rootStore = rootStore;
+  }
   @observable email: ?String = "dat@gmail.com";
   @observable password: ?String = "123456";
   @observable confirmPassword: ?String = "123456";

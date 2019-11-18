@@ -71,6 +71,15 @@ export default class SetUpProfileStore {
     let mess = "";
     try {
       await Firebase.database.ref("users/" + userId).set({
+        avataImage: "",
+        follower: [],
+        following: [],
+        postId: [],
+        chatId: [],
+        blockId: [],
+        profileId: userId
+      });
+      await Firebase.database.ref("profiles/" + userId).set({
         fullName: this.fullName,
         dateOfBirth: this.dateOfBirth,
         gender: this.gender,
