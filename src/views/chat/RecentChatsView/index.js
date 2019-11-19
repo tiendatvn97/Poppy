@@ -14,7 +14,7 @@ import {
   Icon
 } from "native-base";
 
-import DrawerHeader from "../../header/DrawerHeader"
+import DrawerHeader from "../../header/DrawerHeader";
 import { StyleSheet, Alert } from "react-native";
 const data = [
   {
@@ -46,6 +46,9 @@ const data = [
     image: require("../../../icons/1.jpg")
   }
 ];
+import { observer, inject } from "mobx-react";
+@inject("userStore")
+@observer
 export default class RecentChatsView extends Component {
   static navigationOptions = {
     drawerLabel: "Chats",
@@ -56,23 +59,32 @@ export default class RecentChatsView extends Component {
   render() {
     return (
       <Container>
-        <DrawerHeader parent={this} title="Recent Chats" nameIcon="user-friends" typeIcon="FontAwesome5"/>
+        <DrawerHeader
+          parent={this}
+          title="Recent Chats"
+          nameIcon="user-friends"
+          typeIcon="FontAwesome5"
+        />
         <Content>
           <List>
-            {data.map(item => (
-              <ListItem thumbnail onPress={() => Alert.alert("ok")}>
+            {this.props.userStore.listUser.map(item => (
+              <ListItem thumbnail onPress={() => {
+                this.props.navigation.navigate("Chat");
+              }}>
                 <Left>
-                  <Thumbnail source={item.image} />
+                  <Thumbnail source={require("../../../icons/2.jpg")} />
                 </Left>
                 <Body>
-                  <Text>Sankhadeep</Text>
+                  <Text>{item.profiles.fullName}</Text>
                   <Text note numberOfLines={1}>
                     Its time to build a difference blabla bla. .
                   </Text>
                 </Body>
                 <Right style={{ paddingRight: 0, paddingTop: 0 }}>
                   <Button transparent>
-                    <Text style={styles.textNote} uppercase={false}>1h</Text>
+                    <Text style={styles.textNote} uppercase={false}>
+                      1h
+                    </Text>
                   </Button>
                 </Right>
               </ListItem>

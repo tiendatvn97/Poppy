@@ -1,5 +1,6 @@
 import { observable, action, computed } from "mobx";
 import Firebase from "../../firebase/Firebase";
+import Profile from "../models/Profile";
 const moment = require("moment");
 export default class SetUpProfileStore {
   @observable fullName: ?string = "";
@@ -70,6 +71,7 @@ export default class SetUpProfileStore {
   @action async setProfileUser(userId: ?String) {
     let mess = "";
     try {
+      const profile = await Profile.load(this.fullName, this.dateOfBirth, this.gender, this.location, this.aboutMe);
       await Firebase.database.ref("users/" + userId).set({
         avataImage: "",
         follower: [],
@@ -77,14 +79,7 @@ export default class SetUpProfileStore {
         postId: [],
         chatId: [],
         blockId: [],
-        profileId: userId
-      });
-      await Firebase.database.ref("profiles/" + userId).set({
-        fullName: this.fullName,
-        dateOfBirth: this.dateOfBirth,
-        gender: this.gender,
-        location: this.location,
-        aboutMe: this.aboutMe
+        profiles: profile
       });
     } catch (error) {
       mess = error.message;

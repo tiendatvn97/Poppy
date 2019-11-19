@@ -7,6 +7,7 @@ import PostDetailView from "../views/feed/PostDetailView";
 import MyProfileView from "../views/profile/MyProfileView";
 import SetUpProfileView from "../views/profile/SetUpProfileView";
 import RecentChatsView from "../views/chat/RecentChatsView";
+import ChatsView from "../views/chat/ChatView";
 
 import CustomDrawerContentComponent from "./CustomDrawerContentComponent";
 
@@ -22,10 +23,11 @@ let routeConfigs = {
   PostDetail: PostDetailView,
   MyProfile: MyProfileView,
   RecentChats: RecentChatsView,
-  SetUpProfile: SetUpProfileView
+  SetUpProfile: SetUpProfileView,
+  Chat: ChatsView
 };
 let drawerNavigationConfig = {
-  initialRouteName: "Login",
+  initialRouteName: "Chat",
   contentComponent: CustomDrawerContentComponent,
   contentOptions: {
     activeTintColor: "orange",
@@ -44,7 +46,8 @@ let drawerNavigationConfig = {
     "Register",
     "PostDetail",
     "CreatePost",
-    "SetUpProfile"
+    "SetUpProfile",
+    "Chat"
   ],
   drawerPosition: "left"
   // order: [Login, Register]

@@ -1,3 +1,4 @@
+import Profile from "./Profile"
 export default class User {
   id: ?string = "";
   avataImage: ?string = "";
