@@ -4,7 +4,7 @@ import Profile from "../models/Profile";
 import User from "../models/User";
 
 export default class UserStore {
-  @observable id: ?string = "3aRqo3BmeXYrkix8P9CILdTOwk43";
+  @observable id: ?string = "u6xWTSoxmVVxsfGmhfqegbATryP2";
   @observable avataImage: ?string = "";
   @observable follower: ?(string[]) = [];
   @observable following: ?(string[]) = [];
@@ -19,44 +19,19 @@ export default class UserStore {
     location: "Male"
   };
 
-  @observable listUser: ?User = [
-    {
-      avataImage: "",
-      profiles: {
-        aboutMe: "a",
-        dateOfBirth: "08/11/2019",
-        fullName: "3aRqo3BmeXYrkix8P9CILdTOwk43",
-        gender: "dat",
-        location: "Male"
-      }
-    },
-    {
-      avataImage: "",
-      profiles: {
-        aboutMe: "abc",
-        dateOfBirth: "Female",
-        fullName: "abc",
-        gender: "16/11/2019",
-        location: "abc"
-      }
-    },
-    {
-      avataImage: "",
-      profiles: {
-        aboutMe: "dd",
-        dateOfBirth: "07/11/2019",
-        fullName: "h42nnU6D4bfmnHchrLNsYhFFZWv2",
-        gender: "test",
-        location: "Female"
-      }
-    }
-  ];
+  @observable recentChats: ?(any[]) = [];
+  @observable listUser: ?User = [];
 
   @action
   async setUser() {
     this.clearStore();
-    await this.getAllUser();
     const user = await Firebase.auth.currentUser;
+    this.id = user.uid;
+    await this.getAllUser();
+    await this.getRecentChats();
+    console.log(`listUser: ${JSON.stringify(this.listUser)}`);
+    console.log(`RECENTchats: ${JSON.stringify(this.recentChats)}`);
+
     await Firebase.database
       .ref("/users/" + user.uid)
       .once("value", async snapshot => {
@@ -105,6 +80,15 @@ export default class UserStore {
         snapshotUser.forEach(user => {
           this.listUser.push(user.val());
         });
+      });
+  }
+
+  @action async getRecentChats() {
+    this.recentChats = [];
+    await Firebase.database
+      .ref("messages/" + this.id)
+      .once("value", snapshot => {
+        if (snapshot.val()) this.recentChats.push(snapshot.val());
       });
   }
 

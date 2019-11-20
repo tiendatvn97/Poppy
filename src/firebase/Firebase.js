@@ -17,9 +17,11 @@ export default class Firebase {
     static userInfo= {
         name:""
     };
+    static firebase;
     static database;
     static init() {
         firebase.initializeApp(firebaseConfig);
+        Firebase.firebase = firebase;
         Firebase.auth = firebase.auth();
         Firebase.database = firebase.database();
     }

@@ -32,6 +32,8 @@ import {
   keyboardDidShowListener,
   Keyboard
 } from "react-native";
+let isDisplayAvatar = true;
+import Firebase from "../../../firebase/Firebase";
 const data = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -63,116 +65,134 @@ const data = [
   }
 ];
 
-@inject("userStore")
+@inject("userStore", "chatStore")
 @observer
 export default class ChatView extends Component {
+  state = {
+    messageList: []
+  };
   static navigationOptions = {
     drawerLabel: "Chats",
     drawerIcon: ({ tintColor }) => (
       <Icon name="rocketchat" type="FontAwesome5" style={{ fontSize: 20 }} />
     )
   };
-  componentDidMount() {
-    // console.log(`ok: ${JSON.stringify(this.myReff)}`)
-  }
-  // componentWillMount(){
-  //   this.myReff.scrollToEnd()
-  // }
 
-  _scrollEnd = evt => {
-    this.myReff.scrollToEnd();
-    console.log('oo')
-    console.log(this.myReff)
-  };
-  componentDidMount() {
-    this._keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      this._scrollEnd
-    );
-    this._keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      this._scrollEnd
-    );
+  componentWillMount() {
+    Firebase.database
+      .ref("messages")
+      .child(this.props.chatStore.hostChat)
+      .child(this.props.chatStore.partnerChat)
+      .on("child_added", value => {
+        this.setState(preState => {
+          return {
+            messageList: [...preState.messageList, value.val()]
+          };
+        });
+        console.log(`ok ${JSON.stringify(this.messageList)}`);
+      });
   }
   render() {
-    console.log("test");
-    console.log(JSON.stringify(this.props.userStore.listUser));
+    const { chatStore } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-      <Container>
-        <DrawerHeader
-          parent={this}
-          title="Chats"
-          nameIcon="user-friends"
-          typeIcon="FontAwesome5"
-        />
-        <Content scrollToEnd>
-          <FlatList
-            ref={test => (this.myReff = test)}
-            onContentSizeChange={()=> this.myReff.scrollToEnd()}
-            style={{ marginTop: 10 }}
-            data={data}
-            renderItem={({ item, index }) => {
-              if (index % 2 === 0)
-                return (
-                  <View style={{ flexDirection: "row", margin: 15 }}>
-                    <Image
-                      style={{ width: 30, height: 30, borderRadius: 15 }}
-                      source={require("../../../icons/3.jpg")}
-                    ></Image>
+        <Container>
+          <DrawerHeader
+            parent={this}
+            title="Chats"
+            nameIcon="user-friends"
+            typeIcon="FontAwesome5"
+          />
+          <Content>
+            <FlatList
+              style={{ marginTop: 10 }}
+              data={this.state.messageList}
+              renderItem={({ item, index }) => {
+                if (index == 0) isDisplayAvatar = true;
+                if (
+                  index > 0 &&
+                  this.state.messageList[index].from ===
+                    this.state.messageList[index - 1].from
+                )
+                  isDisplayAvatar = false;
+                else isDisplayAvatar = true;
+                if (item.from !== chatStore.hostChat)
+                  return (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        marginHorizontal: 15
+                      }}
+                    >
+                      <Image
+                        style={{ width: 30, height: 30, borderRadius: 15 }}
+                        source={
+                          isDisplayAvatar ? require("../../../icons/3.jpg") : ""
+                        }
+                      ></Image>
 
-                    <View style={{ marginLeft: 10 }}>
-                      <Text style={styles.textReceive}>
-                        So strongly and metaphysically did I conceive of my
-                      </Text>
-                      <Text style={{ fontSize: 10, color: "gray" }}>
-                        1:23 PM
-                      </Text>
+                      <View style={{ marginLeft: 10 }}>
+                        <Text style={styles.textReceive}>{item.content}</Text>
+                        <Text style={{ fontSize: 10, color: "#e6e6e6" }}>
+                          1:23 PM
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                );
-              else
-                return (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      margin: 15,
-                      justifyContent: "flex-end"
-                    }}
-                  >
-                    <View style={{ marginRight: 10 }}>
-                      <Text style={styles.textSend}>
-                        So strongly and metaphysically did I conceive of my
-                      </Text>
-                      <Text style={{ fontSize: 10, color: "gray" }}>
-                        1:23 PM
-                      </Text>
+                  );
+                else
+                  return (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        marginHorizontal: 15,
+                        justifyContent: "flex-end"
+                      }}
+                    >
+                      <View style={{ marginRight: 10, marginLeft: 15 }}>
+                        <Text style={styles.textSend}>{item.content}</Text>
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            color: "gray",
+                            marginLeft: 10
+                          }}
+                        >
+                          1:23 PM
+                        </Text>
+                      </View>
+                      <Image
+                        style={{ width: 30, height: 30, borderRadius: 15 }}
+                        source={
+                          isDisplayAvatar ? require("../../../icons/3.jpg") : ""
+                        }
+                      ></Image>
                     </View>
-                    <Image
-                      style={{ width: 30, height: 30, borderRadius: 15 }}
-                      source={require("../../../icons/3.jpg")}
-                    ></Image>
-                  </View>
-                );
-            }}
-          ></FlatList>
-        </Content>
+                  );
+              }}
+            ></FlatList>
+          </Content>
 
-        <Card style={{ marginBottom: 0, borderTopWidth: 1.5 }}>
-          <Form>
-            <Item>
-              <Input placeholder="Write comment..." style={{ fontSize: 12 }} />
-              <Icon name="emoticon-devil" type="MaterialCommunityIcons" />
-              <View style={styles.sendIcon}>
-                <Icon
-                  name="ios-send"
-                  style={{ paddingRight: 0, color: "white" }}
+          <Card style={{ marginBottom: 0, borderTopWidth: 1.5 }}>
+            <Form>
+              <Item>
+                <Input
+                  placeholder="Write comment..."
+                  style={{ fontSize: 12 }}
+                  value={chatStore.textMessage}
+                  onChangeText={value => chatStore.textMessageOnChange(value)}
                 />
-              </View>
-            </Item>
-          </Form>
-        </Card>
-      </Container>
+                <Icon name="emoticon-devil" type="MaterialCommunityIcons" />
+                <View style={styles.sendIcon}>
+                  <Icon
+                    name="ios-send"
+                    style={{ paddingRight: 0, color: "white" }}
+                    onPress={() => chatStore.sendMessage()}
+                  />
+                </View>
+              </Item>
+            </Form>
+          </Card>
+        </Container>
       </KeyboardAvoidingView>
     );
   }
@@ -181,11 +201,11 @@ const styles = StyleSheet.create({
   textReceive: {
     width: "auto",
     marginRight: 50,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: "gray",
     borderRadius: 7,
     fontSize: 12,
-    padding: 10
+    padding: 5
   },
   textSend: {
     width: "auto",
@@ -193,7 +213,8 @@ const styles = StyleSheet.create({
     borderColor: "red",
     borderRadius: 7,
     fontSize: 12,
-    padding: 10
+    padding: 5,
+    marginLeft: 10
   },
   sendIcon: {
     width: 36,

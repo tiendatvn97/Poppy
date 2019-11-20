@@ -3,6 +3,10 @@ import Firebase from "../../firebase/Firebase";
 import Profile from "../models/Profile";
 const moment = require("moment");
 export default class SetUpProfileStore {
+  constructor(stores) {
+    this.rootStore = stores;
+  }
+
   @observable fullName: ?string = "";
   @observable dateOfBirth: ?string = "";
   @observable gender: ?string = "";
@@ -71,8 +75,16 @@ export default class SetUpProfileStore {
   @action async setProfileUser(userId: ?String) {
     let mess = "";
     try {
-      const profile = await Profile.load(this.fullName, this.dateOfBirth, this.gender, this.location, this.aboutMe);
+      const profile = await Profile.load(
+        this.fullName,
+        this.dateOfBirth,
+        this.gender,
+        this.location,
+        this.aboutMe
+      );
       await Firebase.database.ref("users/" + userId).set({
+        id: userId,
+        email: this.rootStore.registerStore.email,
         avataImage: "",
         follower: [],
         following: [],
@@ -87,8 +99,8 @@ export default class SetUpProfileStore {
     return mess;
   }
 
-  @action test(){
+  @action test() {
     var userId = Firebase.auth.currentUser.uid;
-    console.log(`userId${userId}`)
+    console.log(`userId${userId}`);
   }
 }

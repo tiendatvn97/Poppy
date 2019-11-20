@@ -9,6 +9,7 @@ import RegisterStore from "./stores/RegisterStore";
 import SignInStore from "./stores/SignInStore";
 import SetUpProfileStore from "./stores/SetUpProfileStore";
 import UserStore from "./stores/UserStore";
+import ChatStore from "./stores/ChatStore";
 
 class rootStore {
   secondScreenStore: SecondScreenStore;
@@ -21,6 +22,7 @@ class rootStore {
   signInStore: SignInStore;
   setUpProfileStore: SetUpProfileStore;
   userStore: UserStore;
+  chatStore: ChatStore;
 
   constructor() {
     this.secondScreenStore = new SecondScreenStore();
@@ -31,8 +33,9 @@ class rootStore {
     this.postDetailStore = new PostDetailStore();
     this.registerStore = new RegisterStore();
     this.signInStore = new SignInStore(this);
-    this.setUpProfileStore = new SetUpProfileStore();
+    this.setUpProfileStore = new SetUpProfileStore(this);
     this.userStore = new UserStore();
+    this.chatStore = new ChatStore();
   }
 }
 

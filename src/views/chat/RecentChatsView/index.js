@@ -48,6 +48,7 @@ const data = [
 ];
 import { observer, inject } from "mobx-react";
 @inject("userStore")
+@inject("chatStore")
 @observer
 export default class RecentChatsView extends Component {
   static navigationOptions = {
@@ -57,6 +58,7 @@ export default class RecentChatsView extends Component {
     )
   };
   render() {
+    const { userStore, chatStore, navigation } = this.props;
     return (
       <Container>
         <DrawerHeader
@@ -67,28 +69,40 @@ export default class RecentChatsView extends Component {
         />
         <Content>
           <List>
-            {this.props.userStore.listUser.map(item => (
-              <ListItem thumbnail onPress={() => {
-                this.props.navigation.navigate("Chat");
-              }}>
-                <Left>
-                  <Thumbnail source={require("../../../icons/2.jpg")} />
-                </Left>
-                <Body>
-                  <Text>{item.profiles.fullName}</Text>
-                  <Text note numberOfLines={1}>
-                    Its time to build a difference blabla bla. .
-                  </Text>
-                </Body>
-                <Right style={{ paddingRight: 0, paddingTop: 0 }}>
-                  <Button transparent>
-                    <Text style={styles.textNote} uppercase={false}>
-                      1h
-                    </Text>
-                  </Button>
-                </Right>
-              </ListItem>
-            ))}
+            {userStore.recentChats.map(item => {
+              let userInfo = null;
+              let arr = Object.values(Object.values(item)[0]);
+              userStore.listUser.map(user => {
+                if (user.id === Object.keys(item)[0]) userInfo = user;
+              });
+              if (userInfo)
+                return (
+                  <ListItem
+                    thumbnail
+                    onPress={() => {
+                      chatStore.setValue(userStore.id, userInfo.id);
+                      navigation.navigate("Chat");
+                    }}
+                  >
+                    <Left>
+                      <Thumbnail source={require("../../../icons/2.jpg")} />
+                    </Left>
+                    <Body>
+                      <Text>{userInfo.profiles.fullName}</Text>
+                      <Text note numberOfLines={1}>
+                        {arr[arr.length - 1]["content"] || ""}
+                      </Text>
+                    </Body>
+                    <Right style={{ paddingRight: 0, paddingTop: 0 }}>
+                      <Button transparent>
+                        <Text style={styles.textNote} uppercase={false}>
+                          1h
+                        </Text>
+                      </Button>
+                    </Right>
+                  </ListItem>
+                );
+            })}
           </List>
         </Content>
       </Container>

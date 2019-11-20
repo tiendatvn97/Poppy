@@ -1,4 +1,4 @@
-import Profile from "./Profile"
+import Profile from "./Profile";
 export default class User {
   id: ?string = "";
   avataImage: ?string = "";
@@ -9,7 +9,16 @@ export default class User {
   blockId: ?(string[]) = [];
   profile: ?Profile = null;
 
-  static async load(id, avataImage, follower,following, postId, chatId, blockId, profile) {
+  static async load(
+    id,
+    avataImage,
+    follower,
+    following,
+    postId,
+    chatId,
+    blockId,
+    profile
+  ) {
     const user = new User();
     user.id = id;
     user.avataImage = avataImage;
