@@ -23,13 +23,15 @@ import { observer, inject } from "mobx-react";
 
 import BackHeader from "../header/BackHeader";
 
-@inject("registerStore")
-@inject("setUpProfileStore")
+@inject("registerStore", "navigationStore", "setUpProfileStore")
 @observer
 export default class RegisterView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
   };
+  componentWillMount() {
+    this.props.navigationStore.currentNavigation = this.props.navigation;
+  }
 
   render() {
     const { registerStore, setUpProfileStore } = this.props;

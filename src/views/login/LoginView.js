@@ -6,8 +6,11 @@ import {
   TouchableOpacity,
   Alert,
   View,
-  Text,
+  Text
 } from "react-native";
+import { observer, inject } from "mobx-react";
+@inject("navigationStore")
+@observer
 export default class LoginView extends Component {
   static navigationOptions = {
     drawerLabel: "Sign Out",
@@ -15,6 +18,11 @@ export default class LoginView extends Component {
       <Icon name="logout" type="SimpleLineIcons" style={{ fontSize: 20 }} />
     )
   };
+
+  componentWillMount() {
+    this.props.navigationStore.currentNavigation = this.props.navigation;
+  }
+
   render() {
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
@@ -31,7 +39,7 @@ export default class LoginView extends Component {
 
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }} />
-          <Button 
+          <Button
             style={styles.button}
             onPress={() => this.props.navigation.navigate("SignIn")}
           >
@@ -42,7 +50,7 @@ export default class LoginView extends Component {
             transparent
             style={{ alignSelf: "center" }}
             onPress={() => {
-              this.props.navigation.navigate("SetUpProfile")
+              this.props.navigation.navigate("SetUpProfile");
             }}
           >
             <Text style={styles.textNewAcount}>Create New Account</Text>

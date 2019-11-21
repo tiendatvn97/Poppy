@@ -29,7 +29,7 @@ import BackHeader from "../header/BackHeader";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import SwitchSelector from "react-native-switch-selector";
 
-@inject("setUpProfileStore")
+@inject("setUpProfileStore", "navigationStore")
 @observer
 export default class SetUpProfileView extends Component {
   static navigationOptions = {
@@ -60,6 +60,7 @@ export default class SetUpProfileView extends Component {
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
+    this.props.navigationStore.currentNavigation = this.props.navigation;
   }
   _keyboardDidShow() {
     this.setState({ keyBoardDidShow: true });

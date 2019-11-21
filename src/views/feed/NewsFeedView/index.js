@@ -16,8 +16,11 @@ import {
   Form,
   Item
 } from "native-base";
+import { observer, inject } from "mobx-react";
 import DrawerHeader from "../../header/DrawerHeader";
 import { StyleSheet, Alert, Image } from "react-native";
+@inject("navigationStore")
+@observer
 export default class NewsFeedView extends Component {
   static navigationOptions = {
     drawerLabel: "Home",
@@ -25,6 +28,10 @@ export default class NewsFeedView extends Component {
       <Icon name="home" type="AntDesign" style={{ fontSize: 20 }} />
     )
   };
+  componentWillMount() {
+    this.props.navigationStore.currentNavigation = this.props.navigation;
+  }
+
   render() {
     const data = [
       {
@@ -69,7 +76,7 @@ export default class NewsFeedView extends Component {
             backgroundColor: "#ff6265"
           }}
           onPress={() => {
-            this.props.navigation.navigate("CreatePost")
+            this.props.navigation.navigate("CreatePost");
           }}
         >
           <Icon name="video-camera" type="Entypo"></Icon>

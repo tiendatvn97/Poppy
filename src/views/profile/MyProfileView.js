@@ -30,7 +30,9 @@ import {
 
 const widthScreen = Dimensions.get("window").width;
 import DrawerHeader from "../header/DrawerHeader";
-
+import { observer, inject } from "mobx-react";
+@inject("navigationStore")
+@observer
 export default class MyProfileView extends Component {
   static navigationOptions = {
     drawerLabel: "My Profile",
@@ -38,6 +40,10 @@ export default class MyProfileView extends Component {
       <Icon name="profile" type="AntDesign" style={{ fontSize: 20 }} />
     )
   };
+  componentWillMount() {
+    this.props.navigationStore.currentNavigation = this.props.navigation;
+  }
+
   render() {
     return (
       <Container>

@@ -15,7 +15,8 @@ import { DrawerNavigatorItems } from "react-navigation-drawer";
 import { observer, inject } from "mobx-react";
 import Firebase from "../firebase/Firebase";
 
-@inject("signInStore")
+
+@inject("signInStore","navigationStore")
 @observer
 class CustomDrawerContentComponent extends Component {
   constructor(props) {
@@ -40,7 +41,11 @@ class CustomDrawerContentComponent extends Component {
           <DrawerNavigatorItems
             {...this.props}
             onItemPress={async ({ route, focused }) => {
-              if (route.key === "Login") {
+              await this.props.navigationStore.reset(route.routes[0].routeName);
+              console.log(`route: ${JSON.stringify(route)}`);
+              if (route.key === "SignOut") {
+                console.log(`test ${JSON.stringify(this.props.navigation)}`);
+                // this.props.navigation.dispatch(resetAction());
                 await this.props.signInStore.SignOut();
               }
               this.props.onItemPress({ route, focused });

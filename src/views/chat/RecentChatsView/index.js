@@ -13,50 +13,43 @@ import {
   Button,
   Icon
 } from "native-base";
-
+import Firebase from "../../../firebase/Firebase";
 import DrawerHeader from "../../header/DrawerHeader";
 import { StyleSheet, Alert } from "react-native";
-const data = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../../icons/1.jpg")
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    image: require("../../../icons/2.jpg")
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    image: require("../../../icons/3.jpg")
-  },
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../../icons/3.jpg")
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    image: require("../../../icons/2.jpg")
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    image: require("../../../icons/1.jpg")
-  },
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../../icons/1.jpg")
-  }
-];
 import { observer, inject } from "mobx-react";
-@inject("userStore")
-@inject("chatStore")
+
+@inject("userStore", "chatStore", "navigationStore")
 @observer
 export default class RecentChatsView extends Component {
+  state = {
+    recentChats: []
+  };
   static navigationOptions = {
     drawerLabel: "Chats",
     drawerIcon: ({ tintColor }) => (
       <Icon name="rocketchat" type="FontAwesome5" style={{ fontSize: 20 }} />
     )
   };
+
+  async componentWillMount() {
+    this.props.navigationStore.currentNavigation = this.props.navigation;
+    await Firebase.database
+      .ref("messages")
+      .child(this.props.userStore.id)
+      .on("child_added", value => {
+        if (value.val()) {
+          const tmp = {};
+          tmp[value.key] = value.val();
+          this.setState(preState => {
+            return {
+              recentChats: [...preState.recentChats, tmp]
+            };
+          });
+        }
+
+        console.log(`ok recent ${JSON.stringify(this.state.recentChats)}`);
+      });
+  }
   render() {
     const { userStore, chatStore, navigation } = this.props;
     return (
@@ -69,7 +62,7 @@ export default class RecentChatsView extends Component {
         />
         <Content>
           <List>
-            {userStore.recentChats.map(item => {
+            {this.state.recentChats.map(item => {
               let userInfo = null;
               let arr = Object.values(Object.values(item)[0]);
               userStore.listUser.map(user => {

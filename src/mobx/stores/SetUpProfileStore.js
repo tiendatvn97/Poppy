@@ -93,6 +93,7 @@ export default class SetUpProfileStore {
         blockId: [],
         profiles: profile
       });
+      this.rootStore.userStore.setUser();
     } catch (error) {
       mess = error.message;
     }

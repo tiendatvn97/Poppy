@@ -37,7 +37,11 @@ export default class DrawerHeader extends Component {
             type = {this.props.typeIcon}
             style={{color:"black", fontSize: 20}}
             onPress={() => {
-              this.props.parent.props.navigation.openDrawer();
+              // this.props.parent.props.navigation.openDrawer();
+              if (title =="Recent Chats") {
+                console.log("recent")
+                this.props.parent.props.navigation.navigate("Contact")
+              }
             }}
           ></Icon>
         </Right>

@@ -1,5 +1,3 @@
-import SecondScreenStore from "./stores/SecondScreenStore";
-import ThirdScreenStore from "./stores/ThirdScreenStore";
 
 import CreatePostStore from "./stores/CreatePostStore";
 import MyProfileStore from "./stores/MyProfileStore";
@@ -10,10 +8,9 @@ import SignInStore from "./stores/SignInStore";
 import SetUpProfileStore from "./stores/SetUpProfileStore";
 import UserStore from "./stores/UserStore";
 import ChatStore from "./stores/ChatStore";
+import NavigationStore from "./stores/NavigationStore";
 
 class rootStore {
-  secondScreenStore: SecondScreenStore;
-  thirdScreenStore: ThirdScreenStore;
   createPostStore: CreatePostStore;
   myProfileStore: MyProfileStore;
   newsFeedStore: NewsFeedStore;
@@ -23,19 +20,19 @@ class rootStore {
   setUpProfileStore: SetUpProfileStore;
   userStore: UserStore;
   chatStore: ChatStore;
+  navigationStore: NavigationStore;
 
   constructor() {
-    this.secondScreenStore = new SecondScreenStore();
-    this.thirdScreenStore = new ThirdScreenStore();
     this.createPostStore = new CreatePostStore();
-    this.myProfileStore = new MyProfileStore();
-    this.newsFeedStore = new NewsFeedStore();
+    this.myProfileStore = new MyProfileStore(this);
+    this.newsFeedStore = new NewsFeedStore(this);
     this.postDetailStore = new PostDetailStore();
-    this.registerStore = new RegisterStore();
+    this.registerStore = new RegisterStore(this);
     this.signInStore = new SignInStore(this);
     this.setUpProfileStore = new SetUpProfileStore(this);
-    this.userStore = new UserStore();
-    this.chatStore = new ChatStore();
+    this.userStore = new UserStore(this);
+    this.chatStore = new ChatStore(this);
+    this.navigationStore = new NavigationStore(this);
   }
 }
 

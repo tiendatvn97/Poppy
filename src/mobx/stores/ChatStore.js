@@ -2,6 +2,10 @@ import { observable, action, computed } from "mobx";
 import Firebase from "../../firebase/Firebase";
 
 export default class ChatStore {
+  constructor(store) {
+    this.rootStore = store;
+  }
+
   @observable hostChat: ?String = "";
   @observable partnerChat: ?String = "";
   @observable textMessage: ?String = "";
