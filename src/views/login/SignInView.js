@@ -24,7 +24,7 @@ import { StyleSheet, Alert, KeyboardAvoidingView } from "react-native";
 import Firebase from "../../firebase/Firebase";
 import { observer, inject } from "mobx-react";
 
-@inject("signInStore","userStore")
+@inject("signInStore", "userStore")
 @observer
 export default class SignInView extends Component {
   static navigationOptions = {
@@ -41,7 +41,11 @@ export default class SignInView extends Component {
     if (mess) {
       Alert.alert(mess);
     } else {
-      this.props.navigation.navigate("NewsFeed");
+      try {
+        this.props.navigation.navigate("drawer");
+      } catch (e) {
+        console.log(`error:${e}`);
+      }
     }
   };
   render() {

@@ -46,8 +46,6 @@ export default class RecentChatsView extends Component {
             };
           });
         }
-
-        console.log(`ok recent ${JSON.stringify(this.state.recentChats)}`);
       });
   }
   render() {

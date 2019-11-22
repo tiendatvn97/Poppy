@@ -7,18 +7,27 @@ import { createDrawerNavigator } from "react-navigation-drawer";
 import { createAppContainer } from "react-navigation";
 
 import { Icon } from "native-base";
-import {LoginStack, ChatStack, NewFeedStack, ProfileStack } from "./StackNavigators"
 
+import {
+  LoginStack,
+  ChatStack,
+  NewFeedStack,
+  ProfileStack
+} from "./StackNavigators";
 
-import { StackActions, NavigationActions } from 'react-navigation';
+import {
+  StackActions,
+  NavigationActions,
+  createSwitchNavigator
+} from "react-navigation";
 
 export const resetAction = StackActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({ routeName: 'Login' })],
+  actions: [NavigationActions.navigate({ routeName: "Login" })]
 });
 
 let drawerNavigationConfig = {
-  initialRouteName: "Login",
+  initialRouteName: "NewFeed",
   contentComponent: CustomDrawerContentComponent,
   contentOptions: {
     activeTintColor: "orange",
@@ -28,18 +37,11 @@ let drawerNavigationConfig = {
       color: "gray"
     }
   },
-  order: ["NewFeed", "Login", "Chat", "Profile", "SignOut"],
+  order: ["NewFeed", "Chat", "Profile", "SignOut"],
   drawerPosition: "left"
 };
 
-
 routeConfigs = {
-  Login: {
-    screen: LoginStack,
-    navigationOptions: {
-      drawerLabel: () => null
-    }
-  },
   Chat: {
     screen: ChatStack,
     navigationOptions: {
@@ -58,7 +60,15 @@ routeConfigs = {
       )
     }
   },
-  SignOut: LoginView,
+  SignOut: {
+    screen: ProfileStack,
+    navigationOptions: {
+      drawerLabel: "Signout",
+      drawerIcon: ({ tintColor }) => (
+        <Icon name="logout" type="SimpleLineIcons" style={{ fontSize: 20 }} />
+      )
+    }
+  },
   NewFeed: {
     screen: NewFeedStack,
     navigationOptions: {
@@ -69,21 +79,18 @@ routeConfigs = {
     }
   }
 };
-const drawerNavigator = createDrawerNavigator(routeConfigs, drawerNavigationConfig);
+const drawerNavigator = createDrawerNavigator(
+  routeConfigs,
+  drawerNavigationConfig
+);
+const test = createSwitchNavigator(
+  {
+    Login: {
+      screen: LoginStack
+    },
+    drawer: drawerNavigator
+  },
+  { initialRouteName: "Login" }
+);
 
-export default createAppContainer(drawerNavigator);
-
-// const LoginStack = createStackNavigator({
-//   Login: LoginView,
-//   Register: RegisterView,
-//   SignIn: SignInView,
-//   CreatePost: CreatePostView,
-//   NewsFeed: NewsFeedView,
-//   PostDetail: PostDetailView,
-//   MyProfile: MyProfileView,
-//   RecentChats: RecentChatsView,
-//   SetUpProfile: SetUpProfileView,
-//   Chat: ChatsView
-// },{
-//   initialRouteName: "Drawer"
-// })
+export default createAppContainer(test);

@@ -29,8 +29,8 @@ export default class UserStore {
     this.id = user.uid;
     await this.getAllUser();
     await this.getRecentChats();
-    console.log(`listUser: ${JSON.stringify(this.listUser)}`);
-    console.log(`RECENTchats: ${JSON.stringify(this.recentChats)}`);
+    // console.log(`listUser: ${JSON.stringify(this.listUser)}`);
+    // console.log(`RECENTchats: ${JSON.stringify(this.recentChats)}`);
 
     await Firebase.database
       .ref("/users/" + user.uid)

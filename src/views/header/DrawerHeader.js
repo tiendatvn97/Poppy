@@ -39,7 +39,6 @@ export default class DrawerHeader extends Component {
             onPress={() => {
               // this.props.parent.props.navigation.openDrawer();
               if (title =="Recent Chats") {
-                console.log("recent")
                 this.props.parent.props.navigation.navigate("Contact")
               }
             }}
