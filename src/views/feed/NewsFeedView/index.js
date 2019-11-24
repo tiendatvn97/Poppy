@@ -18,10 +18,14 @@ import {
 } from "native-base";
 import { observer, inject } from "mobx-react";
 import DrawerHeader from "../../header/DrawerHeader";
-import { StyleSheet, Alert, Image } from "react-native";
-@inject("navigationStore")
+import CameraModal from "../../modal/CameraModal";
+import {StyleSheet} from "react-native"
+@inject("createPostStore")
 @observer
 export default class NewsFeedView extends Component {
+  state = {
+    modalVisible: false
+  };
   static navigationOptions = {
     drawerLabel: "Home",
     drawerIcon: () => (
@@ -29,7 +33,7 @@ export default class NewsFeedView extends Component {
     )
   };
   componentWillMount() {
-    this.props.navigationStore.currentNavigation = this.props.navigation;
+    // this.props.navigationStore.currentNavigation = this.props.navigation;
   }
 
   render() {
@@ -63,6 +67,7 @@ export default class NewsFeedView extends Component {
               profileImage={item.profileImage}
             />
           ))}
+          <CameraModal modalVisible={this.state.modalVisible} parent={this} createPostStore={this.props.createPostStore} />
         </Content>
         <Button
           style={{
@@ -76,7 +81,7 @@ export default class NewsFeedView extends Component {
             backgroundColor: "#ff6265"
           }}
           onPress={() => {
-            this.props.navigation.navigate("CreatePost");
+            this.setState({ modalVisible: true });
           }}
         >
           <Icon name="video-camera" type="Entypo"></Icon>

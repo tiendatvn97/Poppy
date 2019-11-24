@@ -23,7 +23,7 @@ class rootStore {
   navigationStore: NavigationStore;
 
   constructor() {
-    this.createPostStore = new CreatePostStore();
+    this.createPostStore = new CreatePostStore(this);
     this.myProfileStore = new MyProfileStore(this);
     this.newsFeedStore = new NewsFeedStore(this);
     this.postDetailStore = new PostDetailStore();

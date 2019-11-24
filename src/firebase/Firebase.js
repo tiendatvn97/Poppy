@@ -19,10 +19,12 @@ export default class Firebase {
     };
     static firebase;
     static database;
+    static storage;
     static init() {
         firebase.initializeApp(firebaseConfig);
         Firebase.firebase = firebase;
         Firebase.auth = firebase.auth();
         Firebase.database = firebase.database();
+        Firebase.storage = firebase.storage();
     }
 }

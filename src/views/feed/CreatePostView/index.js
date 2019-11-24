@@ -31,10 +31,13 @@ const widthScreen = Dimensions.get("window").width;
 
 import FullBackHeader from "../../header/FullBackHeader";
 
+import { observer, inject } from "mobx-react";
+@inject("createPostStore")
+@observer
 export default class CreatePostView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
-  }
+  };
   constructor(props) {
     super(props);
     this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -70,10 +73,16 @@ export default class CreatePostView extends Component {
   }
 
   render() {
+    const { createPostStore } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <Container>
-          <FullBackHeader parent ={this} title="Create Moment" nameIcon="closecircleo" typeIcon="AntDesign" />
+          <FullBackHeader
+            parent={this}
+            title="Create Moment"
+            nameIcon="closecircleo"
+            typeIcon="AntDesign"
+          />
           <Content
             ref={ref => {
               this.scrollView = ref;
@@ -89,7 +98,7 @@ export default class CreatePostView extends Component {
                 margin: 17,
                 resizeMode: "cover"
               }}
-              source={require("../../../icons/1.jpg")}
+              source={{ uri: createPostStore.image.uri }}
             />
 
             <Form>
@@ -100,6 +109,10 @@ export default class CreatePostView extends Component {
                   blurOnSubmit
                   placeholder="Add caption"
                   style={{ fontSize: 12, minHeight: 50 }}
+                  value={createPostStore.caption}
+                  onChangeText={value => {
+                    createPostStore.captionOnChange(value);
+                  }}
                 ></Input>
                 <Icon
                   name="emoticon-devil-outline"
@@ -114,6 +127,10 @@ export default class CreatePostView extends Component {
                   blurOnSubmit
                   placeholder="Tag People"
                   style={{ fontSize: 12, minHeight: 50 }}
+                  value={createPostStore.peopleTag}
+                  onChangeText={value => {
+                    createPostStore.peopleTagOnChange(value);
+                  }}
                 ></Input>
                 <Icon
                   name="plussquareo"
@@ -128,6 +145,10 @@ export default class CreatePostView extends Component {
                   blurOnSubmit
                   returnKeyType="Done"
                   placeholder="Add Location"
+                  value={createPostStore.location}
+                  onChangeText={value => {
+                    createPostStore.locationOnChange(value);
+                  }}
                   style={{ fontSize: 12, minHeight: 50 }}
                 ></Input>
 
@@ -156,11 +177,16 @@ export default class CreatePostView extends Component {
                     style={styles.iconButton}
                   />
                   <Text uppercase={false} style={{ color: "#ff6265" }}>
-                    Save
+                    Cancel
                   </Text>
                 </View>
               </Button>
-              <Button style={styles.button}>
+              <Button
+                style={styles.button}
+                onPress={() => {
+                  this.props.createPostStore.createPost();
+                }}
+              >
                 <View style={styles.viewContainButton}>
                   <Icon
                     name="ios-send"
