@@ -13,13 +13,13 @@ import {
 } from "native-base";
 import { Constants } from "expo";
 
-export default class DrawerHeader extends Component {
+export default class BackHeader extends Component {
   render() {
     const { title } = this.props;
     return (
       <Header
         style={{
-          marginTop: Constants.statusBarHeight,
+          paddingTop: Constants.statusBarHeight / 2,
           backgroundColor: "white"
         }}
       >

@@ -39,7 +39,7 @@ export default class PostDetailView extends Component {
       <Container>
         <BackHeader parent ={this} title="Ngoc Trinh's Moment" />
         <Content>
-          <Card transparent>
+          <Card transparent style={{elevation:1}}>
             <CardItem
               style={{
                 paddingLeft: 0,
@@ -73,14 +73,14 @@ export default class PostDetailView extends Component {
               width={widthScreen}
             />
 
-            <CardItem style={{}}>
+            <CardItem >
               <Left>
                 <Icon name="map-pin" type="Feather" size={10} />
                 <Text style={styles.textNote}>10 mins ago</Text>
               </Left>
             </CardItem>
           </Card>
-          <Card>
+          <Card style={{elevation:0}}>
             <CardItem>
               <Left
                 style={{ justifyContent: "center", alignItems: "center" }}
@@ -95,7 +95,7 @@ export default class PostDetailView extends Component {
               </Left>
             </CardItem>
           </Card>
-          <Card transparent>
+          <Card transparent style={{elevation:0}}>
             <CardItem transparent>
               <Left>
                 <Text style={styles.textNote}>21 Comments</Text>
@@ -166,7 +166,8 @@ export default class PostDetailView extends Component {
               <Item>
                 <Input
                   placeholder="Write comment..."
-                  style={{ fontSize: 12 }}
+                  style={{ fontSize: 12, height:50 }}
+                  multiline
                 />
                 <Icon name="emoticon-devil" type="MaterialCommunityIcons" />
                 <View style={styles.sendIcon}>

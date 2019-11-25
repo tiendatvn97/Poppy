@@ -12,80 +12,47 @@ import ContactView from "../views/InteractPeople/ContactView";
 
 import { createStackNavigator } from "react-navigation-stack";
 export const LoginStack = createStackNavigator(
-    {
-      Login: {
-        navigationOptions: { header: null },
-        screen: LoginView
-      },
-      Register: {
-        navigationOptions: { header: null },
-        screen: RegisterView
-      },
-      SignIn: {
-        navigationOptions: { header: null },
-        screen: SignInView
-      },
-      SetUpProfile: {
-        navigationOptions: { header: null },
-        screen: SetUpProfileView
-      }
-    },
-    {
-      initialRouteName: "Login"
+  {
+    Login: LoginView,
+    Register: RegisterView,
+    SignIn: SignInView,
+    SetUpProfile: SetUpProfileView
+  },
+  {
+    initialRouteName: "Login",
+    headerMode: "none"
+  }
+);
+
+export const ProfileStack = createStackNavigator(
+  {
+    MyProfile: {
+      screen: MyProfileView
     }
-  );
-  
-  export const ProfileStack = createStackNavigator(
-    {
-      MyProfile: {
-        navigationOptions: { header: null },
-        screen: MyProfileView
-      }
-    },
-    {
-      MyProfile: "Drawer"
-    }
-  );
+  },
+  { initialRouteName: "MyProfile", headerMode: "none" }
+);
 export const NewFeedStack = createStackNavigator(
-    {
-      CreatePost: {
-        navigationOptions: { header: null },
-        screen: CreatePostView
-      },
-      NewsFeed: {
-        navigationOptions: { header: null },
-        screen: NewsFeedView
-      },
-      PostDetail: {
-        navigationOptions: { header: null },
-        screen: PostDetailView
-      },
-      MyProfile: {
-        navigationOptions: { header: null },
-        screen: MyProfileView
-      }
-    },
-    {
-      initialRouteName: "NewsFeed"
-    }
-  );
-  export const ChatStack = createStackNavigator(
-    {
-      RecentChats: {
-        navigationOptions: { header: null },
-        screen: RecentChatsView
-      },
-      Chat: {
-        navigationOptions: { header: null },
-        screen: ChatsView,
-        
-      },
-      Contact: {
-        navigationOptions: { header: null },
-        screen: ContactView,
-      }
-    },
-    {
-      initialRouteName: "RecentChats"
-    }
-  );
+  {
+    CreatePost: CreatePostView,
+    NewsFeed: NewsFeedView,
+    PostDetail: PostDetailView,
+    MyProfile: MyProfileView
+  },
+
+  {
+    initialRouteName: "NewsFeed",
+    headerMode: "none"
+  }
+);
+export const ChatStack = createStackNavigator(
+  {
+    RecentChats: RecentChatsView,
+    Chat: ChatsView,
+    Contact: ContactView
+  },
+  {
+    initialRouteName: "RecentChats",
+    headerMode: "none"
+  }
+);

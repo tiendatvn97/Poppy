@@ -19,7 +19,7 @@ import {
 import { observer, inject } from "mobx-react";
 import DrawerHeader from "../../header/DrawerHeader";
 import CameraModal from "../../modal/CameraModal";
-import { StyleSheet } from "react-native";
+import { StyleSheet , StatusBar} from "react-native";
 
 import Firebase from "../../../firebase/Firebase";
 @inject("createPostStore", "userStore", "newsFeedStore")
@@ -72,6 +72,7 @@ export default class NewsFeedView extends Component {
   render() {
     return (
       <Container style={{ paddingBottom: 15 }}>
+        <StatusBar hidden={false} backgroundColor="blue" />
         <DrawerHeader
           parent={this}
           title="My Feed"

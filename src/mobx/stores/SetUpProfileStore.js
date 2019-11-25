@@ -2,6 +2,7 @@ import { observable, action, computed } from "mobx";
 import Firebase from "../../firebase/Firebase";
 import Profile from "../models/Profile";
 const moment = require("moment");
+import uuid4 from "uuid/v4";
 export default class SetUpProfileStore {
   constructor(stores) {
     this.rootStore = stores;
@@ -71,9 +72,48 @@ export default class SetUpProfileStore {
     return "";
   }
 
+  @action
+  async upLoadAvatar() {
+    console.log("upload");
+    // console.log("url image: " + JSON.stringify(this.image.base64));
+
+    var uuid = uuid4();
+    const fileName = `${uuid}.jpg}`;
+    const res = await fetch("../../../src/images/female_avatar.jpg")
+    const blob =res.blob();
+
+    console.log("blob");
+    // const blob = await response.blob();
+    console.log("blob => " + blob);
+    var storageRef = Firebase.storage.ref(`posts/image/${fileName}`);
+
+    storageRef.put(blob).on(
+      Firebase.firebase.storage.TaskEvent.STATE_CHANGED,
+      snapshot => {
+        console.log("snapshot:" + snapshot.state);
+        console.log(
+          "progress:" + (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        if (snapshot.state === Firebase.firebase.storage.TaskState.SUCCESS) {
+          console.log("success");
+        }
+      },
+      error => {
+        console.log("error: " + error.toString());
+      },
+      () => {
+        storageRef.getDownloadURL().then(async downloadUrl => {
+          console.log("File avalable at: " + downloadUrl);
+          // await this.addPost(downloadUrl);
+        });
+      }
+    );
+  }
+
   @action async setProfileUser(userId: ?String) {
     let mess = "";
     try {
+      await this.upLoadAvatar();
       const profile = await Profile.load(
         this.fullName,
         this.dateOfBirth,

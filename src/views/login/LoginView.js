@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Alert,
   View,
-  Text
+  Text,
+  StatusBar
 } from "react-native";
 import { observer, inject } from "mobx-react";
 @inject("navigationStore")
@@ -26,6 +27,7 @@ export default class LoginView extends Component {
   render() {
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
+        <StatusBar barStyle="dark-content"/>
         <View style={{ height: 100 }} />
         <View style={{ justifyContent: "center", flexDirection: "row" }}>
           <Image source={require("../icons/logo.png")} style={styles.image} />
