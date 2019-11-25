@@ -1,9 +1,16 @@
 import {observable, action, computed} from "mobx"
 
 export default class PostDetailStore {
-    @observable test: ?String = "";
-    
-    @action setState(){
-        console.log("set state")
+    @observable loveList: ?string[] =[];
+    @observable shareList: ?string[] = [];
+    @observable commentList: ?string[] = [];
+    @observable postInfo: ?string[] = [];
+   
+    @action clearStore(){
+        this.loveList = [];
+        this.shareList = [];
+        this.commentList = [];
     }
+
+    
 }

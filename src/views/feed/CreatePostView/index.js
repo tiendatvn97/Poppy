@@ -165,35 +165,63 @@ export default class CreatePostView extends Component {
               }}
             >
               <Button
-                style={[styles.button, { marginRight: 25 }]}
+                style={[
+                  styles.button,
+                  { marginRight: 25 },
+                  createPostStore.isSave ? { backgroundColor: "#ff6265" } : null
+                ]}
                 onPress={() => {
                   this.scrollView._root.scrollToEnd({ animated: true });
                 }}
+                disabled={createPostStore.isPost || createPostStore.isSave}
               >
                 <View style={styles.viewContainButton}>
                   <Icon
                     name="clouddownloado"
                     type="AntDesign"
-                    style={styles.iconButton}
+                    style={
+                      createPostStore.isSave
+                        ? styles.iconButtonClicked
+                        : styles.iconButton
+                    }
                   />
-                  <Text uppercase={false} style={{ color: "#ff6265" }}>
-                    Cancel
+                  <Text
+                    uppercase={false}
+                    style={{
+                      color: createPostStore.isSave ? "#ffffff" : "#ff6265"
+                    }}
+                  >
+                    Save
                   </Text>
                 </View>
               </Button>
               <Button
-                style={styles.button}
-                onPress={() => {
-                  this.props.createPostStore.createPost();
+                style={[
+                  styles.button,
+                  createPostStore.isPost ? { backgroundColor: "#ff6265" } : null
+                ]}
+                onPress={async () => {
+                  await createPostStore.createPost();
+                  this.props.navigation.goBack();
                 }}
+                disabled={createPostStore.isPost || createPostStore.isSave}
               >
                 <View style={styles.viewContainButton}>
                   <Icon
                     name="ios-send"
                     type="Ionicons"
-                    style={styles.iconButton}
+                    style={
+                      createPostStore.isPost
+                        ? styles.iconButtonClicked
+                        : styles.iconButton
+                    }
                   />
-                  <Text uppercase={false} style={{ color: "#ff6265" }}>
+                  <Text
+                    uppercase={false}
+                    style={{
+                      color: createPostStore.isPost ? "#ffffff" : "#ff6265"
+                    }}
+                  >
                     Post
                   </Text>
                 </View>
@@ -216,6 +244,10 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     color: "#ff6265",
+    marginRight: 5
+  },
+  iconButtonClicked: {
+    color: "#ffffff",
     marginRight: 5
   },
   viewContainButton: {

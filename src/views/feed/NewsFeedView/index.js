@@ -19,38 +19,57 @@ import {
 import { observer, inject } from "mobx-react";
 import DrawerHeader from "../../header/DrawerHeader";
 import CameraModal from "../../modal/CameraModal";
-import {StyleSheet} from "react-native"
-@inject("createPostStore")
+import { StyleSheet } from "react-native";
+
+import Firebase from "../../../firebase/Firebase";
+@inject("createPostStore", "userStore", "newsFeedStore")
 @observer
 export default class NewsFeedView extends Component {
   state = {
-    modalVisible: false
+    modalVisible: false,
+    listPost: []
   };
+
   static navigationOptions = {
     drawerLabel: "Home",
     drawerIcon: () => (
       <Icon name="home" type="AntDesign" style={{ fontSize: 20 }} />
     )
   };
-  componentWillMount() {
-    // this.props.navigationStore.currentNavigation = this.props.navigation;
+  async componentWillMount() {
+    await this.props.userStore.following.map(async item => {
+      await Firebase.database
+        .ref("postGroup/postByUser/" + item)
+        .on("child_added", async data => {
+          await Firebase.database
+            .ref("postGroup/postList/" + data.key)
+            .on("child_added", async result => {
+              if (result.key === "published") {
+                const post = {
+                  postId: data.key,
+                  data: data.val(),
+                  published: result.val()
+                };
+                this.props.newsFeedStore.listPost.push(post);
+                this.sortPost();
+              }
+            });
+        });
+    });
+  }
+  async sortPost() {
+    let test;
+    this.props.newsFeedStore.listPost = await this.props.newsFeedStore.listPost.sort(
+      (a, b) => {
+        return b.published - a.published;
+      }
+    );
+  }
+  componentDidMount() {
+    this.props.newsFeedStore.clearStore();
   }
 
   render() {
-    const data = [
-      {
-        key: "1",
-        profileImage: require("../../../icons/3.jpg")
-      },
-      {
-        key: "2",
-        profileImage: require("../../../icons/1.jpg")
-      },
-      {
-        key: "3",
-        profileImage: require("../../../icons/2.jpg")
-      }
-    ];
     return (
       <Container style={{ paddingBottom: 15 }}>
         <DrawerHeader
@@ -60,14 +79,19 @@ export default class NewsFeedView extends Component {
           typeIcon="AntDesign"
         />
         <Content contentContainerStyle={{ paddingHorizontal: 15 }}>
-          {data.map(item => (
+          {this.props.newsFeedStore.listPost.map(item => (
             <NewsFeedCardComponent
+              newsFeedStore={this.props.newsFeedStore}
               parent={this}
-              key={item.key}
-              profileImage={item.profileImage}
+              key={item.postId}
+              fullData={item}
             />
           ))}
-          <CameraModal modalVisible={this.state.modalVisible} parent={this} createPostStore={this.props.createPostStore} />
+          <CameraModal
+            modalVisible={this.state.modalVisible}
+            parent={this}
+            createPostStore={this.props.createPostStore}
+          />
         </Content>
         <Button
           style={{

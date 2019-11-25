@@ -10,6 +10,8 @@ export default class CreatePostStore {
   @observable peopleTag: ?(String[]) = [];
   @observable location: ?string = "";
   @observable image: ?any = null;
+  @observable isPost: boolean = false;
+  @observable isSave: boolean = false;
 
   @action
   clearStore() {
@@ -61,9 +63,9 @@ export default class CreatePostStore {
           console.log("error: " + error.toString());
         },
         () => {
-          storageRef.getDownloadURL().then(downloadUrl => {
+          storageRef.getDownloadURL().then(async downloadUrl => {
             console.log("File avalable at: " + downloadUrl);
-            this.addPost(downloadUrl);
+            await this.addPost(downloadUrl);
           });
         }
       );
@@ -71,21 +73,33 @@ export default class CreatePostStore {
   }
 
   @action async addPost(urlImage: ?string) {
+    this.isPost = true;
     const postId = Firebase.database
-      .ref("posts")
+      .ref("postGroup/postByUser")
       .child(this.rootStore.userStore.id)
       .push().key;
     var postData = {
-      uid: postId,
+      postId: postId,
+      userId: this.rootStore.userStore.id,
       image: urlImage,
-      time: Firebase.firebase.database.ServerValue.TIMESTAMP,
+      timeEdit: Firebase.firebase.database.ServerValue.TIMESTAMP,
       content: this.caption,
       tag: this.peopleTag,
       location: this.location
     };
 
+    // const postStatus = {
+    //   published: postData.timeEdit
+    // }
+
     updates = {};
-    updates["posts/" + this.rootStore.userStore.id + "/" + postId] = postData;
+    updates[
+      "postGroup/postByUser/" + this.rootStore.userStore.id + "/" + postId
+    ] = postData;
+    updates["postGroup/postList/" + postId + "/published" ] =
+      postData.timeEdit;
     await Firebase.database.ref().update(updates);
+    this.isPost = false;
+    console.log(`ispost:` + this.isPost);
   }
 }

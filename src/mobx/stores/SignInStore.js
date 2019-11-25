@@ -24,7 +24,7 @@ export default class SignInStore {
     try {
       await Firebase.auth.signInWithEmailAndPassword(this.email, this.password);
       // Firebase.userInfo.name=this.email;
-      this.rootStore.userStore.setUser();
+      await this.rootStore.userStore.setUser();
     } catch (error) {
       mess = error.message;
     }

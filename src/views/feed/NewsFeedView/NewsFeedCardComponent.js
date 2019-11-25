@@ -21,15 +21,27 @@ import {
 // import Icons from "react-native-vector-icons"
 import { StyleSheet, Alert, Image, TouchableOpacity } from "react-native";
 export default class NewsFeedCardComponent extends Component {
+  state = { userInfo: null };
+  async componentWillMount() {
+    const userInfo = await this.props.newsFeedStore.getUserInfo(
+      this.props.fullData.data.userId
+    );
+    this.setState({ userInfo: userInfo });
+  }
   render() {
+    const { fullData, newsFeedStore } = this.props;
     return (
       <Card transparent style={{ marginBottom: 15 }}>
         <TouchableOpacity
           onPress={() => {
+            newsFeedStore.postSelected = fullData.postId;
             this.props.parent.props.navigation.navigate("PostDetail");
           }}
         >
-          <Image style={styles.image} source={this.props.profileImage}></Image>
+          <Image
+            style={styles.image}
+            source={{ uri: fullData.data.image }}
+          ></Image>
         </TouchableOpacity>
 
         <CardItem
@@ -45,11 +57,17 @@ export default class NewsFeedCardComponent extends Component {
             <Thumbnail
               style={{ alignSelf: "center", width: 45, height: 45 }}
               large
-              source={this.props.profileImage}
+              source={fullData.data.imageUrl}
             ></Thumbnail>
             <Body style={{}}>
-              <Text style={{ fontSize: 12, padding: 2 }}>Dat 6 Mui</Text>
-              <Text style={{ fontSize: 10, color: "gray" }}>10 mins ago</Text>
+              <Text style={{ fontSize: 12, padding: 2 }}>
+                {this.state.userInfo
+                  ? this.state.userInfo.profiles.fullName
+                  : ""}
+              </Text>
+              <Text style={{ fontSize: 10, color: "gray" }}>
+                {fullData.data.timeEdit} mins ago
+              </Text>
             </Body>
           </Left>
           <Right>

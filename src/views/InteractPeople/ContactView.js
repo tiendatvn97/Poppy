@@ -43,7 +43,6 @@ export default class ContactView extends Component {
           };
         });
     });
-    console.log(`contact: ${JSON.stringify(this.state.contactList)}`);
   }
   render() {
     const { userStore, chatStore, navigation } = this.props;

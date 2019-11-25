@@ -101,7 +101,6 @@ export default class App extends React.Component {
     Firebase.init();
     this.loadStaticResources();
     Firebase.auth.onAuthStateChanged(user => {
-      // console.log(`ok${JSON.stringify(user)}`)
       if (user) {
         currentUser = Firebase.auth.currentUser
         this.registerForPushNotificationsAsync();

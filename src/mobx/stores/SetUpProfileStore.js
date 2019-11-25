@@ -47,7 +47,6 @@ export default class SetUpProfileStore {
   }
 
   @action hideDateTimePicker() {
-    console.log("hide");
     this.isDateTimePickerVisible = false;
   }
 
@@ -93,7 +92,7 @@ export default class SetUpProfileStore {
         blockId: [],
         profiles: profile
       });
-      this.rootStore.userStore.setUser();
+      await this.rootStore.userStore.setUser();
     } catch (error) {
       mess = error.message;
     }
@@ -102,6 +101,5 @@ export default class SetUpProfileStore {
 
   @action test() {
     var userId = Firebase.auth.currentUser.uid;
-    console.log(`userId${userId}`);
   }
 }

@@ -8,7 +8,7 @@ export default class UserStore {
     this.rootStore = store;
   }
 
-  @observable id: ?string = "u6xWTSoxmVVxsfGmhfqegbATryP2";
+  @observable id: ?string = "";
   @observable avataImage: ?string = "";
   @observable follower: ?(string[]) = [];
   @observable following: ?(string[]) = [];
@@ -39,6 +39,7 @@ export default class UserStore {
     await Firebase.database
       .ref("/users/" + user.uid)
       .once("value", async snapshot => {
+        
         this.id = user.uid;
         this.avataImage = snapshot.val().avataImage;
         this.follower = snapshot.val().follower;

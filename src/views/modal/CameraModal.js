@@ -18,7 +18,6 @@ export default class CameraModal extends Component {
   }
   componentDidMount() {
     this.getPermissionAsync();
-    console.log("hi");
   }
 
   getPermissionAsync = async () => {
@@ -36,21 +35,21 @@ export default class CameraModal extends Component {
       result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        quality: 1,
+        quality: 1
       });
     }
     if (option === "TAKE_PHOTO") {
       result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        quality: 1,
+        quality: 1
       });
     }
 
     this.props.parent.setState({ modalVisible: false });
     if (!result.cancelled) {
-       this.props.createPostStore.image = await result;
-    
+      this.props.createPostStore.image = await result;
+
       this.props.parent.props.navigation.navigate("CreatePost");
     }
   };
