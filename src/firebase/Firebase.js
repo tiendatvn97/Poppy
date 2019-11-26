@@ -15,7 +15,8 @@ var firebaseConfig = {
 export default class Firebase {
     static auth;
     static userInfo= {
-        name:""
+        name:"",
+        avatar:""
     };
     static firebase;
     static database;

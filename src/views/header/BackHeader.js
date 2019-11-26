@@ -19,7 +19,7 @@ export default class BackHeader extends Component {
     return (
       <Header
         style={{
-          paddingTop: Constants.statusBarHeight / 2,
+          // marginTop: Constants.statusBarHeight,
           backgroundColor: "white"
         }}
       >

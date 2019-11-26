@@ -45,8 +45,9 @@ export default class CreatePostStore {
       const fileName = `${uuid}.${fileExtention}`;
       const response = await fetch(this.image.uri);
       const blob = await response.blob();
+      console.log("blob")
       var storageRef = Firebase.storage.ref(`posts/image/${fileName}`);
-
+      console.log("storageRef")
       storageRef.put(blob).on(
         Firebase.firebase.storage.TaskEvent.STATE_CHANGED,
         snapshot => {

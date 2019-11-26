@@ -72,48 +72,9 @@ export default class SetUpProfileStore {
     return "";
   }
 
-  @action
-  async upLoadAvatar() {
-    console.log("upload");
-    // console.log("url image: " + JSON.stringify(this.image.base64));
-
-    var uuid = uuid4();
-    const fileName = `${uuid}.jpg}`;
-    const res = await fetch("../../../src/images/female_avatar.jpg")
-    const blob =res.blob();
-
-    console.log("blob");
-    // const blob = await response.blob();
-    console.log("blob => " + blob);
-    var storageRef = Firebase.storage.ref(`posts/image/${fileName}`);
-
-    storageRef.put(blob).on(
-      Firebase.firebase.storage.TaskEvent.STATE_CHANGED,
-      snapshot => {
-        console.log("snapshot:" + snapshot.state);
-        console.log(
-          "progress:" + (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        if (snapshot.state === Firebase.firebase.storage.TaskState.SUCCESS) {
-          console.log("success");
-        }
-      },
-      error => {
-        console.log("error: " + error.toString());
-      },
-      () => {
-        storageRef.getDownloadURL().then(async downloadUrl => {
-          console.log("File avalable at: " + downloadUrl);
-          // await this.addPost(downloadUrl);
-        });
-      }
-    );
-  }
-
   @action async setProfileUser(userId: ?String) {
     let mess = "";
     try {
-      await this.upLoadAvatar();
       const profile = await Profile.load(
         this.fullName,
         this.dateOfBirth,
@@ -121,12 +82,19 @@ export default class SetUpProfileStore {
         this.location,
         this.aboutMe
       );
+      let avatar = null;
+      if (this.gender === "Female")
+        avatar =
+          "https://firebasestorage.googleapis.com/v0/b/poppy-app-2556f.appspot.com/o/avatars%2FimageDefaults%2Ffemale_avatar.jpg?alt=media&token=2f58fb5a-44ca-40c9-b88d-9fb6c9849e67";
+      else
+        avatar =
+          "https://firebasestorage.googleapis.com/v0/b/poppy-app-2556f.appspot.com/o/avatars%2FimageDefaults%2Fmale_avatar.jpg?alt=media&token=0456c44c-7c5b-46a4-98d5-64b47c3f00cd";
       await Firebase.database.ref("users/" + userId).set({
         id: userId,
         email: this.rootStore.registerStore.email,
-        avataImage: "",
-        follower: [],
-        following: [],
+        avatarImage: avatar,
+        follower: [userId],
+        following: [userId],
         postId: [],
         chatId: [],
         blockId: [],

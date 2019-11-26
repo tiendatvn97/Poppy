@@ -25,26 +25,33 @@ import {
   Dimensions,
   KeyboardAvoidingView,
   FlatList,
-  Image
+  Image,
+  TouchableOpacity
 } from "react-native";
 
 const widthScreen = Dimensions.get("window").width;
 import DrawerHeader from "../header/DrawerHeader";
 import { observer, inject } from "mobx-react";
-@inject("navigationStore")
+import ChangeAvatarModal from "../modal/ChangeAvatarModal";
+
+@inject("userStore", "myProfileStore", "newsFeedStore")
 @observer
 export default class MyProfileView extends Component {
+  state = {
+    modalVisible: false
+  };
   static navigationOptions = {
     drawerLabel: "My Profile",
     drawerIcon: ({ tintColor }) => (
       <Icon name="profile" type="AntDesign" style={{ fontSize: 20 }} />
     )
   };
-  componentWillMount() {
-    this.props.navigationStore.currentNavigation = this.props.navigation;
+  componentDidMount() {
+    this.props.myProfileStore.clearStore();
   }
 
   render() {
+    const { userStore, myProfileStore, newsFeedStore } = this.props;
     return (
       <Container>
         <DrawerHeader
@@ -57,10 +64,17 @@ export default class MyProfileView extends Component {
           <Card style={{ elevation: 0 }}>
             <CardItem>
               <Left>
-                <Thumbnail source={require("../../icons/3.jpg")} />
+                <TouchableOpacity
+                  style={{ borderRadius: 27 }}
+                  onPress={() => {
+                    this.setState({ modalVisible: true });
+                  }}
+                >
+                  <Thumbnail source={{ uri: userStore.avatarImage }} />
+                </TouchableOpacity>
                 <Body>
-                  <Text> William Franklin </Text>
-                  <Text style={styles.textNote}> M, 27, Atlanta, Ga</Text>
+                  <Text>{userStore.profile.fullName}</Text>
+                  <Text style={styles.textNote}>{userStore.email}</Text>
                 </Body>
               </Left>
             </CardItem>
@@ -69,11 +83,7 @@ export default class MyProfileView extends Component {
             <CardItem Body>
               <Body>
                 <Text style={{ marginBottom: 10 }}>About</Text>
-                <Text style={styles.textNote}>
-                  So strongly and metaphysically did I conceive of my situation
-                  then, that while ear. So strongly and metaphysically did I
-                  conceive of my situation
-                </Text>
+                <Text style={styles.textNote}>{userStore.profile.aboutMe}</Text>
               </Body>
             </CardItem>
           </Card>
@@ -83,15 +93,21 @@ export default class MyProfileView extends Component {
                 <Text style={{ marginVertical: 5 }}>Stars</Text>
                 <Item style={styles.itemRate}>
                   <Body style={styles.bodyRate}>
-                    <Text style={styles.textRateNuber}>8</Text>
+                    <Text style={styles.textRateNuber}>
+                      {newsFeedStore.listPost.length}
+                    </Text>
                     <Text style={styles.textNote}>MOMENTS</Text>
                   </Body>
                   <Body style={styles.bodyRate}>
-                    <Text style={styles.textRateNuber}>16</Text>
+                    <Text style={styles.textRateNuber}>
+                      {userStore.follower.length - 1}
+                    </Text>
                     <Text style={styles.textNote}>FOLLOWERS</Text>
                   </Body>
                   <Body style={[styles.bodyRate, { flex: 0.7 }]}>
-                    <Text style={styles.textRateNuber}>34</Text>
+                    <Text style={styles.textRateNuber}>
+                      {userStore.following.length - 1}
+                    </Text>
                     <Text style={styles.textNote}>FOLLOWING</Text>
                   </Body>
                 </Item>
@@ -101,15 +117,20 @@ export default class MyProfileView extends Component {
           <Text style={{ marginLeft: 17, marginTop: 17 }}>Moments</Text>
           <FlatList
             style={{ padding: 17 }}
-            data={DATA}
+            data={newsFeedStore.listPost}
             numColumns={3}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
               <View style={{ flex: 1 }}>
-                <Image style={styles.imageFlatList} source={item.image} />
+                <Image style={styles.imageFlatList} source={{uri: item.data.image}} />
                 <View style={{ height: 17, width: widthScreen }}></View>
               </View>
             )}
+          />
+          <ChangeAvatarModal
+            modalVisible={this.state.modalVisible}
+            parent={this}
+            myProfileStore={myProfileStore}
           />
         </Content>
         <Button

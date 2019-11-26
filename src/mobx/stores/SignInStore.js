@@ -6,7 +6,7 @@ export default class SignInStore {
     this.rootStore = store;
   }
 
-  @observable email: ?String = "dat@gmail.com";
+  @observable email: ?String = "ok@gmail.com";
   @observable password: ?String = "123456";
   @observable isLoading: boolean = false;
 
@@ -36,7 +36,8 @@ export default class SignInStore {
       console.log("signOUt")
     try {
         await Firebase.auth.signOut();
-        Firebase.userInfo.name="";
+        // Firebase.userInfo.name="";
+        // Firebase.userStore.avatar=""
     } catch (e) {
         console.log(e);
     }

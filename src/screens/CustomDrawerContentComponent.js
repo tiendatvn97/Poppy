@@ -16,25 +16,26 @@ import { observer, inject } from "mobx-react";
 import Firebase from "../firebase/Firebase";
 import { StackActions, NavigationActions } from "react-navigation";
 
-@inject("signInStore", "navigationStore")
+@inject("signInStore", "navigationStore", "userStore")
 @observer
 class CustomDrawerContentComponent extends Component {
   constructor(props) {
     super(props);
   }
   render() {
+    const { userStore } = this.props;
     return (
       <Container>
         <Header style={styles.headerContainer}>
           <Left>
             <Image
               style={styles.headerImage}
-              source={require("../icons/avatar.jpg")}
+              source={{ uri: userStore.avatarImage }}
             ></Image>
           </Left>
           <Body>
-            <Text>{Firebase.userInfo.name}</Text>
-            <Text style={styles.textNote}>M, 27, Atlanta, GA</Text>
+            <Text>{userStore.profile.fullName}</Text>
+            <Text style={styles.textNote}>{userStore.email}</Text>
           </Body>
         </Header>
         <Content>

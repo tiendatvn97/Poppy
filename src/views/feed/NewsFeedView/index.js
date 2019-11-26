@@ -19,12 +19,16 @@ import {
 import { observer, inject } from "mobx-react";
 import DrawerHeader from "../../header/DrawerHeader";
 import CameraModal from "../../modal/CameraModal";
-import { StyleSheet , StatusBar} from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 
 import Firebase from "../../../firebase/Firebase";
 @inject("createPostStore", "userStore", "newsFeedStore")
 @observer
 export default class NewsFeedView extends Component {
+  constructor(props) {
+    super(props);
+    this.props.newsFeedStore.clearStore();
+  }
   state = {
     modalVisible: false,
     listPost: []
@@ -37,36 +41,47 @@ export default class NewsFeedView extends Component {
     )
   };
   async componentWillMount() {
-    await this.props.userStore.following.map(async item => {
-      await Firebase.database
-        .ref("postGroup/postByUser/" + item)
-        .on("child_added", async data => {
-          await Firebase.database
-            .ref("postGroup/postList/" + data.key)
-            .on("child_added", async result => {
-              if (result.key === "published") {
-                const post = {
-                  postId: data.key,
-                  data: data.val(),
-                  published: result.val()
-                };
-                this.props.newsFeedStore.listPost.push(post);
-                this.sortPost();
-              }
-            });
-        });
-    });
+    let test = [];
+    await Promise.all(
+      this.props.userStore.following.map(async item => {
+        console.log("item+" + JSON.stringify(item));
+        await Promise.all(
+          Firebase.database
+            .ref("postGroup/postByUser/" + item)
+            .on("child_added", async (data) => {
+              await Promise.all(
+                Firebase.database
+                  .ref("postGroup/postList/" + data.key)
+                  .on("child_added", async result => {
+                    if (result.key === "published") {
+                      const post = await {
+                        postId: data.key,
+                        data: data.val(),
+                        published: result.val()
+                      };
+                    
+                      await test.push(post);
+                    }
+                  })
+              );
+            })
+        );
+      })
+    );
+    // this.props.userStore.listPost = await this.sortPost(test);
+    console.log("test" + JSON.stringify(test));
   }
-  async sortPost() {
-    let test;
-    this.props.newsFeedStore.listPost = await this.props.newsFeedStore.listPost.sort(
-      (a, b) => {
+
+  async sortPost(test: ?(any[])) {
+    return Promise.all(
+      test.listPost.sort((a, b) => {
         return b.published - a.published;
-      }
+      })
     );
   }
   componentDidMount() {
     this.props.newsFeedStore.clearStore();
+    console.log("didmount new feed");
   }
 
   render() {
@@ -116,3 +131,12 @@ export default class NewsFeedView extends Component {
   }
 }
 const styles = StyleSheet.create({});
+
+a="";
+function test(){
+  return new Promise((resolve,reject) => {
+    setTimeout(()=>{resolve("ok");return null},3000)
+  })
+};
+test().then((a) => a=b);
+setTimeout(()=>{console.log(a)},3000)

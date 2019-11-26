@@ -9,22 +9,21 @@ export default class UserStore {
   }
 
   @observable id: ?string = "";
-  @observable avataImage: ?string = "";
+  @observable avatarImage: ?string = "";
+  @observable email: ?string = "";
   @observable follower: ?(string[]) = [];
   @observable following: ?(string[]) = [];
   @observable postId: ?(string[]) = [];
   @observable chatId: ?(string[]) = [];
   @observable blockId: ?(string[]) = [];
-  @observable profile: ?Profile = {
-    aboutMe: "a",
-    dateOfBirth: "08/11/2019",
-    fullName: "3aRqo3BmeXYrkix8P9CILdTOwk43",
-    gender: "dat",
-    location: "Male"
-  };
+  @observable profile: ?Profile = null;
 
   @observable recentChats: ?(any[]) = [];
   @observable listUser: ?User = [];
+  @computed
+  get getAvatar(){
+    return this.avatarImage;
+  }
 
   @action
   async setUser() {
@@ -39,21 +38,25 @@ export default class UserStore {
     await Firebase.database
       .ref("/users/" + user.uid)
       .once("value", async snapshot => {
-        
+        // Firebase.userInfo = snapshot.val().profiles.fullName;
+        // Firebase.avatar = snapshot.val().avatarImage;
         this.id = user.uid;
-        this.avataImage = snapshot.val().avataImage;
+        this.avatarImage = snapshot.val().avatarImage;
+        this.email = snapshot.val().email;
         this.follower = snapshot.val().follower;
         this.following = snapshot.val().following;
         this.postId = snapshot.val().postId;
         this.chatId = snapshot.val().chatId;
         this.blockId = snapshot.val().blockId;
+        this.profile = snapshot.val().profiles;
       });
   }
 
   @action
   clearStore() {
     this.id = "";
-    this.avataImage = "";
+    this.avatarImage = "";
+    this.email = "";
     this.follower = [];
     this.following = [];
     this.postId = [];
@@ -82,5 +85,4 @@ export default class UserStore {
         if (snapshot.val()) this.recentChats.push(snapshot.val());
       });
   }
-
 }

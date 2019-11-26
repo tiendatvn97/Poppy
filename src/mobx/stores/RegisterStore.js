@@ -46,7 +46,6 @@ export default class RegisterStore {
         this.email,
         this.password
       );
-      Firebase.userInfo.name = this.email;
     } catch (error) {
       mess = error.message;
     }
