@@ -29,7 +29,7 @@ export default class NewsFeedCardComponent extends Component {
     this.setState({ userInfo: userInfo });
   }
   render() {
-    const { fullData, newsFeedStore } = this.props;
+    const { fullData, newsFeedStore, userStore } = this.props;
     return (
       <Card transparent style={{ marginBottom: 15 }}>
         <TouchableOpacity
@@ -66,7 +66,7 @@ export default class NewsFeedCardComponent extends Component {
                   : ""}
               </Text>
               <Text style={{ fontSize: 10, color: "gray" }}>
-                {fullData.data.timeEdit} mins ago
+                {userStore.timeCoverter(fullData.data.timeEdit)}
               </Text>
             </Body>
           </Left>

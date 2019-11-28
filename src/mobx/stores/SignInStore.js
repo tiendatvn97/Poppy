@@ -6,7 +6,7 @@ export default class SignInStore {
     this.rootStore = store;
   }
 
-  @observable email: ?String = "ok@gmail.com";
+  @observable email: ?String = "p@gmail.com";
   @observable password: ?String = "123456";
   @observable isLoading: boolean = false;
 

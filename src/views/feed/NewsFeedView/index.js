@@ -19,9 +19,10 @@ import {
 import { observer, inject } from "mobx-react";
 import DrawerHeader from "../../header/DrawerHeader";
 import CameraModal from "../../modal/CameraModal";
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet, StatusBar, FlatList } from "react-native";
 
 import Firebase from "../../../firebase/Firebase";
+
 @inject("createPostStore", "userStore", "newsFeedStore")
 @observer
 export default class NewsFeedView extends Component {
@@ -31,7 +32,8 @@ export default class NewsFeedView extends Component {
   }
   state = {
     modalVisible: false,
-    listPost: []
+    listPost: [],
+    isLoading: false
   };
 
   static navigationOptions = {
@@ -40,51 +42,53 @@ export default class NewsFeedView extends Component {
       <Icon name="home" type="AntDesign" style={{ fontSize: 20 }} />
     )
   };
-  async componentWillMount() {
-    let test = [];
-    await Promise.all(
-      this.props.userStore.following.map(async item => {
-        console.log("item+" + JSON.stringify(item));
-        await Promise.all(
-          Firebase.database
-            .ref("postGroup/postByUser/" + item)
-            .on("child_added", async (data) => {
-              await Promise.all(
-                Firebase.database
-                  .ref("postGroup/postList/" + data.key)
-                  .on("child_added", async result => {
-                    if (result.key === "published") {
-                      const post = await {
-                        postId: data.key,
-                        data: data.val(),
-                        published: result.val()
-                      };
-                    
-                      await test.push(post);
-                    }
-                  })
-              );
-            })
-        );
-      })
-    );
-    // this.props.userStore.listPost = await this.sortPost(test);
-    console.log("test" + JSON.stringify(test));
-  }
 
-  async sortPost(test: ?(any[])) {
-    return Promise.all(
-      test.listPost.sort((a, b) => {
-        return b.published - a.published;
-      })
-    );
-  }
+  componentWillMount() {}
   componentDidMount() {
-    this.props.newsFeedStore.clearStore();
-    console.log("didmount new feed");
+    this.loadFeed();
+  }
+  loadFeed() {
+    this.setState({ isLoading: true });
+    let test = [];
+    setTimeout(() => {
+      this.setState({ listPost: [] });
+      this.sortPost(test);
+    }, 1000);
+
+    this.props.userStore.following.map(async item => {
+      Firebase.database
+        .ref("postGroup/postByUser/" + item)
+        .once("value")
+        .then(snapshot => {
+          snapshot.forEach(data => {
+            Firebase.database
+              .ref("postGroup/postList/" + data.key)
+              .once("value")
+              .then(result => {
+                result.forEach(item => {
+                  if (item.key === "published") {
+                    const post = {
+                      postId: data.key,
+                      data: data.val(),
+                      published: item.val()
+                    };
+                    test = [...test, post];
+                  }
+                });
+              });
+          });
+        });
+    });
+  }
+  sortPost(test = []) {
+    this.state.listPost = test.sort((a, b) => {
+      return b.published - a.published;
+    });
+    this.setState({ isLoading: false });
   }
 
   render() {
+    const { userStore, newsFeedStore } = this.props;
     return (
       <Container style={{ paddingBottom: 15 }}>
         <StatusBar hidden={false} backgroundColor="blue" />
@@ -94,21 +98,28 @@ export default class NewsFeedView extends Component {
           nameIcon="search1"
           typeIcon="AntDesign"
         />
-        <Content contentContainerStyle={{ paddingHorizontal: 15 }}>
-          {this.props.newsFeedStore.listPost.map(item => (
-            <NewsFeedCardComponent
-              newsFeedStore={this.props.newsFeedStore}
-              parent={this}
-              key={item.postId}
-              fullData={item}
-            />
-          ))}
+        <View contentContainerStyle={{ paddingHorizontal: 15 }}>
+          <FlatList
+            refreshing={this.state.isLoading}
+            onRefresh={this.loadFeed.bind(this)}
+            data={this.state.listPost}
+            renderItem={({ item, index }) => (
+              <NewsFeedCardComponent
+                parent={this}
+                fullData={item}
+                userStore={userStore}
+                newsFeedStore={newsFeedStore}
+              />
+            )}
+            keyExtractor={item => item.postId}
+          />
+
           <CameraModal
             modalVisible={this.state.modalVisible}
             parent={this}
             createPostStore={this.props.createPostStore}
           />
-        </Content>
+        </View>
         <Button
           style={{
             width: 55,
@@ -130,13 +141,3 @@ export default class NewsFeedView extends Component {
     );
   }
 }
-const styles = StyleSheet.create({});
-
-a="";
-function test(){
-  return new Promise((resolve,reject) => {
-    setTimeout(()=>{resolve("ok");return null},3000)
-  })
-};
-test().then((a) => a=b);
-setTimeout(()=>{console.log(a)},3000)

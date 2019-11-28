@@ -21,7 +21,7 @@ export default class UserStore {
   @observable recentChats: ?(any[]) = [];
   @observable listUser: ?User = [];
   @computed
-  get getAvatar(){
+  get getAvatar() {
     return this.avatarImage;
   }
 
@@ -85,4 +85,38 @@ export default class UserStore {
         if (snapshot.val()) this.recentChats.push(snapshot.val());
       });
   }
+  @action pluralCheck(s: ?number) {
+    if (s == 1) {
+      return " ago";
+    } else {
+      return "s ago";
+    }
+  }
+
+  @action
+  timeCoverter = timestamp => {
+    var date = new Date(timestamp);
+    var seconds = Math.floor((new Date() - date)/1000 );
+    var interval = Math.floor(seconds / 31536000);
+    if (interval > 1) {
+      return interval + " year" + this.pluralCheck(interval);
+    }
+    var interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + " month" + this.pluralCheck(interval);
+    }
+    var interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + " day" + this.pluralCheck(interval);
+    }
+    var interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+      return interval + " hour" + this.pluralCheck(interval);
+    }
+    var interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + " minute" + this.pluralCheck(interval);
+    }
+    return Math.floor(seconds) + " second" + this.pluralCheck(interval);
+  };
 }
