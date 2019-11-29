@@ -29,16 +29,19 @@ import {
   View,
   Text,
   KeyboardAvoidingView,
-  keyboardDidShowListener,
-  Keyboard
+  Keyboard,
+  Dimensions
 } from "react-native";
 let isDisplayAvatar = true;
 import Firebase from "../../../firebase/Firebase";
+import { ScrollView } from "react-native-gesture-handler";
+const { height } = Dimensions.get("window");
 @inject("userStore", "chatStore")
 @observer
 export default class ChatView extends Component {
   state = {
-    messageList: []
+    messageList: [],
+    flatListHeight: height
   };
   static navigationOptions = {
     drawerLabel: "Chats",
@@ -46,7 +49,39 @@ export default class ChatView extends Component {
       <Icon name="rocketchat" type="FontAwesome5" style={{ fontSize: 20 }} />
     )
   };
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+  _keyboardDidShow(e) {
+    console.log(e);
+    // this.scrollView.scrollToEnd({animated: true})
+    // this.flatList.scrollToEnd({ animated: true });
+    this.setState({
+      flatListHeight: height - e.height
+    });
+  }
+  _keyboardDidHide(e) {
+    this.setState({
+      flatListHeight: height
+    });
+  }
+  constructor(props) {
+    super(props);
+    this._keyboardDidShow = this._keyboardDidShow.bind(this);
+    this._keyboardDidHide = this._keyboardDidHide.bind(this);
+  }
 
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
+    );
+  }
   componentWillMount() {
     Firebase.database
       .ref("messages")
@@ -63,83 +98,86 @@ export default class ChatView extends Component {
   render() {
     const { chatStore } = this.props;
     return (
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-        <Container>
-          <DrawerHeader
-            parent={this}
-            title="Chats"
-            nameIcon="user-friends"
-            typeIcon="FontAwesome5"
-          />
-          <Content>
-            <FlatList
-              style={{ marginTop: 10 }}
-              data={this.state.messageList}
-              renderItem={({ item, index }) => {
-                if (index == 0) isDisplayAvatar = true;
-                if (
-                  index > 0 &&
-                  this.state.messageList[index].from ===
-                    this.state.messageList[index - 1].from
-                )
-                  isDisplayAvatar = false;
-                else isDisplayAvatar = true;
-                if (item.from !== chatStore.hostChat)
-                  return (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        marginHorizontal: 15
-                      }}
-                    >
-                      <Image
-                        style={{ width: 30, height: 30, borderRadius: 15 }}
-                        source={
-                          isDisplayAvatar ? require("../../../icons/3.jpg") : ""
-                        }
-                      ></Image>
+      <Container>
+        <DrawerHeader
+          parent={this}
+          title="Chats"
+          nameIcon="user-friends"
+          typeIcon="FontAwesome5"
+        />
+        <KeyboardAvoidingView behavior="padding">
+          <FlatList
+            style={{ height: this.state.flatListHeight }}
+            inverted
+            ref={test => (this.flatList = test)}
+            style={{ marginTop: 10 }}
+            data={this.state.messageList}
+            renderItem={({ item, index }) => {
+              if (index == 0) isDisplayAvatar = true;
+              if (
+                index > 0 &&
+                this.state.messageList[index].from ===
+                  this.state.messageList[index - 1].from
+              )
+                isDisplayAvatar = false;
+              else isDisplayAvatar = true;
+              if (item.from !== chatStore.hostChat)
+                return (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      marginHorizontal: 15
+                    }}
+                  >
+                    <Image
+                      style={{ width: 30, height: 30, borderRadius: 15 }}
+                      source={
+                        isDisplayAvatar ? require("../../../icons/3.jpg") : ""
+                      }
+                    ></Image>
 
-                      <View style={{ marginLeft: 10 }}>
-                        <Text style={styles.textReceive}>{item.content}</Text>
-                        <Text style={{ fontSize: 10, color: "#e6e6e6" }}>
-                          1:23 PM
-                        </Text>
-                      </View>
+                    <View style={{ marginLeft: 10 }}>
+                      <Text style={styles.textReceive}>{item.content}</Text>
+                      <Text style={{ fontSize: 10, color: "#e6e6e6" }}>
+                        1:23 PM
+                      </Text>
                     </View>
-                  );
-                else
-                  return (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        marginHorizontal: 15,
-                        justifyContent: "flex-end"
-                      }}
-                    >
-                      <View style={{ marginRight: 10, marginLeft: 15 }}>
-                        <Text style={styles.textSend}>{item.content}</Text>
-                        <Text
-                          style={{
-                            fontSize: 10,
-                            color: "gray",
-                            marginLeft: 10
-                          }}
-                        >
-                          1:23 PM
-                        </Text>
-                      </View>
-                      <Image
-                        style={{ width: 30, height: 30, borderRadius: 15 }}
-                        source={
-                          isDisplayAvatar ? require("../../../icons/3.jpg") : ""
-                        }
-                      ></Image>
+                  </View>
+                );
+              else
+                return (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      marginHorizontal: 15,
+                      justifyContent: "flex-end"
+                    }}
+                  >
+                    <View style={{ marginRight: 10, marginLeft: 15 }}>
+                      <Text style={styles.textSend}>{item.content}</Text>
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: "gray",
+                          marginLeft: 10
+                        }}
+                      >
+                        1:23 PM
+                      </Text>
                     </View>
-                  );
-              }}
-            ></FlatList>
-          </Content>
+                    <Image
+                      style={{ width: 30, height: 30, borderRadius: 15 }}
+                      source={
+                        isDisplayAvatar ? require("../../../icons/3.jpg") : ""
+                      }
+                    ></Image>
+                  </View>
+                );
+            }}
+          ></FlatList>
+        </KeyboardAvoidingView>
 
+        <KeyboardAvoidingView behavior="padding" style={{height:50,width:150}}> 
           <Card style={{ marginBottom: 0, borderTopWidth: 1.5 }}>
             <Form>
               <Item>
@@ -160,9 +198,8 @@ export default class ChatView extends Component {
               </Item>
             </Form>
           </Card>
-        
-        </Container>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </Container>
     );
   }
 }
