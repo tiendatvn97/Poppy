@@ -19,7 +19,6 @@ export default class DrawerHeader extends Component {
     return (
       <Header
         style={{
-          // paddingTop: Constants.statusBarHeight / 2,
           backgroundColor: "white"
         }}
       >

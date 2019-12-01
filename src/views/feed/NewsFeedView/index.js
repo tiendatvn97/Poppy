@@ -18,12 +18,13 @@ import {
 } from "native-base";
 import { observer, inject } from "mobx-react";
 import DrawerHeader from "../../header/DrawerHeader";
+import StatusBarCustom from "../../header/StatusBarCustom";
 import CameraModal from "../../modal/CameraModal";
 import { StyleSheet, StatusBar, FlatList } from "react-native";
 
 import Firebase from "../../../firebase/Firebase";
 
-@inject("createPostStore", "userStore", "newsFeedStore")
+@inject("createPostStore", "userStore", "newsFeedStore", "postDetailStore")
 @observer
 export default class NewsFeedView extends Component {
   constructor(props) {
@@ -55,9 +56,9 @@ export default class NewsFeedView extends Component {
       this.sortPost(test);
     }, 1000);
 
-    this.props.userStore.following.map(async item => {
+    this.props.userStore.following.map(async user => {
       Firebase.database
-        .ref("postGroup/postByUser/" + item)
+        .ref("postGroup/postByUser/" + user)
         .once("value")
         .then(snapshot => {
           snapshot.forEach(data => {
@@ -70,7 +71,7 @@ export default class NewsFeedView extends Component {
                     const post = {
                       postId: data.key,
                       data: data.val(),
-                      published: item.val()
+                      published: item.val(),
                     };
                     test = [...test, post];
                   }
@@ -88,10 +89,10 @@ export default class NewsFeedView extends Component {
   }
 
   render() {
-    const { userStore, newsFeedStore } = this.props;
+    const { userStore, newsFeedStore, postDetailStore } = this.props;
     return (
       <Container style={{ paddingBottom: 15 }}>
-        <StatusBar hidden={false} backgroundColor="blue" />
+        <StatusBarCustom />
         <DrawerHeader
           parent={this}
           title="My Feed"
@@ -105,6 +106,7 @@ export default class NewsFeedView extends Component {
             data={this.state.listPost}
             renderItem={({ item, index }) => (
               <NewsFeedCardComponent
+                postDetailStore={postDetailStore}
                 parent={this}
                 fullData={item}
                 userStore={userStore}

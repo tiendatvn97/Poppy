@@ -31,6 +31,7 @@ import {
 
 const widthScreen = Dimensions.get("window").width;
 import DrawerHeader from "../header/DrawerHeader";
+import StatusBarCustom from "../header/StatusBarCustom";
 import { observer, inject } from "mobx-react";
 import ChangeAvatarModal from "../modal/ChangeAvatarModal";
 
@@ -54,6 +55,7 @@ export default class MyProfileView extends Component {
     const { userStore, myProfileStore, newsFeedStore } = this.props;
     return (
       <Container>
+        <StatusBarCustom/>
         <DrawerHeader
           parent={this}
           title="My Profile"

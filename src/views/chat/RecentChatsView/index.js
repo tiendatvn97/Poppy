@@ -15,10 +15,11 @@ import {
 } from "native-base";
 import Firebase from "../../../firebase/Firebase";
 import DrawerHeader from "../../header/DrawerHeader";
+import StatusBarCustom from "../../header/StatusBarCustom";
 import { StyleSheet, Alert } from "react-native";
 import { observer, inject } from "mobx-react";
 
-@inject("userStore", "chatStore", "navigationStore")
+@inject("userStore", "chatStore")
 @observer
 export default class RecentChatsView extends Component {
   state = {
@@ -31,8 +32,7 @@ export default class RecentChatsView extends Component {
     )
   };
 
-  async componentWillMount() {
-    this.props.navigationStore.currentNavigation = this.props.navigation;
+  async componentDidMount() {
     await Firebase.database
       .ref("messages")
       .child(this.props.userStore.id)
@@ -48,10 +48,12 @@ export default class RecentChatsView extends Component {
         }
       });
   }
+
   render() {
     const { userStore, chatStore, navigation } = this.props;
     return (
       <Container>
+        <StatusBarCustom/>
         <DrawerHeader
           parent={this}
           title="Recent Chats"
@@ -66,7 +68,12 @@ export default class RecentChatsView extends Component {
               userStore.listUser.map(user => {
                 if (user.id === Object.keys(item)[0]) userInfo = user;
               });
-              if (userInfo)
+              if (
+                userInfo &&
+                chatStore.historyChat
+                  .map(item => item.userId)
+                  .indexOf(userInfo.id) == -1
+              )
                 return (
                   <ListItem
                     thumbnail
@@ -81,13 +88,45 @@ export default class RecentChatsView extends Component {
                     <Body>
                       <Text>{userInfo.profiles.fullName}</Text>
                       <Text note numberOfLines={1}>
-                        {arr[arr.length - 1]["content"] || ""}
+                        {arr[arr.length - 1]["content"]}
                       </Text>
                     </Body>
                     <Right style={{ paddingRight: 0, paddingTop: 0 }}>
                       <Button transparent>
                         <Text style={styles.textNote} uppercase={false}>
-                          1h
+                          {chatStore.convertTime(arr[arr.length - 1]["time"])}
+                        </Text>
+                      </Button>
+                    </Right>
+                  </ListItem>
+                );
+              else if (
+                userInfo &&
+                (index = chatStore.historyChat
+                  .map(item => item.userId)
+                  .indexOf(userInfo.id)) !== -1
+              )
+                return (
+                  <ListItem
+                    thumbnail
+                    onPress={() => {
+                      chatStore.setValue(userStore.id, userInfo.id);
+                      navigation.navigate("Chat");
+                    }}
+                  >
+                    <Left>
+                      <Thumbnail source={require("../../../icons/2.jpg")} />
+                    </Left>
+                    <Body>
+                      <Text>{userInfo.profiles.fullName}</Text>
+                      <Text note numberOfLines={1}>
+                        {chatStore.historyChat[index].content}
+                      </Text>
+                    </Body>
+                    <Right style={{ paddingRight: 0, paddingTop: 0 }}>
+                      <Button transparent>
+                        <Text style={styles.textNote} uppercase={false}>
+                          {chatStore.convertTime(chatStore.historyChat[index].time)}
                         </Text>
                       </Button>
                     </Right>

@@ -29,8 +29,6 @@ export default class UserStore {
     this.id = user.uid;
     await this.getAllUser();
     await this.getRecentChats();
-    // console.log(`listUser: ${JSON.stringify(this.listUser)}`);
-    // console.log(`RECENTchats: ${JSON.stringify(this.recentChats)}`);
 
     await Firebase.database
       .ref("/users/" + user.uid)
@@ -43,24 +41,7 @@ export default class UserStore {
         this.chatId = snapshot.val().chatId;
         this.blockId = snapshot.val().blockId;
       });
-
-    // await Firebase.database
-    //   .ref("/profiles/Nj5FRPnZrUWrydJaLr9uQIj1pFf2")
-    //   .once("value", snapshot => {
-    //     if (snapshot.val()) {
-    //       this.id = user.uid;
-    //       const profileObj = new Profile();
-    //       profileObj.id = snapshot.val().id;
-    //       profileObj.fullName = snapshot.val().fullName;
-    //       profileObj.gender = snapshot.val().gender;
-    //       profileObj.dateOfBirth = snapshot.val().dateOfBirth;
-    //       profileObj.location = snapshot.val().location;
-    //       profileObj.aboutMe = snapshot.val().aboutMe;
-    //       this.profile = profileObj;
-    //     }
-    //   });
   }
-
   @action
   clearStore() {
     this.id = "";
@@ -71,9 +52,8 @@ export default class UserStore {
     this.chatId = [];
     this.blockId = [];
     this.profile = null;
-    this.recentChats=[
-    ];
-    this.listUser=[];
+    this.recentChats = [];
+    this.listUser = [];
   }
 
   @action async getAllUser() {
@@ -94,4 +74,4 @@ export default class UserStore {
         if (snapshot.val()) this.recentChats.push(snapshot.val());
       });
   }
-
+}

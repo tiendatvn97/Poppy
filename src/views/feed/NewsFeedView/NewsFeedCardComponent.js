@@ -29,12 +29,12 @@ export default class NewsFeedCardComponent extends Component {
     this.setState({ userInfo: userInfo });
   }
   render() {
-    const { fullData, newsFeedStore, userStore } = this.props;
+    const { fullData, newsFeedStore, userStore, postDetailStore } = this.props;
     return (
       <Card transparent style={{ marginBottom: 15 }}>
         <TouchableOpacity
-          onPress={() => {
-            newsFeedStore.postSelected = fullData.postId;
+          onPress={async () => {
+            postDetailStore.postInfo = fullData;
             this.props.parent.props.navigation.navigate("PostDetail");
           }}
         >

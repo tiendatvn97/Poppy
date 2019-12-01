@@ -22,6 +22,7 @@ import { StyleSheet, Alert, KeyboardAvoidingView } from "react-native";
 import { observer, inject } from "mobx-react";
 
 import BackHeader from "../header/BackHeader";
+import StatusBarCustom from "../header/StatusBarCustom";
 
 @inject("registerStore", "navigationStore", "setUpProfileStore")
 @observer
@@ -37,6 +38,7 @@ export default class RegisterView extends Component {
     const { registerStore, setUpProfileStore } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+        <StatusBarCustom/>
         <Container>
           <BackHeader title="Create Account" parent={this} />
           <View style={{ flex: 1 }}>

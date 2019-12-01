@@ -30,6 +30,7 @@ import {
 const widthScreen = Dimensions.get("window").width;
 
 import FullBackHeader from "../../header/FullBackHeader";
+import StatusBarCustom from "../../header/StatusBarCustom";
 
 import { observer, inject } from "mobx-react";
 @inject("createPostStore")
@@ -77,6 +78,7 @@ export default class CreatePostView extends Component {
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <Container>
+          <StatusBarCustom/>
           <FullBackHeader
             parent={this}
             title="Create Moment"

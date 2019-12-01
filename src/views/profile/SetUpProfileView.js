@@ -26,6 +26,7 @@ import {
 } from "react-native";
 import { observer, inject } from "mobx-react";
 import BackHeader from "../header/BackHeader";
+import StatusBarCustom from "../header/StatusBarCustom";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import SwitchSelector from "react-native-switch-selector";
 
@@ -75,6 +76,7 @@ export default class SetUpProfileView extends Component {
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <Container>
+          <StatusBarCustom/>
           <BackHeader title="Set up Profile" parent={this} />
           <View style={{ flex: 1 }}>
             <View style={{ flex: 6.5 }}>

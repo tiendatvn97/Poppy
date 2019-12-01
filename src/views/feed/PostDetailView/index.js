@@ -27,17 +27,27 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import Image from "react-native-scalable-image";
-import DrawerHeader from "../../header/DrawerHeader";
+import StatusBarCustom from "../../header/StatusBarCustom";
 import BackHeader from "../../header/BackHeader";
 const widthScreen = Dimensions.get("window").width;
+import { observer, inject } from "mobx-react";
+
+@inject("postDetailStore", "newsFeedStore")
+@observer
 export default class PostDetailView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
   };
+  async componentDidMount() {
+      const test = await this.props.newsFeedStore.getUserInfo(this.props.postDetailStore.postInfo.data.userId);
+    console.log("postDetailStore "+JSON.stringify(test))
+  }
   render() {
+    const { postDetailStore } = this.props;
     return (
       <Container>
-        <BackHeader parent ={this} title="Ngoc Trinh's Moment" />
+        {/* <StatusBarCustom />
+        <BackHeader parent ={this} title= {`${postDetailStore.getUserInfo(postDetailStore.postInfo.data.userId).profiles.fullName}'s Moment`} />
         <Content>
           <Card transparent style={{elevation:1}}>
             <CardItem
@@ -179,7 +189,7 @@ export default class PostDetailView extends Component {
               </Item>
             </Form>
           </Card>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView> */}
       </Container>
     );
   }

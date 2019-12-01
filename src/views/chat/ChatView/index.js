@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
   Container,
   Header,
@@ -21,6 +21,7 @@ import {
 import { observer, inject } from "mobx-react";
 
 import DrawerHeader from "../../header/DrawerHeader";
+import StatusBarCustom from "../../header/StatusBarCustom";
 import {
   StyleSheet,
   Alert,
@@ -30,7 +31,8 @@ import {
   Text,
   KeyboardAvoidingView,
   Keyboard,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from "react-native";
 let isDisplayAvatar = true;
 import Firebase from "../../../firebase/Firebase";
@@ -41,6 +43,7 @@ const { height } = Dimensions.get("window");
 export default class ChatView extends Component {
   state = {
     messageList: [],
+    isDisplayTime: [],
     flatListHeight: height
   };
   static navigationOptions = {
@@ -49,38 +52,31 @@ export default class ChatView extends Component {
       <Icon name="rocketchat" type="FontAwesome5" style={{ fontSize: 20 }} />
     )
   };
-  componentWillUnmount() {
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
-  }
-  _keyboardDidShow(e) {
-    console.log(e);
-    // this.scrollView.scrollToEnd({animated: true})
-    // this.flatList.scrollToEnd({ animated: true });
-    this.setState({
-      flatListHeight: height - e.height
-    });
-  }
-  _keyboardDidHide(e) {
-    this.setState({
-      flatListHeight: height
-    });
-  }
-  constructor(props) {
-    super(props);
-    this._keyboardDidShow = this._keyboardDidShow.bind(this);
-    this._keyboardDidHide = this._keyboardDidHide.bind(this);
-  }
+  // componentWillUnmount() {
+  //   this.keyboardDidShowListener.remove();
+  //   this.keyboardDidHideListener.remove();
+  // }
+  // _keyboardDidShow(e) {
+  //   console.log(e);
+  //   // this.scrollView.scrollToEnd({animated: true})
+  //   // this.flatList.scrollToEnd({ animated: true });
+  //   this.setState({
+  //     flatListHeight: height - e.height
+  //   });
+  // }
+  // _keyboardDidHide(e) {
+  //   this.setState({
+  //     flatListHeight: height
+  //   });
+  // }
+  // constructor(props) {
+  //   super(props);
+  //   this._keyboardDidShow = this._keyboardDidShow.bind(this);
+  //   this._keyboardDidHide = this._keyboardDidHide.bind(this);
+  // }
 
   componentDidMount() {
-    this.keyboardDidShowListener = Keyboard.addListener(
-      "keyboardDidShow",
-      this._keyboardDidShow
-    );
-    this.keyboardDidHideListener = Keyboard.addListener(
-      "keyboardDidHide",
-      this._keyboardDidHide
-    );
+    this.flatList.scrollToEnd();
   }
   componentWillMount() {
     Firebase.database
@@ -90,7 +86,8 @@ export default class ChatView extends Component {
       .on("child_added", value => {
         this.setState(preState => {
           return {
-            messageList: [...preState.messageList, value.val()]
+            messageList: [value.val(), ...preState.messageList],
+            isDisplayTime: [false, ...preState.isDisplayTime]
           };
         });
       });
@@ -99,19 +96,20 @@ export default class ChatView extends Component {
     const { chatStore } = this.props;
     return (
       <Container>
+        <StatusBarCustom/>
         <DrawerHeader
           parent={this}
           title="Chats"
           nameIcon="user-friends"
           typeIcon="FontAwesome5"
         />
-        <KeyboardAvoidingView behavior="padding">
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           <FlatList
-            style={{ height: this.state.flatListHeight }}
             inverted
             ref={test => (this.flatList = test)}
             style={{ marginTop: 10 }}
             data={this.state.messageList}
+            keyExtractor={item => item.id}
             renderItem={({ item, index }) => {
               if (index == 0) isDisplayAvatar = true;
               if (
@@ -126,7 +124,8 @@ export default class ChatView extends Component {
                   <View
                     style={{
                       flexDirection: "row",
-                      marginHorizontal: 15
+                      marginHorizontal: 15,
+                      marginBottom: 10
                     }}
                   >
                     <Image
@@ -137,10 +136,24 @@ export default class ChatView extends Component {
                     ></Image>
 
                     <View style={{ marginLeft: 10 }}>
-                      <Text style={styles.textReceive}>{item.content}</Text>
-                      <Text style={{ fontSize: 10, color: "#e6e6e6" }}>
-                        1:23 PM
-                      </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState(preState => {
+                            let state = preState.isDisplayTime;
+                            state[index] = !state[index];
+                            return {
+                              isDisplayTime: state
+                            };
+                          });
+                        }}
+                      >
+                        <Text style={styles.textReceive}>{item.content}</Text>
+                      </TouchableOpacity>
+                      {this.state.isDisplayTime[index] && (
+                        <Text style={{ fontSize: 10, color: "#e6e6e6" }}>
+                          {chatStore.convertTime(item.time)}
+                        </Text>
+                      )}
                     </View>
                   </View>
                 );
@@ -150,20 +163,35 @@ export default class ChatView extends Component {
                     style={{
                       flexDirection: "row",
                       marginHorizontal: 15,
-                      justifyContent: "flex-end"
+                      justifyContent: "flex-end",
+                      marginBottom: 10
                     }}
                   >
                     <View style={{ marginRight: 10, marginLeft: 15 }}>
-                      <Text style={styles.textSend}>{item.content}</Text>
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          color: "gray",
-                          marginLeft: 10
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState(preState => {
+                            let state = preState.isDisplayTime;
+                            state[index] = !state[index];
+                            return {
+                              isDisplayTime: state
+                            };
+                          });
                         }}
                       >
-                        1:23 PM
-                      </Text>
+                        <Text style={styles.textSend}>{item.content}</Text>
+                      </TouchableOpacity>
+                      {this.state.isDisplayTime[index] && (
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            color: "gray",
+                            marginLeft: 10
+                          }}
+                        >
+                          {chatStore.convertTime(item.time)}
+                        </Text>
+                      )}
                     </View>
                     <Image
                       style={{ width: 30, height: 30, borderRadius: 15 }}
@@ -175,15 +203,14 @@ export default class ChatView extends Component {
                 );
             }}
           ></FlatList>
-        </KeyboardAvoidingView>
 
-        <KeyboardAvoidingView behavior="padding" style={{height:50,width:150}}> 
           <Card style={{ marginBottom: 0, borderTopWidth: 1.5 }}>
             <Form>
               <Item>
                 <Input
                   placeholder="Write comment..."
-                  style={{ fontSize: 12 }}
+                  multiline
+                  style={{ fontSize: 12, height: 50 }}
                   value={chatStore.textMessage}
                   onChangeText={value => chatStore.textMessageOnChange(value)}
                 />

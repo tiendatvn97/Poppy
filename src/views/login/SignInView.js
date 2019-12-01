@@ -18,11 +18,14 @@ import {
   Item,
   Spinner
 } from "native-base";
-import BackHeader from "../header/BackHeader";
+
 import { StyleSheet, Alert, KeyboardAvoidingView } from "react-native";
 
 import Firebase from "../../firebase/Firebase";
 import { observer, inject } from "mobx-react";
+
+import BackHeader from "../header/BackHeader";
+import StatusBarCustom from "../header/StatusBarCustom";
 
 @inject("signInStore", "userStore")
 @observer
@@ -52,6 +55,7 @@ export default class SignInView extends Component {
     const { signInStore } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+        <StatusBarCustom />
         <Container>
           <BackHeader title="Sign In" parent={this} />
           <View style={{ flex: 1 }}>

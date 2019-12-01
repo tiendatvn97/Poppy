@@ -15,6 +15,7 @@ import {
 } from "native-base";
 import Firebase from "../../firebase/Firebase";
 import DrawerHeader from "../header/DrawerHeader";
+import StatusBarCustom from "../header/StatusBarCustom";
 import { StyleSheet, Alert } from "react-native";
 
 import { observer, inject } from "mobx-react";
@@ -48,6 +49,7 @@ export default class ContactView extends Component {
     const { userStore, chatStore, navigation } = this.props;
     return (
       <Container>
+        <StatusBarCustom/>
         <DrawerHeader
           parent={this}
           title="Contact"

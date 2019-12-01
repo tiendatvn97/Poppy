@@ -12,14 +12,12 @@ import {
   Right
 } from "native-base";
 import { Constants } from "expo";
-
 export default class BackHeader extends Component {
   render() {
     const { title } = this.props;
     return (
       <Header
         style={{
-          // marginTop: Constants.statusBarHeight,
           backgroundColor: "white"
         }}
       >
