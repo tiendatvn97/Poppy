@@ -27,7 +27,7 @@ import {
   Thumbnail
 } from "native-base";
 import { Constants } from "expo";
-@inject("userStore")
+@inject("userStore", "thirdProfileStore")
 @observer
 export default class SearchUserView extends Component {
   state = {
@@ -38,7 +38,7 @@ export default class SearchUserView extends Component {
   }
 
   render() {
-    const { userStore } = this.props;
+    const { userStore, thirdProfileStore } = this.props;
     const filteredUsers = userStore.listUser.filter(
       createFilter(this.state.searchTerm, KEYS_TO_FILTERS)
     );
@@ -72,6 +72,7 @@ export default class SearchUserView extends Component {
                 height: 40,
                 borderRadius: 15
               }}
+              textAlign={'center'}
               onChangeText={term => {
                 this.searchUpdated(term);
               }}
@@ -91,14 +92,22 @@ export default class SearchUserView extends Component {
 
           {filteredUsers.map((userFound, index) => {
             userInfo = null;
-            userFound && console.log("userFound: " + JSON.stringify(userFound));
             userInfo = userStore.listUser.find(
               user => user.id === userFound.id
             );
-            userInfo && console.log("userInfo: " + JSON.stringify(userInfo));
             if (userInfo && index < 10) {
               return (
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("Profile")}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (userFound.id === userStore.id) {
+                      this.props.navigation.navigate("MyProfile");
+                    } else {
+                      thirdProfileStore.thirdUser = userInfo;
+                      this.props.navigation.navigate("ThirdProfile");
+                    }
+                  }}
+                  style={{backgroundColor:"pink"}}
+                >
                   <CardItem transparent style={{ paddingTop: 0 }}>
                     <Left
                       style={{

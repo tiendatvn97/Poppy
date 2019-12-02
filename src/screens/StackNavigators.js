@@ -31,7 +31,7 @@ export const ProfileStack = createStackNavigator(
     MyProfile: MyProfileView,
     ThirdProfile: ThirdProfileView
   },
-  { initialRouteName: "ThirdProfile", headerMode: "none" }
+  { initialRouteName: "MyProfile", headerMode: "none" }
 );
 export const NewFeedStack = createStackNavigator(
   {
@@ -39,7 +39,9 @@ export const NewFeedStack = createStackNavigator(
     NewsFeed: NewsFeedView,
     PostDetail: PostDetailView,
     MyProfile: MyProfileView,
-    SearchUser: SearchUserView
+    SearchUser: SearchUserView,
+    ThirdProfile: ThirdProfileView,
+    Chat: ChatsView,
   },
 
   {

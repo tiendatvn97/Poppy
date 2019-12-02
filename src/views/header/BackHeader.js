@@ -26,10 +26,14 @@ export default class BackHeader extends Component {
             transparent
             onPress={() => this.props.parent.props.navigation.goBack()}
           >
-            <Icon name="arrow-back" style={{ color: "black" }} />
+            <Icon
+              name="ios-arrow-back"
+              type="Ionicons"
+              style={{ color: "black" }}
+            />
           </Button>
         </Left>
-        <Body>
+        <Body style={{ flex: 6 }}>
           <Title style={{ color: "black", alignSelf: "center", fontSize: 18 }}>
             {title}
           </Title>

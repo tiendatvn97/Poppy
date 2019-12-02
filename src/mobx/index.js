@@ -9,6 +9,7 @@ import SetUpProfileStore from "./stores/SetUpProfileStore";
 import UserStore from "./stores/UserStore";
 import ChatStore from "./stores/ChatStore";
 import NavigationStore from "./stores/NavigationStore";
+import ThirdProfileStore from "./stores/ThirdProfileStore";
 
 class rootStore {
   createPostStore: CreatePostStore;
@@ -21,6 +22,7 @@ class rootStore {
   userStore: UserStore;
   chatStore: ChatStore;
   navigationStore: NavigationStore;
+  thirdProfileStore: ThirdProfileStore;
 
   constructor() {
     this.createPostStore = new CreatePostStore(this);
@@ -33,6 +35,7 @@ class rootStore {
     this.userStore = new UserStore(this);
     this.chatStore = new ChatStore(this);
     this.navigationStore = new NavigationStore(this);
+    this.thirdProfileStore = new ThirdProfileStore(this);
   }
 }
 

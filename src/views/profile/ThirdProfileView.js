@@ -38,8 +38,9 @@ import StatusBarCustom from "../header/StatusBarCustom";
 import { observer, inject } from "mobx-react";
 import ChangeAvatarModal from "../modal/ChangeAvatarModal";
 import Firebase from "../../firebase/Firebase";
+import ChatStore from "../../mobx/stores/ChatStore";
 
-@inject("userStore", "myProfileStore", "newsFeedStore", "postDetailStore")
+@inject("userStore", "thirdProfileStore", "postDetailStore", "chatStore")
 @observer
 export default class ThirdProfileView extends Component {
   state = {
@@ -54,14 +55,15 @@ export default class ThirdProfileView extends Component {
       <Icon name="profile" type="AntDesign" style={{ fontSize: 20 }} />
     )
   };
+
   componentDidMount() {
-    this.props.myProfileStore.clearStore();
+    this.props.thirdProfileStore.refresh();
     setTimeout(() => {
       this.setState({ isLoading: false });
     }, 500);
     Firebase.database
       .ref("postGroup/postByUser")
-      .child(this.props.userStore.id)
+      .child(this.props.thirdProfileStore.thirdUser.id)
       .orderByChild("timeEdit")
       .on("child_added", snapshot => {
         if (snapshot.val()) {
@@ -77,10 +79,10 @@ export default class ThirdProfileView extends Component {
   render() {
     const {
       userStore,
-      myProfileStore,
-      newsFeedStore,
+      thirdProfileStore,
       postDetailStore,
-      navigation
+      navigation,
+      chatStore
     } = this.props;
     const { listPost, isLoading } = this.state;
     return (
@@ -88,10 +90,10 @@ export default class ThirdProfileView extends Component {
         <StatusBarCustom />
         <DrawerHeader
           parent={this}
-          title="My Profile"
-          nameRightIcon="edit"
-          typeRightIcon="Feather"
-          nameLeftIcon="ios-menu"
+          title={`${this.props.thirdProfileStore.thirdUser ? this.props.thirdProfileStore.thirdUser.profiles.fullName : "" }'s profile`}
+          nameRightIcon="dots-three-vertical"
+          typeRightIcon="Entypo"
+          nameLeftIcon="ios-arrow-back"
           typeLeftIcon="Ionicons"
         />
         <Content>
@@ -104,46 +106,47 @@ export default class ThirdProfileView extends Component {
                     this.setState({ modalVisible: true });
                   }}
                 >
-                  <Thumbnail source={{ uri: userStore.avatarImage }} />
+                  <Thumbnail
+                    source={{ uri: thirdProfileStore.thirdUser.avatarImage }}
+                  />
                 </TouchableOpacity>
                 <Body>
-                  <Text>{userStore.profile.fullName}</Text>
+                  <Text>{thirdProfileStore.thirdUser.profiles.fullName}</Text>
                   <Text style={styles.textNote}>{userStore.email}</Text>
                 </Body>
               </Left>
-              <Right >
-                {this.state.follow && (
+              <Right>
+                {thirdProfileStore.isFollow && (
                   <Button
                     style={{
                       backgroundColor: "#ff6265",
-                      height: 35,
-                      width: 130
+                      height: 30,
+                      width: 125,
+                      borderRadius: 5
                     }}
-                    onPress={() =>
-                      this.setState(preState => {
-                        return { follow: !preState.follow };
-                      })
-                    }
+                    onPress={() => {
+                      thirdProfileStore.followAction();
+                    }}
                   >
-                    <Text uppercase={false} style={{fontSize:16}}> Flollow</Text>
+                    <Text uppercase={false} style={{ fontSize: 16 }}>
+                      Flollow
+                    </Text>
                   </Button>
                 )}
-                {!this.state.follow && (
-                  <View style={{ backgroundColor: "#ff6265" }}>
+                {!thirdProfileStore.isFollow && (
+                  <View style={{ backgroundColor: "#ff6265", borderRadius: 5 }}>
                     <Picker
                       mode="dropdown"
                       style={styles.onePicker}
                       itemStyle={styles.onePickerItem}
-                      selectedValue={this.state.follow ? 1 : 0}
+                      selectedValue={thirdProfileStore.isFollow ? 1 : 0}
                       onValueChange={value => {
-                        if (value === 1)
-                          this.setState({
-                            follow: true
-                          });
+                        if (value === 1) {
+                          thirdProfileStore.unFollowAction();
+                        }
                       }}
                     >
                       <Picker.Item
-                        
                         label="Following"
                         value={0}
                         style={{
@@ -153,7 +156,6 @@ export default class ThirdProfileView extends Component {
                         }}
                       />
                       <Picker.Item
-                       
                         label="Unfollow"
                         value={1}
                         style={{ height: 35 }}
@@ -168,7 +170,9 @@ export default class ThirdProfileView extends Component {
             <CardItem Body>
               <Body>
                 <Text style={{ marginBottom: 10 }}>About</Text>
-                <Text style={styles.textNote}>{userStore.profile.aboutMe}</Text>
+                <Text style={styles.textNote}>
+                  {thirdProfileStore.thirdUser.profiles.aboutMe}
+                </Text>
               </Body>
             </CardItem>
           </Card>
@@ -188,13 +192,13 @@ export default class ThirdProfileView extends Component {
                       </Body>
                       <Body style={styles.bodyRate}>
                         <Text style={styles.textRateNuber}>
-                          {userStore.follower.length - 1}
+                          {thirdProfileStore.follower.length - 1}
                         </Text>
                         <Text style={styles.textNote}>FOLLOWERS</Text>
                       </Body>
                       <Body style={[styles.bodyRate, { flex: 0.7 }]}>
                         <Text style={styles.textRateNuber}>
-                          {userStore.following.length - 1}
+                          {thirdProfileStore.thirdUser.following.length - 1}
                         </Text>
                         <Text style={styles.textNote}>FOLLOWING</Text>
                       </Body>
@@ -208,31 +212,27 @@ export default class ThirdProfileView extends Component {
                 data={listPost}
                 numColumns={3}
                 keyExtractor={item => item.postId}
+                ItemSeparatorComponent={() => (
+                  <View style={{ height: 17, width: widthScreen }}></View>
+                )}
                 renderItem={({ item }) => (
-                  <View style={{ flex: 1 }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        postDetailStore.postInfo = item;
-                        navigation.navigate("PostDetail");
-                      }}
-                    >
-                      <Image
-                        style={styles.imageFlatList}
-                        source={{ uri: item.image }}
-                      />
-                    </TouchableOpacity>
-
-                    <View style={{ height: 17, width: widthScreen }}></View>
-                  </View>
+                  <TouchableOpacity
+                    style={{ flex: 1 }}
+                    onPress={() => {
+                      postDetailStore.postInfo = item;
+                      navigation.navigate("PostDetail");
+                    }}
+                    style={{ backgroundColor: "blue" }}
+                  >
+                    <Image
+                      style={styles.imageFlatList}
+                      source={{ uri: item.image }}
+                    />
+                  </TouchableOpacity>
                 )}
               />
             </ScrollView>
           )}
-          <ChangeAvatarModal
-            modalVisible={this.state.modalVisible}
-            parent={this}
-            myProfileStore={myProfileStore}
-          />
         </Content>
         <Button
           style={{
@@ -245,8 +245,12 @@ export default class ThirdProfileView extends Component {
             bottom: 10,
             backgroundColor: "#ff6265"
           }}
+          onPress={() => {
+            chatStore.setValue(userStore.id, thirdProfileStore.thirdUser.id);
+            navigation.navigate("Chat");
+          }}
         >
-          <Icon name="video-camera" type="Entypo"></Icon>
+          <Icon name="message1" type="AntDesign"></Icon>
         </Button>
       </Container>
     );
@@ -307,12 +311,12 @@ const styles = StyleSheet.create({
     elevation: 1.5
   },
   onePicker: {
-    width: 140,
-    height: 35,
-    color:"white"
+    width: 135,
+    height: 30,
+    color: "white"
   },
   onePickerItem: {
-    height: 35,
-    color:"white"
+    height: 30,
+    color: "white"
   }
 });

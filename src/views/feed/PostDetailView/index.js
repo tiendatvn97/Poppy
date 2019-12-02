@@ -35,6 +35,7 @@ const widthScreen = Dimensions.get("window").width;
 import { observer, inject } from "mobx-react";
 import Firebase from "../../../firebase/Firebase";
 import { ScrollView } from "react-native-gesture-handler";
+import ThirdProfileStore from "../../../mobx/stores/ThirdProfileStore";
 let userInfo = "";
 @inject("postDetailStore", "userStore")
 @observer
@@ -82,7 +83,7 @@ export default class PostDetailView extends Component {
             title={`${postAuth ? postAuth.profiles.fullName : ""}'s Moment`}
           />
           <Content>
-            <Card transparent style={{ elevation: 1 }}>
+            <Card transparent style={{ elevation: 0 }}>
               <CardItem
                 style={{
                   paddingLeft: 0,
@@ -91,19 +92,14 @@ export default class PostDetailView extends Component {
                 }}
                 transparent
               >
-                <Left style={{ flex: 1 }}>
+                <Left style={{ flex: 1, justifyContent: "flex-start" }}>
                   <Thumbnail
                     style={{ alignSelf: "center", width: 45, height: 45 }}
                     large
                     source={{ uri: postAuth && postAuth.avatarImage }}
                   />
                   <Body style={{ flex: 7 }}>
-                    <Text style={{ fontSize: 12, padding: 2 }}>Dat 6 Mui</Text>
-                    <Text style={{ fontSize: 10, color: "gray" }}>
-                      {postDetailStore.timeConverter(
-                        postDetailStore.postInfo.timeEdit
-                      )}
-                    </Text>
+                    <Text style={{ fontWeight: "bold" }}>Dat 6 Mui</Text>
                   </Body>
                 </Left>
                 <Right style={{ flex: 1 }}>
@@ -117,13 +113,30 @@ export default class PostDetailView extends Component {
                 source={{ uri: postDetailStore.postInfo.image }}
                 width={widthScreen}
               />
-
-              {/* <CardItem>
-              <Left>
-                <Icon name="map-pin" type="Feather" size={10} />
-                <Text style={styles.textNote}>10 mins ago</Text>
-              </Left>
-            </CardItem> */}
+              {postAuth && postDetailStore.postInfo && (
+                <CardItem style={{ elevation: 0, paddingLeft: 0 }}>
+                  <Left
+                    style={{
+                      maxWidth: 80,
+                      alignItems: "flex-start",
+                      justifyContent: "flex-start",
+                      alignSelf: "flex-start"
+                    }}
+                  >
+                    <Text style={{ fontWeight: "bold" }}>
+                      {postAuth.profiles.fullName}
+                    </Text>
+                  </Left>
+                  <Body style={{ paddingLeft: 10 }}>
+                    <Text>{`${postDetailStore.postInfo.content}`}</Text>
+                    <Text style={{ fontSize: 10, color: "gray" }}>
+                      {postDetailStore.timeConverter(
+                        postDetailStore.postInfo.timeEdit
+                      )}
+                    </Text>
+                  </Body>
+                </CardItem>
+              )}
             </Card>
             <Card style={{ elevation: 0 }}>
               <CardItem>
@@ -146,16 +159,9 @@ export default class PostDetailView extends Component {
             {!isLoading && (
               <Card transparent style={{ elevation: 0 }}>
                 <CardItem transparent>
-                  <Left>
-                    <Text style={styles.textNote}>
-                      {comments.length} Comments
-                    </Text>
-                  </Left>
-                  {/* <Left style={{ justifyContent: "flex-end" }}>
-                  <Text style={[styles.textNote, { color: "#ff6265" }]}>
-                    View All
+                  <Text style={{ color: "gray" }}>
+                    {comments.length} comments
                   </Text>
-                </Left> */}
                 </CardItem>
 
                 <ScrollView style={{ maxHeight: 200 }}>

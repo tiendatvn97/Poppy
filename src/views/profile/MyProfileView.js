@@ -155,22 +155,21 @@ export default class MyProfileView extends Component {
                 data={listPost}
                 numColumns={3}
                 keyExtractor={item => item.postId}
+                ItemSeparatorComponent={() => (
+                  <View style={{ height: 17, width: widthScreen }}></View>
+                )}
                 renderItem={({ item }) => (
-                  <View style={{ flex: 1 }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        postDetailStore.postInfo = item;
-                        navigation.navigate("PostDetail");
-                      }}
-                    >
-                      <Image
-                        style={styles.imageFlatList}
-                        source={{ uri: item.image }}
-                      />
-                    </TouchableOpacity>
-
-                    <View style={{ height: 17, width: widthScreen }}></View>
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      postDetailStore.postInfo = item;
+                      navigation.navigate("PostDetail");
+                    }}
+                  >
+                    <Image
+                      style={styles.imageFlatList}
+                      source={{ uri: item.image }}
+                    />
+                  </TouchableOpacity>
                 )}
               />
             </ScrollView>
@@ -199,36 +198,6 @@ export default class MyProfileView extends Component {
     );
   }
 }
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../icons/1.jpg")
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    image: require("../../icons/2.jpg")
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    image: require("../../icons/3.jpg")
-  },
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../icons/3.jpg")
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    image: require("../../icons/2.jpg")
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    image: require("../../icons/1.jpg")
-  },
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../icons/1.jpg")
-  }
-];
 
 const styles = StyleSheet.create({
   image: {
