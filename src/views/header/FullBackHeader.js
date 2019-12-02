@@ -15,7 +15,7 @@ import { Constants } from "expo";
 
 export default class FullBackHeader extends Component {
   render() {
-    const { title, nameIcon, typeIcon } = this.props;
+    const { title, nameRightIcon, typeRightIcon } = this.props;
     return (
       <Header
         style={{
@@ -38,8 +38,8 @@ export default class FullBackHeader extends Component {
         </Body>
         <Right style={{ flex: 1 }}>
           <Icon
-            name={nameIcon}
-            type={typeIcon}
+            name={nameRightIcon}
+            type={typeRightIcon}
             style={{ color: "black", fontSize: 20 }}
             onPress={() => {
               this.props.parent.props.navigation.openDrawer();

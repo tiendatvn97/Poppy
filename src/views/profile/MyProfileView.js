@@ -59,8 +59,10 @@ export default class MyProfileView extends Component {
         <DrawerHeader
           parent={this}
           title="My Profile"
-          nameIcon="edit"
-          typeIcon="Feather"
+          nameRightIcon="edit"
+          typeRightIcon="Feather"
+          nameLeftIcon="ios-menu"
+          typeLeftIcon="Ionicons"
         />
         <Content>
           <Card style={{ elevation: 0 }}>

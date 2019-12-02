@@ -57,7 +57,11 @@ export default class NewsFeedCardComponent extends Component {
             <Thumbnail
               style={{ alignSelf: "center", width: 45, height: 45 }}
               large
-              source={fullData.data.imageUrl}
+              source={{
+                uri: this.state.userInfo
+                  ? this.state.userInfo.avatarImage
+                  : null
+              }}
             ></Thumbnail>
             <Body style={{}}>
               <Text style={{ fontSize: 12, padding: 2 }}>
@@ -66,7 +70,7 @@ export default class NewsFeedCardComponent extends Component {
                   : ""}
               </Text>
               <Text style={{ fontSize: 10, color: "gray" }}>
-                {userStore.timeCoverter(fullData.data.timeEdit)}
+                {userStore.timeConverter(fullData.data.timeEdit)}
               </Text>
             </Body>
           </Left>

@@ -53,12 +53,14 @@ export default class RecentChatsView extends Component {
     const { userStore, chatStore, navigation } = this.props;
     return (
       <Container>
-        <StatusBarCustom/>
+        <StatusBarCustom />
         <DrawerHeader
           parent={this}
           title="Recent Chats"
-          nameIcon="user-friends"
-          typeIcon="FontAwesome5"
+          nameRightIcon="user-friends"
+          typeRightIcon="FontAwesome5"
+          nameLeftIcon="ios-menu"
+          typeLeftIcon="Ionicons"
         />
         <Content>
           <List>
@@ -126,7 +128,9 @@ export default class RecentChatsView extends Component {
                     <Right style={{ paddingRight: 0, paddingTop: 0 }}>
                       <Button transparent>
                         <Text style={styles.textNote} uppercase={false}>
-                          {chatStore.convertTime(chatStore.historyChat[index].time)}
+                          {chatStore.convertTime(
+                            chatStore.historyChat[index].time
+                          )}
                         </Text>
                       </Button>
                     </Right>

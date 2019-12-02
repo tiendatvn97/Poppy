@@ -82,8 +82,8 @@ export default class CreatePostView extends Component {
           <FullBackHeader
             parent={this}
             title="Create Moment"
-            nameIcon="closecircleo"
-            typeIcon="AntDesign"
+            nameRightIcon="closecircleo"
+            typeRightIcon="AntDesign"
           />
           <Content
             ref={ref => {

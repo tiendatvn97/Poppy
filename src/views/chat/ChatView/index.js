@@ -96,12 +96,14 @@ export default class ChatView extends Component {
     const { chatStore } = this.props;
     return (
       <Container>
-        <StatusBarCustom/>
+        <StatusBarCustom />
         <DrawerHeader
           parent={this}
           title="Chats"
-          nameIcon="user-friends"
-          typeIcon="FontAwesome5"
+          nameRightIcon="user-friends"
+          typeRightIcon="FontAwesome5"
+          nameLeftIcon="ios-arrow-back"
+          typeLeftIcon="Ionicons"
         />
         <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
           <FlatList

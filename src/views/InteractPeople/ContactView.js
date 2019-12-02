@@ -53,8 +53,10 @@ export default class ContactView extends Component {
         <DrawerHeader
           parent={this}
           title="Contact"
-          nameIcon="user-friends"
-          typeIcon="FontAwesome5"
+          nameRightIcon="user-friends"
+          typeRightIcon="FontAwesome5"
+          nameLeftIcon="ios-arrow-back"
+          typeLeftIcon="Ionicons"
         />
         <Content>
           <List>

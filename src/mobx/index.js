@@ -26,7 +26,7 @@ class rootStore {
     this.createPostStore = new CreatePostStore(this);
     this.myProfileStore = new MyProfileStore(this);
     this.newsFeedStore = new NewsFeedStore(this);
-    this.postDetailStore = new PostDetailStore();
+    this.postDetailStore = new PostDetailStore(this);
     this.registerStore = new RegisterStore(this);
     this.signInStore = new SignInStore(this);
     this.setUpProfileStore = new SetUpProfileStore(this);

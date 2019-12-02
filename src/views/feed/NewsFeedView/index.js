@@ -96,8 +96,10 @@ export default class NewsFeedView extends Component {
         <DrawerHeader
           parent={this}
           title="My Feed"
-          nameIcon="search1"
-          typeIcon="AntDesign"
+          nameRightIcon="search1"
+          typeRightIcon="AntDesign"
+          nameLeftIcon="ios-menu"
+          typeLeftIcon="Ionicons"
         />
         <View contentContainerStyle={{ paddingHorizontal: 15 }}>
           <FlatList

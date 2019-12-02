@@ -24,10 +24,14 @@ export default class DrawerHeader extends Component {
       >
         <Left style={{ flex: 1 }}>
           <Icon
-            name="ios-menu"
-            style={{}}
+            name={this.props.nameLeftIcon}
+            type={this.props.typeLeftIcon}
             onPress={() => {
+              if (this.props.nameLeftIcon === "ios-menu")
               this.props.parent.props.navigation.openDrawer();
+              if (this.props.nameLeftIcon === "ios-arrow-back")
+              this.props.parent.props.navigation.goBack();
+
             }}
           ></Icon>
         </Left>
@@ -36,8 +40,8 @@ export default class DrawerHeader extends Component {
         </Body>
         <Right style={{ flex: 1 }}>
           <Icon
-            name={this.props.nameIcon}
-            type={this.props.typeIcon}
+            name={this.props.nameRightIcon}
+            type={this.props.typeRightIcon}
             style={{ color: "black", fontSize: 20 }}
             onPress={() => {
               // this.props.parent.props.navigation.openDrawer();
