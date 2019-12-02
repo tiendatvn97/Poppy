@@ -28,10 +28,9 @@ export default class DrawerHeader extends Component {
             type={this.props.typeLeftIcon}
             onPress={() => {
               if (this.props.nameLeftIcon === "ios-menu")
-              this.props.parent.props.navigation.openDrawer();
+                this.props.parent.props.navigation.openDrawer();
               if (this.props.nameLeftIcon === "ios-arrow-back")
-              this.props.parent.props.navigation.goBack();
-
+                this.props.parent.props.navigation.goBack();
             }}
           ></Icon>
         </Left>
@@ -47,6 +46,9 @@ export default class DrawerHeader extends Component {
               // this.props.parent.props.navigation.openDrawer();
               if (title == "Recent Chats") {
                 this.props.parent.props.navigation.navigate("Contact");
+              }
+              if (this.props.nameRightIcon === "search1") {
+                this.props.parent.props.navigation.navigate("SearchUser");
               }
             }}
           ></Icon>

@@ -34,7 +34,7 @@ export default class NewsFeedCardComponent extends Component {
       <Card transparent style={{ marginBottom: 15 }}>
         <TouchableOpacity
           onPress={async () => {
-            postDetailStore.postInfo = fullData;
+            postDetailStore.postInfo = fullData.data;
             this.props.parent.props.navigation.navigate("PostDetail");
           }}
         >

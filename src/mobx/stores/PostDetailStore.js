@@ -71,13 +71,10 @@ export default class PostDetailStore {
     this.commentContent = commentContent;
   }
   @action updateComment() {
-    console.log("den day r")
 
     if (!this.commentContent.trim(" ")) return;
-    console.log("den day r")
     commentId = Firebase.database.ref(`comments/${this.postInfo.postId}`).push()
       .key;
-      console.log("commentId" + commentId)
     updates = {};
     const comment = {
       userId: this.rootStore.userStore.id,

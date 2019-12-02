@@ -50,7 +50,6 @@ export default class ChangeAvatarModal extends Component {
 
     this.props.parent.setState({ modalVisible: false });
     if (!result.cancelled) {
-        console.log(`---->result: ${JSON.stringify(result)}`)
         this.props.myProfileStore.uploadAvatar(result);
     }
   };

@@ -84,6 +84,7 @@ export default class CreatePostStore {
       userId: this.rootStore.userStore.id,
       image: urlImage,
       timeEdit: Firebase.firebase.database.ServerValue.TIMESTAMP,
+      timeCreate: Firebase.firebase.database.ServerValue.TIMESTAMP,
       content: this.caption,
       tag: this.peopleTag,
       location: this.location

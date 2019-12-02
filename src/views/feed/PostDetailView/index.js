@@ -47,16 +47,14 @@ export default class PostDetailView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
   };
-  componentDidMount() {
-    // console.log("postAuth:" + JSON.stringify(postAuth));
-  }
+  componentDidMount() {}
 
   async componentWillMount() {
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 1000);
+    }, 500);
     const postAuth = await this.props.postDetailStore.getUserInfo(
-      this.props.postDetailStore.postInfo.data.userId
+      this.props.postDetailStore.postInfo.userId
     );
     this.setState({ postAuth: postAuth });
     this.props.postDetailStore.postInfo &&
@@ -64,7 +62,6 @@ export default class PostDetailView extends Component {
         .ref(`comments/${this.props.postDetailStore.postInfo.postId}`)
         .on("child_added", value => {
           if (value.val()) {
-            console.log("value: " + JSON.stringify(value.val()));
             this.setState(preState => {
               return {
                 comments: [value.val(), ...preState.comments]
@@ -82,7 +79,7 @@ export default class PostDetailView extends Component {
           <StatusBarCustom />
           <BackHeader
             parent={this}
-            title={`${postAuth && postAuth.profiles.fullName}'s Moment`}
+            title={`${postAuth ? postAuth.profiles.fullName : ""}'s Moment`}
           />
           <Content>
             <Card transparent style={{ elevation: 1 }}>
@@ -94,22 +91,22 @@ export default class PostDetailView extends Component {
                 }}
                 transparent
               >
-                <Left style={{}}>
+                <Left style={{ flex: 1 }}>
                   <Thumbnail
                     style={{ alignSelf: "center", width: 45, height: 45 }}
                     large
                     source={{ uri: postAuth && postAuth.avatarImage }}
                   />
-                  <Body style={{}}>
+                  <Body style={{ flex: 7 }}>
                     <Text style={{ fontSize: 12, padding: 2 }}>Dat 6 Mui</Text>
                     <Text style={{ fontSize: 10, color: "gray" }}>
                       {postDetailStore.timeConverter(
-                        postDetailStore.postInfo.data.timeEdit
+                        postDetailStore.postInfo.timeEdit
                       )}
                     </Text>
                   </Body>
                 </Left>
-                <Right>
+                <Right style={{ flex: 1 }}>
                   <Button transparent>
                     <Icon type="AntDesign" name="hearto" />
                   </Button>
@@ -117,7 +114,7 @@ export default class PostDetailView extends Component {
               </CardItem>
 
               <Image
-                source={{ uri: postDetailStore.postInfo.data.image }}
+                source={{ uri: postDetailStore.postInfo.image }}
                 width={widthScreen}
               />
 
@@ -146,7 +143,7 @@ export default class PostDetailView extends Component {
               </CardItem>
             </Card>
             {isLoading && <Spinner size="large" color="#0000ff" />}
-            {!isLoading  && (
+            {!isLoading && (
               <Card transparent style={{ elevation: 0 }}>
                 <CardItem transparent>
                   <Left>
@@ -170,7 +167,6 @@ export default class PostDetailView extends Component {
                         user => user.id === item.userId
                       );
                       if (userInfo) {
-                        console.log("ok lam" + JSON.stringify(userInfo));
                         return (
                           <CardItem transparent style={{ paddingTop: 0 }}>
                             <Left>

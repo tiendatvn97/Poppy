@@ -28,7 +28,8 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Picker
 } from "react-native";
 
 const widthScreen = Dimensions.get("window").width;
@@ -40,11 +41,12 @@ import Firebase from "../../firebase/Firebase";
 
 @inject("userStore", "myProfileStore", "newsFeedStore", "postDetailStore")
 @observer
-export default class MyProfileView extends Component {
+export default class ThirdProfileView extends Component {
   state = {
     modalVisible: false,
     listPost: [],
-    isLoading: true
+    isLoading: true,
+    follow: true
   };
   static navigationOptions = {
     drawerLabel: "My Profile",
@@ -109,6 +111,57 @@ export default class MyProfileView extends Component {
                   <Text style={styles.textNote}>{userStore.email}</Text>
                 </Body>
               </Left>
+              <Right >
+                {this.state.follow && (
+                  <Button
+                    style={{
+                      backgroundColor: "#ff6265",
+                      height: 35,
+                      width: 130
+                    }}
+                    onPress={() =>
+                      this.setState(preState => {
+                        return { follow: !preState.follow };
+                      })
+                    }
+                  >
+                    <Text uppercase={false} style={{fontSize:16}}> Flollow</Text>
+                  </Button>
+                )}
+                {!this.state.follow && (
+                  <View style={{ backgroundColor: "#ff6265" }}>
+                    <Picker
+                      mode="dropdown"
+                      style={styles.onePicker}
+                      itemStyle={styles.onePickerItem}
+                      selectedValue={this.state.follow ? 1 : 0}
+                      onValueChange={value => {
+                        if (value === 1)
+                          this.setState({
+                            follow: true
+                          });
+                      }}
+                    >
+                      <Picker.Item
+                        
+                        label="Following"
+                        value={0}
+                        style={{
+                          height: 32,
+                          borderColor: "red",
+                          borderWidth: 1
+                        }}
+                      />
+                      <Picker.Item
+                       
+                        label="Unfollow"
+                        value={1}
+                        style={{ height: 35 }}
+                      />
+                    </Picker>
+                  </View>
+                )}
+              </Right>
             </CardItem>
           </Card>
           <Card style={styles.cardAbout}>
@@ -199,37 +252,6 @@ export default class MyProfileView extends Component {
     );
   }
 }
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../icons/1.jpg")
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    image: require("../../icons/2.jpg")
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    image: require("../../icons/3.jpg")
-  },
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../icons/3.jpg")
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    image: require("../../icons/2.jpg")
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    image: require("../../icons/1.jpg")
-  },
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    image: require("../../icons/1.jpg")
-  }
-];
-
 const styles = StyleSheet.create({
   image: {
     flex: 1,
@@ -283,5 +305,14 @@ const styles = StyleSheet.create({
     borderColor: "#e6e6e6",
     shadowRadius: 0.2,
     elevation: 1.5
+  },
+  onePicker: {
+    width: 140,
+    height: 35,
+    color:"white"
+  },
+  onePickerItem: {
+    height: 35,
+    color:"white"
   }
 });

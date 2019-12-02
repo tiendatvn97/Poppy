@@ -33,7 +33,6 @@ export default class SignInStore {
   }
 
   @action async SignOut() {
-      console.log("signOUt")
     try {
         await Firebase.auth.signOut();
         // Firebase.userInfo.name="";

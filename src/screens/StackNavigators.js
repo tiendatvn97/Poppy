@@ -9,6 +9,8 @@ import SetUpProfileView from "../views/profile/SetUpProfileView";
 import RecentChatsView from "../views/chat/RecentChatsView";
 import ChatsView from "../views/chat/ChatView";
 import ContactView from "../views/InteractPeople/ContactView";
+import SearchUserView from "../views/search/SearchUserView";
+import ThirdProfileView from "../views/profile/ThirdProfileView";
 
 import { createStackNavigator } from "react-navigation-stack";
 export const LoginStack = createStackNavigator(
@@ -26,18 +28,18 @@ export const LoginStack = createStackNavigator(
 
 export const ProfileStack = createStackNavigator(
   {
-    MyProfile: {
-      screen: MyProfileView
-    }
+    MyProfile: MyProfileView,
+    ThirdProfile: ThirdProfileView
   },
-  { initialRouteName: "MyProfile", headerMode: "none" }
+  { initialRouteName: "ThirdProfile", headerMode: "none" }
 );
 export const NewFeedStack = createStackNavigator(
   {
     CreatePost: CreatePostView,
     NewsFeed: NewsFeedView,
     PostDetail: PostDetailView,
-    MyProfile: MyProfileView
+    MyProfile: MyProfileView,
+    SearchUser: SearchUserView
   },
 
   {
