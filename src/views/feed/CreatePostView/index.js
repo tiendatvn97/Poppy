@@ -110,7 +110,7 @@ export default class CreatePostView extends Component {
                   returnKeyType="Done"
                   blurOnSubmit
                   placeholder="Add caption"
-                  style={{ fontSize: 12, minHeight: 50 }}
+                  style={{ fontSize: 16, minHeight: 50 }}
                   value={createPostStore.caption}
                   onChangeText={value => {
                     createPostStore.captionOnChange(value);
@@ -128,7 +128,7 @@ export default class CreatePostView extends Component {
                   returnKeyType="Done"
                   blurOnSubmit
                   placeholder="Tag People"
-                  style={{ fontSize: 12, minHeight: 50 }}
+                  style={{ fontSize: 16, minHeight: 50 }}
                   value={createPostStore.peopleTag}
                   onChangeText={value => {
                     createPostStore.peopleTagOnChange(value);
@@ -151,7 +151,7 @@ export default class CreatePostView extends Component {
                   onChangeText={value => {
                     createPostStore.locationOnChange(value);
                   }}
-                  style={{ fontSize: 12, minHeight: 50 }}
+                  style={{ fontSize: 16, minHeight: 50 }}
                 ></Input>
 
                 <Icon name="map-pin" type="Feather" style={styles.iconForm} />

@@ -23,6 +23,7 @@ import CameraModal from "../../modal/CameraModal";
 import { StyleSheet, StatusBar, FlatList } from "react-native";
 
 import Firebase from "../../../firebase/Firebase";
+import { timezone } from "expo-localization";
 
 @inject("createPostStore", "userStore", "newsFeedStore", "postDetailStore")
 @observer
@@ -47,6 +48,40 @@ export default class NewsFeedView extends Component {
   componentWillMount() {}
   componentDidMount() {
     this.loadFeed();
+    setTimeout(() => {
+      this.props.userStore.following.map(item => {
+        Firebase.database
+          .ref("postGroup/postByUser/" + item)
+          .on("child_changed", snapshot => {
+            if (snapshot.val()) {
+              setTimeout(() => {
+                const index =
+                  this.state.listPost &&
+                  this.state.listPost
+                    .map(item => item.postId)
+                    .indexOf(snapshot.val().postId);
+
+                if (index !== -1) {
+                  const postChanged = {
+                    postId:
+                      this.state.listPost && this.state.listPost[index].postId,
+                    data: snapshot.val(),
+                    published:
+                      this.state.listPost &&
+                      this.state.listPost[index].published
+                  };
+                  this.setState(preState => {
+                    preState.listPost.splice(index, 1, postChanged);
+                    return {
+                      listPost: preState.listPost
+                    };
+                  });
+                }
+              }, 700);
+            }
+          });
+      });
+    }, 1200);
   }
   loadFeed() {
     this.setState({ isLoading: true });
@@ -71,7 +106,7 @@ export default class NewsFeedView extends Component {
                     const post = {
                       postId: data.key,
                       data: data.val(),
-                      published: item.val(),
+                      published: item.val()
                     };
                     test = [...test, post];
                   }

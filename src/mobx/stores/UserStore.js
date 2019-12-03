@@ -32,14 +32,10 @@ export default class UserStore {
     this.id = user.uid;
     await this.getAllUser();
     await this.getRecentChats();
-    // console.log(`listUser: ${JSON.stringify(this.listUser)}`);
-    // console.log(`RECENTchats: ${JSON.stringify(this.recentChats)}`);
 
     await Firebase.database
       .ref("/users/" + user.uid)
       .once("value", async snapshot => {
-        // Firebase.userInfo = snapshot.val().profiles.fullName;
-        // Firebase.avatar = snapshot.val().avatarImage;
         this.id = user.uid;
         this.avatarImage = snapshot.val().avatarImage;
         this.email = snapshot.val().email;
@@ -96,7 +92,7 @@ export default class UserStore {
   @action
   timeConverter = timestamp => {
     var date = new Date(timestamp);
-    var seconds = Math.floor((new Date() - date)/1000 );
+    var seconds = Math.floor((new Date() - date) / 1000);
     var interval = Math.floor(seconds / 31536000);
     if (interval > 1) {
       return interval + " year" + this.pluralCheck(interval);

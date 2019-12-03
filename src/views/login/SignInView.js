@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     marginHorizontal: 45,
-    fontSize: 13,
+    fontSize: 15,
     color: "#4A4A4A"
   },
   viewDescription: {

@@ -79,7 +79,6 @@ export default class App extends React.Component {
     // });
 
     try {
-      // console.log(`test current ${JSON.stringify(currentUser)}`)
       Firebase.database.ref('users/'+currentUser.uid+'/push_token').set(token);
     } catch (error) {
       console.log(error)

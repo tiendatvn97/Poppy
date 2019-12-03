@@ -36,7 +36,6 @@ export default class CreatePostStore {
 
   @action
   async createPost() {
-    // console.log("url image: " + JSON.stringify(this.image.base64));
     if (this.image) {
       const fileExtention = this.image.uri.split(".").pop();
       console.log(`EXT: ${fileExtention}`);
@@ -87,7 +86,9 @@ export default class CreatePostStore {
       timeCreate: Firebase.firebase.database.ServerValue.TIMESTAMP,
       content: this.caption,
       tag: this.peopleTag,
-      location: this.location
+      location: this.location,
+      loves: [],
+      shares: []
     };
 
     // const postStatus = {
@@ -102,6 +103,5 @@ export default class CreatePostStore {
       postData.timeEdit;
     await Firebase.database.ref().update(updates);
     this.isPost = false;
-    console.log(`ispost:` + this.isPost);
   }
 }

@@ -41,7 +41,7 @@ export const NewFeedStack = createStackNavigator(
     MyProfile: MyProfileView,
     SearchUser: SearchUserView,
     ThirdProfile: ThirdProfileView,
-    Chat: ChatsView,
+    ChatFromFeed: ChatsView
   },
 
   {

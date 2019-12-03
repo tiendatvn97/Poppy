@@ -70,9 +70,10 @@ export default class SearchUserView extends Component {
                 alignSelf: "center",
                 flex: 1,
                 height: 40,
-                borderRadius: 15
+                borderRadius: 15,
+                fontSize: 16
               }}
-              textAlign={'center'}
+              textAlign={"center"}
               onChangeText={term => {
                 this.searchUpdated(term);
               }}
@@ -106,7 +107,7 @@ export default class SearchUserView extends Component {
                       this.props.navigation.navigate("ThirdProfile");
                     }
                   }}
-                  style={{backgroundColor:"pink"}}
+                  style={{ backgroundColor: "pink" }}
                 >
                   <CardItem transparent style={{ paddingTop: 0 }}>
                     <Left
@@ -115,7 +116,7 @@ export default class SearchUserView extends Component {
                         alignItems: "center"
                       }}
                     >
-                      <Thumbnail source={require("../../../icons/2.jpg")} />
+                      <Thumbnail source={{uri: userFound.avatarImage}} />
                     </Left>
                     <Right
                       style={{
@@ -127,7 +128,7 @@ export default class SearchUserView extends Component {
                     >
                       <Button transparent>
                         <Text
-                          style={{ marginLeft: 15, fontSize: 14 }}
+                          style={{ marginLeft: 15, fontSize: 16}}
                           uppercase={false}
                         >
                           {userFound.profiles.fullName}
@@ -151,21 +152,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "flex-start"
   },
-  emailItem: {
-    borderBottomWidth: 0.5,
-    borderColor: "rgba(0,0,0,0.3)",
-    padding: 10
-  },
-  emailSubject: {
-    color: "rgba(0,0,0,0.5)"
-  },
+
   searchInput: {
     padding: 10,
     borderColor: "#CCC",
     borderWidth: 1
-  },
-  textNote: {
-    fontSize: 10,
-    color: "gray"
   }
 });

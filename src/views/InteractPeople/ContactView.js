@@ -86,9 +86,4 @@ export default class ContactView extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  textNote: {
-    fontSize: 10,
-    color: "gray"
-  }
-});
+

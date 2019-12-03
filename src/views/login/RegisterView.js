@@ -88,7 +88,7 @@ export default class RegisterView extends Component {
                 <View style={styles.viewDescription}>
                   <Text style={styles.textDescription}>
                     By Creating Account, you are automatically accepting all the{" "}
-                    <Text style={{ color: "#ff6265", fontSize: 13 }}>
+                    <Text style={{ color: "#ff6265", fontSize: 14 }}>
                       Terms & Conditions
                     </Text>{" "}
                     related to Momento
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     marginHorizontal: 45,
-    fontSize: 13,
+    fontSize: 15,
     color: "#4A4A4A" /*  */
   },
   viewDescription: {

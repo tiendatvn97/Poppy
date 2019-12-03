@@ -51,12 +51,14 @@ export default class PostDetailView extends Component {
   componentDidMount() {}
 
   async componentWillMount() {
+    this.props.postDetailStore.refresh();
     setTimeout(() => {
       this.setState({ isLoading: false });
     }, 500);
     const postAuth = await this.props.postDetailStore.getUserInfo(
       this.props.postDetailStore.postInfo.userId
     );
+
     this.setState({ postAuth: postAuth });
     this.props.postDetailStore.postInfo &&
       Firebase.database
@@ -104,7 +106,7 @@ export default class PostDetailView extends Component {
                 </Left>
                 <Right style={{ flex: 1 }}>
                   <Button transparent>
-                    <Icon type="AntDesign" name="hearto" />
+                    <Icon type="Entypo" name="dots-three-vertical" />
                   </Button>
                 </Right>
               </CardItem>
@@ -129,7 +131,7 @@ export default class PostDetailView extends Component {
                   </Left>
                   <Body style={{ paddingLeft: 10 }}>
                     <Text>{`${postDetailStore.postInfo.content}`}</Text>
-                    <Text style={{ fontSize: 10, color: "gray" }}>
+                    <Text style={{ fontSize: 12, color: "gray" }}>
                       {postDetailStore.timeConverter(
                         postDetailStore.postInfo.timeEdit
                       )}
@@ -144,26 +146,44 @@ export default class PostDetailView extends Component {
                   style={{ justifyContent: "center", alignItems: "center" }}
                   bordered
                 >
-                  <Icon type="AntDesign" name="hearto" />
-                  <Text>214</Text>
+                  {postDetailStore.loveState && (
+                    <Icon
+                      type="AntDesign"
+                      name="heart"
+                      style={{ color: "red" }}
+                      onPress={() => {
+                        postDetailStore.unLoveAction();
+                      }}
+                    />
+                  )}
+                  {!postDetailStore.loveState && (
+                    <Icon
+                      type="AntDesign"
+                      name="hearto"
+                      onPress={() => {
+                        postDetailStore.loveAction();
+                      }}
+                    />
+                  )}
+
+                  <Text>{postDetailStore.loveList.length}</Text>
                 </Left>
                 <Left
                   style={{ justifyContent: "center", alignItems: "center" }}
                 >
                   <Icon type="AntDesign" name="sharealt" />
-                  <Text>214</Text>
+                  <Text>{postDetailStore.shareList.length}</Text>
+                </Left>
+                <Left
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Text>{comments.length} comments</Text>
                 </Left>
               </CardItem>
             </Card>
             {isLoading && <Spinner size="large" color="#0000ff" />}
             {!isLoading && (
               <Card transparent style={{ elevation: 0 }}>
-                <CardItem transparent>
-                  <Text style={{ color: "gray" }}>
-                    {comments.length} comments
-                  </Text>
-                </CardItem>
-
                 <ScrollView style={{ maxHeight: 200 }}>
                   <FlatList
                     data={comments}
@@ -188,7 +208,7 @@ export default class PostDetailView extends Component {
                                     justifyContent: "space-between"
                                   }}
                                 >
-                                  <Text>
+                                  <Text style={{ fontWeight: "bold" }}>
                                     {userInfo && userInfo.profiles.fullName}
                                   </Text>
                                   <Text style={styles.textNote}>
@@ -197,7 +217,14 @@ export default class PostDetailView extends Component {
                                     )}
                                   </Text>
                                 </View>
-                                <Text style={{ fontSize: 10 }}>
+                                <Text
+                                  style={{
+                                    backgroundColor: "#edf0f5",
+                                    alignSelf: "flex-start",
+                                    padding: 7,
+                                    borderRadius: 7
+                                  }}
+                                >
                                   {item.content}
                                 </Text>
                               </Body>
@@ -217,7 +244,7 @@ export default class PostDetailView extends Component {
                         }
                         value={postDetailStore.commentContent}
                         placeholder="Write comment..."
-                        style={{ fontSize: 12, height: 50 }}
+                        style={{ fontSize: 16, height: 45 }}
                         multiline
                       />
                       <Icon
@@ -260,7 +287,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   textNote: {
-    fontSize: 10,
+    fontSize: 12,
     color: "gray"
   },
   sendIcon: {

@@ -247,7 +247,7 @@ export default class ThirdProfileView extends Component {
           }}
           onPress={() => {
             chatStore.setValue(userStore.id, thirdProfileStore.thirdUser.id);
-            navigation.navigate("Chat");
+            navigation.navigate("ChatFromFeed");
           }}
         >
           <Icon name="message1" type="AntDesign"></Icon>
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   textNote: {
-    fontSize: 10,
+    fontSize: 16,
     color: "gray"
   },
   bodyRate: {

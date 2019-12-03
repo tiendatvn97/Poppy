@@ -145,7 +145,7 @@ export default class RecentChatsView extends Component {
 }
 const styles = StyleSheet.create({
   textNote: {
-    fontSize: 10,
+    fontSize: 12,
     color: "gray"
   }
 });

@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     borderRadius: 35
   },
   textNote: {
-    fontSize: 10,
+    fontSize: 14,
     color: "gray"
   }
 });

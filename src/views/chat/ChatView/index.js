@@ -44,7 +44,8 @@ export default class ChatView extends Component {
   state = {
     messageList: [],
     isDisplayTime: [],
-    flatListHeight: height
+    flatListHeight: height,
+    partnerInfo: null
   };
   static navigationOptions = {
     drawerLabel: "Chats",
@@ -77,6 +78,15 @@ export default class ChatView extends Component {
 
   componentDidMount() {
     this.flatList.scrollToEnd();
+    Firebase.database
+      .ref("users/" + this.props.chatStore.partnerChat)
+      .once("value", snapshot => {
+        if (snapshot.val()) {
+          this.setState({
+            partnerInfo: snapshot.val()
+          });
+        }
+      });
   }
   componentWillMount() {
     Firebase.database
@@ -93,15 +103,14 @@ export default class ChatView extends Component {
       });
   }
   render() {
-    const { chatStore } = this.props;
+    const { chatStore, userStore } = this.props;
+    const { partnerInfo } = this.state;
     return (
       <Container>
         <StatusBarCustom />
         <DrawerHeader
           parent={this}
-          title="Chats"
-          nameRightIcon="user-friends"
-          typeRightIcon="FontAwesome5"
+          title={partnerInfo ? `${partnerInfo.profiles.fullName}'s Chat` : ""}
           nameLeftIcon="ios-arrow-back"
           typeLeftIcon="Ionicons"
         />
@@ -132,9 +141,9 @@ export default class ChatView extends Component {
                   >
                     <Image
                       style={{ width: 30, height: 30, borderRadius: 15 }}
-                      source={
-                        isDisplayAvatar ? require("../../../icons/3.jpg") : ""
-                      }
+                      source={{
+                        uri: isDisplayAvatar ? userStore.avatarImage : null
+                      }}
                     ></Image>
 
                     <View style={{ marginLeft: 10 }}>
@@ -152,7 +161,7 @@ export default class ChatView extends Component {
                         <Text style={styles.textReceive}>{item.content}</Text>
                       </TouchableOpacity>
                       {this.state.isDisplayTime[index] && (
-                        <Text style={{ fontSize: 10, color: "#e6e6e6" }}>
+                        <Text style={{ fontSize: 12, color: "#e6e6e6" }}>
                           {chatStore.convertTime(item.time)}
                         </Text>
                       )}
@@ -186,7 +195,7 @@ export default class ChatView extends Component {
                       {this.state.isDisplayTime[index] && (
                         <Text
                           style={{
-                            fontSize: 10,
+                            fontSize: 12,
                             color: "gray",
                             marginLeft: 10
                           }}
@@ -197,9 +206,12 @@ export default class ChatView extends Component {
                     </View>
                     <Image
                       style={{ width: 30, height: 30, borderRadius: 15 }}
-                      source={
-                        isDisplayAvatar ? require("../../../icons/3.jpg") : ""
-                      }
+                      source={{
+                        uri:
+                          isDisplayAvatar && partnerInfo
+                            ? partnerInfo.avatarImage
+                            : null
+                      }}
                     ></Image>
                   </View>
                 );
@@ -212,7 +224,7 @@ export default class ChatView extends Component {
                 <Input
                   placeholder="Write comment..."
                   multiline
-                  style={{ fontSize: 12, height: 50 }}
+                  style={{ fontSize: 16, height: 50 }}
                   value={chatStore.textMessage}
                   onChangeText={value => chatStore.textMessageOnChange(value)}
                 />
@@ -239,7 +251,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "gray",
     borderRadius: 7,
-    fontSize: 12,
+    fontSize: 16,
     padding: 5
   },
   textSend: {
@@ -247,7 +259,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "red",
     borderRadius: 7,
-    fontSize: 12,
+    fontSize: 16,
     padding: 5,
     marginLeft: 10
   },

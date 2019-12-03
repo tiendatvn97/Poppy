@@ -58,7 +58,7 @@ export default class LoginView extends Component {
             <Text style={styles.textNewAcount}>Create New Account</Text>
           </Button>
           <View style={{ flex: 1 }} />
-          <Text style={{ textAlign: "center", fontSize: 10 }}>
+          <Text style={{ textAlign: "center", fontSize: 14 }}>
             © 2019 PoppyApp Inc
           </Text>
           <View style={{ height: 10 }} />
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   textDescription: {
     marginHorizontal: 40,
     textAlign: "center",
-    fontSize: 12
+    fontSize: 14
   },
   textNameApp: {
     fontSize: 40,

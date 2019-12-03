@@ -180,7 +180,7 @@ export default class MyProfileView extends Component {
             myProfileStore={myProfileStore}
           />
         </Content>
-        <Button
+        {/* <Button
           style={{
             width: 55,
             height: 55,
@@ -193,7 +193,7 @@ export default class MyProfileView extends Component {
           }}
         >
           <Icon name="video-camera" type="Entypo"></Icon>
-        </Button>
+        </Button> */}
       </Container>
     );
   }
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   textNote: {
-    fontSize: 10,
+    fontSize: 16,
     color: "gray"
   },
   bodyRate: {

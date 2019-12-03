@@ -20,34 +20,33 @@ import {
 
 // import Icons from "react-native-vector-icons"
 import { StyleSheet, Alert, Image, TouchableOpacity } from "react-native";
+import { NewFeedStack } from "../../../screens/StackNavigators";
 export default class NewsFeedCardComponent extends Component {
-  state = { userInfo: null };
+  state = { userInfo: null, loves: [] };
   async componentWillMount() {
     const userInfo = await this.props.newsFeedStore.getUserInfo(
       this.props.fullData.data.userId
     );
     this.setState({ userInfo: userInfo });
   }
+  componentDidMount() {
+    this.setState({ loves: this.props.fullData.data.loves });
+  }
+  componentWillUpdate() {}
+
   render() {
     const { fullData, newsFeedStore, userStore, postDetailStore } = this.props;
+    if (fullData.data.loves !== this.state.loves) {
+      this.setState({
+        loves: fullData.data.loves
+      });
+    }
     return (
       <Card transparent style={{ marginBottom: 15 }}>
-        <TouchableOpacity
-          onPress={async () => {
-            postDetailStore.postInfo = fullData.data;
-            this.props.parent.props.navigation.navigate("PostDetail");
-          }}
-        >
-          <Image
-            style={styles.image}
-            source={{ uri: fullData.data.image }}
-          ></Image>
-        </TouchableOpacity>
-
         <CardItem
           style={{
             paddingLeft: 0,
-            paddingBottom: 0,
+            paddingBottom: 5,
             paddingTop: 5,
             paddingRight: 10
           }}
@@ -64,22 +63,49 @@ export default class NewsFeedCardComponent extends Component {
               }}
             ></Thumbnail>
             <Body style={{}}>
-              <Text style={{ fontSize: 12, padding: 2 }}>
+              <Text style={{ fontSize: 16, padding: 2, fontWeight: "bold" }}>
                 {this.state.userInfo
                   ? this.state.userInfo.profiles.fullName
                   : ""}
               </Text>
-              <Text style={{ fontSize: 10, color: "gray" }}>
+              <Text style={{ fontSize: 12, color: "gray" }}>
                 {userStore.timeConverter(fullData.data.timeEdit)}
               </Text>
             </Body>
           </Left>
           <Right>
-            <Button transparent>
-              <Icon type="AntDesign" name="hearto"></Icon>
-            </Button>
+            {(this.state.loves &&
+              this.state.loves.indexOf(userStore.id) !== -1 && (
+                <Icon
+                  type="AntDesign"
+                  name="heart"
+                  style={{ color: "red" }}
+                  onPress={() => {
+                    newsFeedStore.unLoveAction(fullData.data);
+                  }}
+                />
+              )) || (
+              <Icon
+                type="AntDesign"
+                name="hearto"
+                onPress={() => {
+                  newsFeedStore.loveAction(fullData.data);
+                }}
+              />
+            )}
           </Right>
         </CardItem>
+        <TouchableOpacity
+          onPress={async () => {
+            postDetailStore.postInfo = fullData.data;
+            this.props.parent.props.navigation.navigate("PostDetail");
+          }}
+        >
+          <Image
+            style={styles.image}
+            source={{ uri: fullData.data.image }}
+          ></Image>
+        </TouchableOpacity>
       </Card>
     );
   }
