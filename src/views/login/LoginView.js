@@ -43,7 +43,7 @@ export default class LoginView extends Component {
           <View style={{ flex: 1 }} />
           <Button
             style={styles.button}
-            onPress={() => this.props.navigation.navigate("SignIn")}
+            onPress={() => this.props.navigation.navigate("ConfirmCodeFromEmail")}
           >
             <Text uppercase={false}>Sign In</Text>
           </Button>

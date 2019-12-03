@@ -11,6 +11,7 @@ import ChatsView from "../views/chat/ChatView";
 import ContactView from "../views/InteractPeople/ContactView";
 import SearchUserView from "../views/search/SearchUserView";
 import ThirdProfileView from "../views/profile/ThirdProfileView";
+import ConfirmCodeFromEmailView from "../views/login/ConfirmCodeFromEmailView";
 
 import { createStackNavigator } from "react-navigation-stack";
 export const LoginStack = createStackNavigator(
@@ -18,7 +19,8 @@ export const LoginStack = createStackNavigator(
     Login: LoginView,
     Register: RegisterView,
     SignIn: SignInView,
-    SetUpProfile: SetUpProfileView
+    SetUpProfile: SetUpProfileView,
+    ConfirmCodeFromEmail: ConfirmCodeFromEmailView
   },
   {
     initialRouteName: "Login",
@@ -41,7 +43,8 @@ export const NewFeedStack = createStackNavigator(
     MyProfile: MyProfileView,
     SearchUser: SearchUserView,
     ThirdProfile: ThirdProfileView,
-    ChatFromFeed: ChatsView
+    ChatFromFeed: ChatsView,
+   
   },
 
   {
