@@ -42,7 +42,7 @@ export default class RecentChatsView extends Component {
           tmp[value.key] = value.val();
           this.setState(preState => {
             return {
-              recentChats: [...preState.recentChats, tmp]
+              recentChats: [tmp,...preState.recentChats]
             };
           });
         }
@@ -85,7 +85,7 @@ export default class RecentChatsView extends Component {
                     }}
                   >
                     <Left>
-                      <Thumbnail source={require("../../../icons/2.jpg")} />
+                      <Thumbnail source={{uri: userInfo.avatarImage}} />
                     </Left>
                     <Body>
                       <Text>{userInfo.profiles.fullName}</Text>
@@ -117,7 +117,7 @@ export default class RecentChatsView extends Component {
                     }}
                   >
                     <Left>
-                      <Thumbnail source={require("../../../icons/2.jpg")} />
+                      <Thumbnail source={{uri: userInfo.avatarImage}} />
                     </Left>
                     <Body>
                       <Text>{userInfo.profiles.fullName}</Text>

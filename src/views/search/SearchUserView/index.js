@@ -92,7 +92,7 @@ export default class SearchUserView extends Component {
           </Header>
 
           {filteredUsers.map((userFound, index) => {
-            userInfo = null;
+            let userInfo = null;
             userInfo = userStore.listUser.find(
               user => user.id === userFound.id
             );

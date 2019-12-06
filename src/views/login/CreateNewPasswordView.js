@@ -27,45 +27,30 @@ import { observer, inject } from "mobx-react";
 import BackHeader from "../header/BackHeader";
 import StatusBarCustom from "../header/StatusBarCustom";
 
-@inject("signInStore", "userStore")
 @observer
-export default class SignInView extends Component {
+export default class CreateNewPasswordView extends Component {
   static navigationOptions = {
     drawerLabel: () => null
   };
 
   constructor(props) {
     super(props);
-    this.signIn = this.signIn.bind(this);
   }
 
-  signIn = async () => {
-    let mess = await this.props.signInStore.SignIn();
-    if (mess) {
-      Alert.alert(mess);
-    } else {
-      try {
-        this.props.navigation.navigate("drawer");
-      } catch (e) {
-        console.log(`error:${e}`);
-      }
-    }
-  };
   render() {
-    const { signInStore, navigation } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <StatusBarCustom />
         <Container>
-          <BackHeader title="Sign In" parent={this} />
+          <BackHeader title="Create New Password" parent={this} />
           <View style={{ flex: 1 }}>
             <View style={styles.viewForm}>
               <Content>
                 <View style={styles.viewDescription}>
                   <View style={{ height: 20 }}></View>
                   <Text style={styles.textDescription}>
-                    Type in your Email ID and Password you chose for Momento and
-                    click Go to Feed
+                    No Problem! Just give in your Email ID and we will send you
+                    a link to reset your password
                   </Text>
                   <View style={{ height: 20 }}></View>
                 </View>
@@ -83,45 +68,24 @@ export default class SignInView extends Component {
                       borderColor: "gray"
                     }}
                   >
-                    <Input
-                      placeholder="Email"
-                      placeholderTextColor="#cccccc"
-                      value={signInStore.email}
-                      onChangeText={value => signInStore.emailOnChange(value)}
-                    />
+                    <Input placeholder="New Password" placeholderTextColor="#cccccc" />
                   </Item>
                   <View style={{ height: 30 }}></View>
                   <Item regular style={{ borderRadius: 8 }}>
                     <Input
-                      secureTextEntry={true}
-                      placeholder="Password"
+                      placeholder="Confirm Password"
                       placeholderTextColor="#cccccc"
-                      value={signInStore.password}
-                      onChangeText={value =>
-                        signInStore.passwordOnChange(value)
-                      }
                     />
                   </Item>
                 </Form>
                 <View>
                   <View style={{ height: 30 }}></View>
-                  <Button style={styles.button} onPress={this.signIn}>
+                  <Button style={styles.button}>
                     <Text uppercase={false} style={{ fontSize: 16 }}>
-                      Go to Feed
+                      save
                     </Text>
                   </Button>
                   <View style={{ height: 20 }} />
-                  <Button
-                    transparent
-                    style={{ alignSelf: "center" }}
-                    onPress={() => {
-                      navigation.navigate("SendEmail");
-                    }}
-                  >
-                    <Text uppercase={false} style={styles.textNewAcount}>
-                      Can’t Sign In? Reset Password
-                    </Text>
-                  </Button>
                   <View style={{ height: 20 }}></View>
                   <View
                     style={{
@@ -129,7 +93,7 @@ export default class SignInView extends Component {
                       justifyContent: "center"
                     }}
                   >
-                    {signInStore.isLoading && <Spinner />}
+                    {/* {signInStore.isLoading && <Spinner />} */}
                   </View>
                 </View>
               </Content>

@@ -110,7 +110,7 @@ export default class ChatView extends Component {
         <StatusBarCustom />
         <DrawerHeader
           parent={this}
-          title={partnerInfo ? `${partnerInfo.profiles.fullName}'s Chat` : ""}
+          title={partnerInfo ? `${partnerInfo.profiles.fullName}` : ""}
           nameLeftIcon="ios-arrow-back"
           typeLeftIcon="Ionicons"
         />
@@ -142,7 +142,10 @@ export default class ChatView extends Component {
                     <Image
                       style={{ width: 30, height: 30, borderRadius: 15 }}
                       source={{
-                        uri: isDisplayAvatar ? userStore.avatarImage : null
+                        uri:
+                          isDisplayAvatar && partnerInfo
+                            ? partnerInfo.avatarImage
+                            : null
                       }}
                     ></Image>
 
@@ -207,10 +210,7 @@ export default class ChatView extends Component {
                     <Image
                       style={{ width: 30, height: 30, borderRadius: 15 }}
                       source={{
-                        uri:
-                          isDisplayAvatar && partnerInfo
-                            ? partnerInfo.avatarImage
-                            : null
+                        uri: isDisplayAvatar ? userStore.avatarImage : null
                       }}
                     ></Image>
                   </View>

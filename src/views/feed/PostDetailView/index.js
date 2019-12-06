@@ -84,7 +84,7 @@ export default class PostDetailView extends Component {
             parent={this}
             title={`${postAuth ? postAuth.profiles.fullName : ""}'s Moment`}
           />
-          <Content>
+          <Content >
             <Card transparent style={{ elevation: 0 }}>
               <CardItem
                 style={{
@@ -101,7 +101,7 @@ export default class PostDetailView extends Component {
                     source={{ uri: postAuth && postAuth.avatarImage }}
                   />
                   <Body style={{ flex: 7 }}>
-                    <Text style={{ fontWeight: "bold" }}>Dat 6 Mui</Text>
+              <Text style={{ fontWeight: "bold" }}>{postAuth && postAuth.profiles.fullName}</Text>
                   </Body>
                 </Left>
                 <Right style={{ flex: 1 }}>
@@ -184,7 +184,7 @@ export default class PostDetailView extends Component {
             {isLoading && <Spinner size="large" color="#0000ff" />}
             {!isLoading && (
               <Card transparent style={{ elevation: 0 }}>
-                <ScrollView style={{ maxHeight: 200 }}>
+                <ScrollView style={{ maxHeight: 200, minHeight:120 }}>
                   <FlatList
                     data={comments}
                     renderItem={({ item, index }) => {

@@ -12,6 +12,9 @@ import ContactView from "../views/InteractPeople/ContactView";
 import SearchUserView from "../views/search/SearchUserView";
 import ThirdProfileView from "../views/profile/ThirdProfileView";
 import ConfirmCodeFromEmailView from "../views/login/ConfirmCodeFromEmailView";
+import CreateNewPasswordView from "../views/login/CreateNewPasswordView";
+import SendEmailView from "../views/login/SendEmailView";
+import EditProfileView from "../views/profile/EditProfileView";
 
 import { createStackNavigator } from "react-navigation-stack";
 export const LoginStack = createStackNavigator(
@@ -20,7 +23,9 @@ export const LoginStack = createStackNavigator(
     Register: RegisterView,
     SignIn: SignInView,
     SetUpProfile: SetUpProfileView,
-    ConfirmCodeFromEmail: ConfirmCodeFromEmailView
+    ConfirmCodeFromEmail: ConfirmCodeFromEmailView,
+    CreateNewPassword: CreateNewPasswordView,
+    SendEmail: SendEmailView
   },
   {
     initialRouteName: "Login",
@@ -31,7 +36,8 @@ export const LoginStack = createStackNavigator(
 export const ProfileStack = createStackNavigator(
   {
     MyProfile: MyProfileView,
-    ThirdProfile: ThirdProfileView
+    ThirdProfile: ThirdProfileView,
+    EditProfile: EditProfileView
   },
   { initialRouteName: "MyProfile", headerMode: "none" }
 );
