@@ -3,7 +3,7 @@ import Firebase from "../../firebase/Firebase";
 import Profile from "../models/Profile";
 const moment = require("moment");
 import uuid4 from "uuid/v4";
-export default class SetUpProfileStore {
+export default class EditProfileStore {
   constructor(stores) {
     this.rootStore = stores;
   }
@@ -15,6 +15,15 @@ export default class SetUpProfileStore {
   @observable aboutMe: ?string = "";
   @observable isLoading: boolean = false;
   @observable isDateTimePickerVisible: boolean = false;
+
+  @action getData() {
+    const profile = this.rootStore.userStore.profile;
+    this.fullName = profile.fullName;
+    this.dateOfBirth = profile.dateOfBirth;
+    this.gender = profile.gender;
+    this.location = profile.location;
+    this.aboutMe = profile.aboutMe;
+  }
 
   @action fullNameOnChange(dateOfBirth: ?string) {
     this.fullName = dateOfBirth;
@@ -56,7 +65,8 @@ export default class SetUpProfileStore {
     return date.isValid();
   }
 
-  @action submitProfile(): ?string {
+  @action async submitProfile(): ?string {
+    this.isLoading = true;
     let mess = "";
     if (
       !this.fullName ||
@@ -66,40 +76,29 @@ export default class SetUpProfileStore {
       !this.aboutMe
     )
       return "All of field is not empty";
-    if (!this.isValidDate()) return "Date is incorrect format";
-    if (this.gender !== "Female" && this.gender !== "Male")
+    else if (!this.isValidDate()) return "Date is incorrect format";
+    else if (this.gender !== "Female" && this.gender !== "Male")
       return "Gender is incorrect format";
-    return "";
+    else mess = await this.update();
+
+    return mess;
   }
 
-  @action async setProfileUser(userId: ?String) {
+  @action async update() {
     let mess = "";
     try {
       const profile = await Profile.load(
         this.fullName,
         this.gender,
         this.dateOfBirth,
+
         this.location,
         this.aboutMe
       );
-      let avatar = null;
-      if (this.gender === "Female")
-        avatar =
-          "https://firebasestorage.googleapis.com/v0/b/poppy-app-2556f.appspot.com/o/avatars%2FimageDefaults%2Ffemale_avatar.jpg?alt=media&token=2f58fb5a-44ca-40c9-b88d-9fb6c9849e67";
-      else
-        avatar =
-          "https://firebasestorage.googleapis.com/v0/b/poppy-app-2556f.appspot.com/o/avatars%2FimageDefaults%2Fmale_avatar.jpg?alt=media&token=0456c44c-7c5b-46a4-98d5-64b47c3f00cd";
-      await Firebase.database.ref("users/" + userId).set({
-        id: userId,
-        email: this.rootStore.registerStore.email,
-        avatarImage: avatar,
-        follower: [userId],
-        following: [userId],
-        postId: [],
-        chatId: [],
-        blockId: [],
-        profiles: profile
-      });
+
+      updates = {};
+      updates[`users/${this.rootStore.userStore.id}/profiles`] = profile;
+      await Firebase.database.ref().update(updates);
       await this.rootStore.userStore.setUser();
     } catch (error) {
       mess = error.message;

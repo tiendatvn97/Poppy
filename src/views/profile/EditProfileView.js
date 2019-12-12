@@ -30,7 +30,7 @@ import StatusBarCustom from "../header/StatusBarCustom";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import SwitchSelector from "react-native-switch-selector";
 
-// @inject("setUpProfileStore", "navigationStore")
+@inject("editProfileStore", "navigationStore")
 @observer
 export default class EditProfileView extends Component {
   static navigationOptions = {
@@ -47,6 +47,7 @@ export default class EditProfileView extends Component {
   };
 
   componentDidMount() {
+    this.props.editProfileStore.getData();
     this.keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       this._keyboardDidShow
@@ -71,11 +72,11 @@ export default class EditProfileView extends Component {
   }
 
   render() {
-    // const { setUpProfileStore } = this.props;
+    const { editProfileStore } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <Container>
-          <StatusBarCustom/>
+          <StatusBarCustom />
           <BackHeader title="Set up Profile" parent={this} />
           <View style={{ flex: 1 }}>
             <View style={{ flex: 6.5 }}>
@@ -92,10 +93,10 @@ export default class EditProfileView extends Component {
                     <Input
                       placeholder="Full Name "
                       placeholderTextColor="#cccccc"
-                    //   value={setUpProfileStore.fullName}
-                    //   onChangeText={value =>
-                    //     setUpProfileStore.fullNameOnChange(value)
-                    //   }
+                      value={editProfileStore.fullName}
+                      onChangeText={value =>
+                        editProfileStore.fullNameOnChange(value)
+                      }
                     />
                   </Item>
                   <View style={{ height: 20 }}></View>
@@ -108,25 +109,25 @@ export default class EditProfileView extends Component {
                     <Input
                       placeholder="Date Of Birth"
                       placeholderTextColor="#cccccc"
-                    //   value={setUpProfileStore.dateOfBirth}
-                    //   onChangeText={value =>
-                    //     setUpProfileStore.dateOfBirthOnChange(value)
-                    //   }
+                      value={editProfileStore.dateOfBirth}
+                      onChangeText={value =>
+                        editProfileStore.dateOfBirthOnChange(value)
+                      }
                     ></Input>
 
                     <Icon
                       name="md-calendar"
                       style={styles.iconForm}
-                    //   onPress={() => setUpProfileStore.showDateTimePicker()}
+                      onPress={() => editProfileStore.showDateTimePicker()}
                     />
                     <DateTimePicker
                       mode="date"
                       date={new Date()}
-                    //   isVisible={setUpProfileStore.isDateTimePickerVisible}
-                    //   onConfirm={date =>
-                    //     setUpProfileStore.handleDatePicked(date)
-                    //   }
-                    //   onCancel={() => setUpProfileStore.hideDateTimePicker()}
+                      isVisible={editProfileStore.isDateTimePickerVisible}
+                      onConfirm={date =>
+                        editProfileStore.handleDatePicked(date)
+                      }
+                      onCancel={() => editProfileStore.hideDateTimePicker()}
                     />
                   </Item>
                   <View style={{ height: 20 }}></View>
@@ -134,29 +135,27 @@ export default class EditProfileView extends Component {
                     <Input
                       placeholder="Gender"
                       placeholderTextColor="#cccccc"
-                    //   value={setUpProfileStore.gender}
-                    //   onChangeText={value =>
-                    //     setUpProfileStore.genderOnChange(value)
-                    //   }
+                      value={editProfileStore.gender}
+                      onChangeText={value =>
+                        editProfileStore.genderOnChange(value)
+                      }
                     />
                     <SwitchSelector
-                      initial={0}
+                      initial={editProfileStore.gender === "Female" ? 0 : 1}
                       style={{ width: 150 }}
-                      onPress={value => setUpProfileStore.genderOnChange(value)}
+                      onPress={value => editProfileStore.genderOnChange(value)}
                       textColor="#7a44cf"
                       selectedColor={
-                        // setUpProfileStore.gender != "Male" &&
-                        // setUpProfileStore.gender != "Female"
-                        //   ? "#7a44cf"
-                        //   : 
-                          "white"
+                        editProfileStore.gender != "Male" &&
+                        editProfileStore.gender != "Female"
+                          ? "#7a44cf"
+                          : "white"
                       }
                       buttonColor={
-                        // setUpProfileStore.gender != "Male" &&
-                        // setUpProfileStore.gender != "Female"
-                        //   ? "white"
-                        //   : 
-                          "#7a44cf"
+                        editProfileStore.gender != "Male" &&
+                        editProfileStore.gender != "Female"
+                          ? "white"
+                          : "#7a44cf"
                       }
                       borderColor="#d9d9d9"
                       hasPadding
@@ -178,10 +177,10 @@ export default class EditProfileView extends Component {
                     <Input
                       placeholder="Location"
                       placeholderTextColor="#cccccc"
-                    //   value={setUpProfileStore.location}
-                    //   onChangeText={value =>
-                    //     setUpProfileStore.locationOnChange(value)
-                    //   }
+                      value={editProfileStore.location}
+                      onChangeText={value =>
+                        editProfileStore.locationOnChange(value)
+                      }
                     />
                     <Icon
                       name="map-pin"
@@ -197,10 +196,10 @@ export default class EditProfileView extends Component {
                       returnKeyType="Done"
                       placeholder="About Me"
                       placeholderTextColor="#cccccc"
-                    //   value={setUpProfileStore.aboutMe}
-                    //   onChangeText={value =>
-                    //     setUpProfileStore.aboutMeOnChange(value)
-                    //   }
+                      value={editProfileStore.aboutMe}
+                      onChangeText={value =>
+                        editProfileStore.aboutMeOnChange(value)
+                      }
                       multiline={true}
                       style={{
                         height: 100
@@ -220,25 +219,26 @@ export default class EditProfileView extends Component {
               >
                 <Button
                   style={styles.button}
-                //   onPress={async () => {
-                //     let mess = setUpProfileStore.submitProfile();
-                //     if (mess) Alert.alert(mess);
-                //     else {
-                //       this.props.navigation.navigate("Register");
-                //     }
-                //   }}
+                  onPress={async () => {
+                    let mess = await editProfileStore.submitProfile();
+                    this.props.editProfileStore.isLoading = false;
+                    if (mess) Alert.alert(mess);
+                    else {
+                      this.props.navigation.goBack();
+                    }
+                  }}
                 >
                   <Text uppercase={false} style={{ fontSize: 16 }}>
-                    Get Set Go
+                    Update
                   </Text>
                 </Button>
               </View>
             )}
 
             <View style={{ flex: 0.5 }}>
-              {/* {setUpProfileStore.isLoading && (
-              <Spinner size="large" color="#0000ff" />
-            )} */}
+              {editProfileStore.isLoading && (
+                <Spinner size="large" color="#0000ff" />
+              )}
             </View>
           </View>
         </Container>

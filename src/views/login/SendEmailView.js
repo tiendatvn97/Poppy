@@ -26,7 +26,7 @@ import { observer, inject } from "mobx-react";
 
 import BackHeader from "../header/BackHeader";
 import StatusBarCustom from "../header/StatusBarCustom";
-
+@inject("signInStore")
 @observer
 export default class SendEmailView extends Component {
   static navigationOptions = {
@@ -38,7 +38,7 @@ export default class SendEmailView extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, signInStore } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <StatusBarCustom />
@@ -66,6 +66,10 @@ export default class SendEmailView extends Component {
                     <Input
                       placeholder="Email"
                       placeholderTextColor="#cccccc"
+                      value={signInStore.emailForResetPws}
+                      onChangeText={value => {
+                        signInStore.emailForResetPwsOnChange(value);
+                      }}
                     />
                   </Item>
                 </Form>
@@ -74,7 +78,11 @@ export default class SendEmailView extends Component {
                   <Button
                     style={styles.button}
                     onPress={() => {
-                      navigation.navigate("CreateNewPassword");
+                      // navigation.navigate("CreateNewPassword");
+                      signInStore.resetPassword(signInStore.emailForResetPws);
+                      setTimeout(()=> {
+                        navigation.navigate("SignIn")
+                      }, 1000)
                     }}
                   >
                     <Text uppercase={false} style={{ fontSize: 16 }}>
@@ -82,6 +90,15 @@ export default class SendEmailView extends Component {
                     </Text>
                   </Button>
                   <View style={{ height: 20 }} />
+
+                  {signInStore.isReseting && (
+                    <View
+                      style={{ justifyContent: "center", alignItems: "center" }}
+                    >
+                      <Spinner size="large" color="#0000ff" />
+                      <Text>check mail please</Text>
+                    </View>
+                  )}
 
                   <View style={{ height: 20 }}></View>
                 </View>

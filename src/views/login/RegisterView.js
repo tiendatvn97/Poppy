@@ -114,13 +114,12 @@ export default class RegisterView extends Component {
                       if (mess) {
                         Alert.alert(mess);
                       } else {
-                        const test = Firebase.auth.currentUser;
+                        const test = await Firebase.auth.currentUser;
                         mess = await setUpProfileStore.setProfileUser(test.uid);
                         if (mess) Alert.alert(mess);
                         else {
-                          // Alert.alert("successfully");
                           console.log("successfully");
-                          this.props.navigation.navigate("NewsFeed");
+                          this.props.navigation.navigate("SignIn");
                         }
                       }
                     }}

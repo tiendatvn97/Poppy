@@ -50,6 +50,9 @@ export default class DrawerHeader extends Component {
               if (this.props.nameRightIcon === "search1") {
                 this.props.parent.props.navigation.navigate("SearchUser");
               }
+              if (this.props.nameRightIcon == "edit") {
+                this.props.parent.props.navigation.navigate("EditProfile");
+              }
             }}
           ></Icon>
         </Right>

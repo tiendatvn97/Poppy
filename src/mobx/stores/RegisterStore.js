@@ -1,6 +1,7 @@
 import { observable, action, computed } from "mobx";
 
 import Firebase from "../../firebase/Firebase";
+import { ThemeContext } from "react-navigation";
 export default class RegisterStore {
   constructor(rootStore) {
     this.rootStore = rootStore;
@@ -46,6 +47,7 @@ export default class RegisterStore {
         this.email,
         this.password
       );
+       Firebase.auth.currentUser.sendEmailVerification().then(() => console.log("verify"));
     } catch (error) {
       mess = error.message;
     }

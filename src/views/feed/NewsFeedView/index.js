@@ -25,7 +25,13 @@ import { StyleSheet, StatusBar, FlatList } from "react-native";
 import Firebase from "../../../firebase/Firebase";
 import { timezone } from "expo-localization";
 
-@inject("createPostStore", "userStore", "newsFeedStore", "postDetailStore")
+@inject(
+  "createPostStore",
+  "userStore",
+  "newsFeedStore",
+  "postDetailStore",
+  "thirdProfileStore"
+)
 @observer
 export default class NewsFeedView extends Component {
   constructor(props) {
@@ -124,7 +130,12 @@ export default class NewsFeedView extends Component {
   }
 
   render() {
-    const { userStore, newsFeedStore, postDetailStore } = this.props;
+    const {
+      userStore,
+      newsFeedStore,
+      postDetailStore,
+      thirdProfileStore
+    } = this.props;
     return (
       <Container style={{ paddingBottom: 15 }}>
         <StatusBarCustom />
@@ -148,6 +159,7 @@ export default class NewsFeedView extends Component {
                 fullData={item}
                 userStore={userStore}
                 newsFeedStore={newsFeedStore}
+                thirdProfileStore={thirdProfileStore}
               />
             )}
             keyExtractor={item => item.postId}

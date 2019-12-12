@@ -105,7 +105,7 @@ export default class MyProfileView extends Component {
                   <Thumbnail source={{ uri: userStore.avatarImage }} />
                 </TouchableOpacity>
                 <Body>
-                  <Text>{userStore.profile.fullName}</Text>
+                  <Text>{userStore.profile && userStore.profile.fullName}</Text>
                   <Text style={styles.textNote}>{userStore.email}</Text>
                 </Body>
               </Left>
@@ -115,7 +115,9 @@ export default class MyProfileView extends Component {
             <CardItem Body>
               <Body>
                 <Text style={{ marginBottom: 10 }}>About</Text>
-                <Text style={styles.textNote}>{userStore.profile.aboutMe}</Text>
+                <Text style={styles.textNote}>
+                  {userStore.profile && userStore.profile.aboutMe}
+                </Text>
               </Body>
             </CardItem>
           </Card>

@@ -34,7 +34,7 @@ class CustomDrawerContentComponent extends Component {
             ></Image>
           </Left>
           <Body>
-            <Text>{userStore.profile.fullName}</Text>
+            <Text>{userStore.profile && userStore.profile.fullName}</Text>
             <Text style={styles.textNote}>{userStore.email}</Text>
           </Body>
         </Header>
