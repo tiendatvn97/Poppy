@@ -9,6 +9,12 @@
       "android",
       "web"
     ],
+    "ios": {
+      "bundleIdentifier": "com.vietis.poppyApp"
+    },
+    "android": {
+      "package": "com.vietis.poppyApp"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
